@@ -1,0 +1,324 @@
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// NurVakti — Türkçe Localizable.strings
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+// MARK: - TAB BAR
+"tab.home"     = "Vakitler";
+"tab.quran"    = "Kur'an";
+"tab.dhikr"    = "Zikirmatik";
+"tab.alarms"   = "Alarmlar";
+"tab.settings" = "Ayarlar";
+
+// MARK: - MENU
+"menu_quran"    = "Kur'an-ı Kerim";
+"menu_dhikr"    = "Zikirmatik";
+"menu_qibla"    = "Kıble Pusulası";
+"menu_calendar" = "Dini Günler";
+
+// MARK: - PRAYER NAMES
+"prayer.imsak"   = "İmsak";
+"prayer.fajr"    = "Sabah";
+"prayer.sunrise" = "Güneş";
+"prayer.dhuhr"   = "Öğle";
+"prayer.asr"     = "İkindi";
+"prayer.maghrib" = "Akşam";
+"prayer.isha"    = "Yatsı";
+
+// MARK: - HOME
+"home.nextPrayer"        = "Sonraki Vakit";
+"home.completedToday"    = "Bugün %d vakit tamamlandı";
+"home.quranShortcut"     = "Kur'an-ı Kerim";
+"home.dhikrShortcut"     = "Zikirmatik";
+"home.qiblaShortcut"     = "Kıble Bulucu";
+"home.zakatCalculator"   = "Zekat Hesaplayıcı";
+"home.calendar"          = "Dini Günler Takvimi";
+"home.searchShortcut"    = "Sure Ara";
+"home.loading"           = "Yükleniyor...";
+"home.cityUnknown"       = "Konum Bilinmiyor";
+"home.prayerTimesTitle"  = "Namaz Vakitleri";
+"home.allCompleted"      = "Tüm vakitler tamamlandı";
+"home.noLocation"        = "Konum izni verilmedi";
+
+// MARK: - AMBIENT
+"ambient.imsak"   = "Seher vakti";
+"ambient.fajr"    = "Sabah aydınlığı";
+"ambient.sunrise" = "Güneş doğuyor";
+"ambient.dhuhr"   = "Gün ortası";
+"ambient.asr"     = "Öğleden sonra";
+"ambient.maghrib" = "Gün batımı";
+"ambient.isha"    = "Gece vakti";
+
+// MARK: - DHIKR
+"dhikr.subhanallah"   = "Sübhanallah";
+"dhikr.elhamdulillah" = "Elhamdülillah";
+"dhikr.allahuekber"   = "Allahu Ekber";
+"dhikr.lailaheillallah" = "Lâ ilâhe illâllah";
+"dhikr.salawat"       = "Allahümme salli alâ Muhammed";
+"dhikr.estağfirullah" = "Estağfirullah";
+"dhikr.target"        = "Hedef: %d";
+"dhikr.spiritualJourney" = "Manevi Yolculuk";
+"dhikr.zikirAndDua"    = "Zikir & Dua";
+"dhikr.collection"     = "Zikir Koleksiyonu";
+"dhikr.prayers"        = "Dualar";
+"dhikr.morning"        = "Sabah";
+"dhikr.evening"        = "Akşam";
+"dhikr.peaceReport"    = "Huzur Raporu";
+"dhikr.dailyTotal"     = "Bugünkü Toplam";
+"dhikr.grandTotal"     = "Genel Toplam";
+"dhikr.completed"     = "Maşallah! Tamamlandı 🎉";
+"dhikr.dailyCount"    = "Bugün %d kez tamamlandı";
+"dhikr.reset"         = "Sıfırla";
+"dhikr.addNew"        = "Yeni Zikir Ekle";
+"dhikr.editTitle"     = "Zikir Düzenle";
+"dhikr.name"          = "Zikir Adı";
+"dhikr.targetCount"   = "Hedef Sayı";
+"dhikr.vibrate"       = "Titreşim";
+"dhikr.save"          = "Kaydet";
+"dhikr.cancel"        = "İptal";
+"dhikr.delete"        = "Sil";
+"dhikr.arabicOptional" = "Arapça (Opsiyonel)";
+"dhikr.addHint"        = "Kendi özel zikrinizi oluşturun ve listenize ekleyin.";
+
+// MARK: - QURAN
+"quran.searchPlaceholder" = "Sure adı veya numarası ara...";
+"quran.ayahs"            = "Ayet";
+"quran.addBookmark"      = "Yer İşareti Ekle";
+"quran.removeBookmark"   = "Yer İşaretini Kaldır";
+"quran.surahCount"        = "%d Sure";
+"quran.ayahCount"         = "%d Ayet";
+"quran.meccan"            = "Mekki";
+"quran.medinan"           = "Medeni";
+"quran.continueReading"   = "Okumaya Devam Et";
+"quran.resumeFrom"        = "Kaldığım yer: Sure %d, Ayet %d";
+"quran.bookmarks"         = "Yer İşaretlerim";
+"quran.noBookmarks"       = "Henüz yer işareti yok";
+"quran.addBookmark"       = "Yer İşareti Ekle";
+"quran.removeBookmark"    = "Yer İşaretini Kaldır";
+"quran.share"             = "Paylaş";
+"quran.copy"              = "Kopyala";
+"quran.loading"           = "Yükleniyor...";
+"quran.loadError"         = "Kur'an yüklenemedi";
+"quran.retry"             = "Tekrar Dene";
+"quran.translation"       = "Meal";
+"quran.arabic"            = "Arapça";
+"quran.fontSize.small"    = "Küçük";
+"quran.fontSize.medium"   = "Orta";
+"quran.fontSize.large"    = "Büyük";
+"quran.hatimJourney"      = "Hatim Yolculuğu";
+"quran.pageLabel"         = "Sayfa";
+"quran.surahLabel"        = "Sure";
+"quran.ayahLabel"         = "Ayet";
+"quran.surahsTitle"       = "Sureler";
+"quran.startFromFirst"    = "1. Sayfadan başlayın";
+"quran.continueWhereLeft" = "Kaldığınız yerden devam edin";
+"quran.lastRead"          = "Son Okuduğum";
+"quran.goToLastAyah"      = "Son okunan ayete git";
+"quran.mushafView"        = "Mushaf Görünümü";
+"quran.listView"          = "Liste Görünümü";
+"quran.onlyArabic"        = "Sadece Arapça";
+"quran.withTranslation"   = "Mealli";
+"dua.listenArabic"        = "Arapça Dinle";
+"dua.transliteration"     = "Okunuşu";
+"dua.translation"         = "Anlamı";
+"dua.loadingAudio"        = "Ses yükleniyor...";
+
+// MARK: - QIBLA
+"qibla.title"        = "Kıble";
+"qibla.qiblaDirection" = "Kıble Yönü";
+"qibla.kaabaDirection" = "Ka'be Yönü";
+"qibla.calibrateHint"  = "Telefonunuzu düz tutun ve pusulanın kalibre olduğundan emin olun.";
+"qibla.calibrate"    = "Kalibre et: Telefonu 8 çizecek şekilde döndür";
+"qibla.veryAccurate" = "Çok hassas";
+"qibla.accurate"     = "Hassas";
+"qibla.lowAccuracy"  = "Hassasiyet düşük";
+"qibla.noCompass"    = "Bu cihazda pusula desteklenmiyor";
+"qibla.north"        = "K";
+"qibla.east"         = "D";
+"qibla.south"        = "G";
+"qibla.west"         = "B";
+
+// MARK: - ALARMS
+"alarm.title"             = "Alarmlar";
+"alarm.addAlarm"          = "Alarm Ekle";
+"alarm.editAlarm"         = "Alarmı Düzenle";
+"alarm.noAlarms"          = "Henüz alarm kurulmamış";
+"alarm.noAlarmsSubtitle"  = "Vakit bildirimleri almak için alarm ekleyin";
+"alarm.prayer"            = "Vakit";
+"alarm.offset"            = "Fark (dakika)";
+"alarm.offsetBefore"      = "%d dk önce";
+"alarm.offsetAfter"       = "%d dk sonra";
+"alarm.sound"             = "Ses";
+"alarm.enabled"           = "Aktif";
+"alarm.disabled"          = "Pasif";
+"alarm.delete"            = "Alarmı Sil";
+"alarm.save"              = "Kaydet";
+"alarm.sound.ezan"        = "Ezan";
+"alarm.sound.fajr"        = "Sabah Ezanı";
+"alarm.sound.system"      = "Sistem Sesi";
+"alarm.sound.silent"      = "Titreşim";
+"alarm.permissionRequired" = "Bildirim İzni Gerekli";
+"alarm.permissionDesc"     = "Vakitleri kaçırmamanız için bildirim göndermemize izin vermeniz gerekiyor.";
+"alarm.allowNow"           = "Şimdi İzin Ver";
+"alarm.vakitReminder"      = "Vakit Hatırlatıcıları";
+"alarm.footerNote"         = "Alarmlar telefonunuz sessizde olsa dahi (seçili sese göre) çalacaktır.";
+"alarm.minutesBeforeLabel" = "Kaç dakika önce?";
+"alarm.soundLabel"         = "Uyarı Sesi";
+"alarm.editSettings"       = "Ayarları Düzenle";
+"alarm.vakitBased"         = "Vakit bazlı hatırlatıcı";
+
+// MARK: - ONBOARDING
+"onboarding.language.title"    = "Dilinizi Seçin";
+"onboarding.language.subtitle" = "Choose your language";
+"onboarding.location.title"    = "Konum İzni";
+"onboarding.location.body"     = "Bulunduğunuz şehre göre namaz vakitlerini hesaplıyoruz.";
+"onboarding.location.allow"    = "Konum İzni Ver";
+"onboarding.location.skip"     = "Şimdi Değil";
+"onboarding.notif.title"       = "Vakit Hatırlatıcıları";
+"onboarding.notif.body"        = "Her vakit geldiğinde sizi bilgilendirelim.";
+"onboarding.notif.allow"       = "Bildirimlere İzin Ver";
+"onboarding.notif.skip"        = "Atla";
+"onboarding.back"              = "Geri";
+"onboarding.next"              = "Devam Et";
+"onboarding.finish"            = "Başla";
+"onboarding.feature.autoUpdate" = "Seyahatte otomatik güncelleme";
+"onboarding.feature.noUpload"   = "Konum bilgisi sunucuya gönderilmez";
+"onboarding.feature.prayerTimes"= "Günlük namaz vakitleri";
+"onboarding.feature.customAlert"= "Vakit öncesi özel hatırlatıcı";
+"onboarding.feature.adhan"      = "Ezan sesi ile bildirim";
+"onboarding.feature.customEach" = "Her vakit için özelleştirme";
+
+// MARK: - SETTINGS
+"settings.title"           = "Ayarlar";
+"settings.language"        = "Uygulama Dili";
+"settings.fontSize"        = "Yazı Boyutu";
+"settings.fontSize.small"  = "Küçük";
+"settings.fontSize.medium" = "Orta";
+"settings.fontSize.large"  = "Büyük";
+"settings.calcMethod"      = "Hesaplama Yöntemi";
+"settings.madhab"          = "Mezhep";
+"settings.hanafi"          = "Hanefi";
+"settings.shafii"          = "Şafii";
+"settings.notifications"   = "Bildirimler";
+"settings.notifEnabled"    = "Bildirimleri Etkinleştir";
+"settings.location"        = "Konum";
+"settings.manualCity"      = "Manuel Şehir";
+"settings.useAutoLocation" = "Otomatik Konum";
+"settings.about"           = "Uygulama Hakkında";
+"settings.version"         = "Sürüm";
+"settings.privacyPolicy"   = "Gizlilik Politikası";
+"settings.openSource"      = "Açık Kaynak Lisanslar";
+"settings.resetSettings"   = "Ayarları Sıfırla";
+"settings.resetConfirm"    = "Tüm ayarlar sıfırlanacak. Emin misiniz?";
+"settings.confirm"         = "Onayla";
+"settings.cancel"          = "İptal";
+"settings.saved"           = "Kaydedildi";
+"settings.journeyHint"     = "Size özel yapılandırılmış NurVakti deneyimi.";
+"settings.appearance"      = "Görünüm ve Yazı";
+"settings.previewText"     = "Canlı Önizleme";
+"settings.calculation"     = "Konum ve Vakit Hesaplama";
+"settings.notifications"   = "Bildirim İzinleri";
+"settings.goToApps"        = "Cihaz Ayarlarına Git";
+"settings.madhab"          = "Mezhep Seçimi";
+"settings.method"          = "Hesaplama Metodu";
+"settings.notifAuthorized" = "İzinler Aktif";
+"settings.notifRequired"   = "Erişim Gerekli";
+"settings.rateApp"         = "Uygulamayı Değerlendir";
+"settings.versionInfo"     = "Sürüm %@ • Build %@";
+
+// MARK: - ERRORS
+"error.title.generic"       = "Bir Hata Oluştu";
+"error.locationDenied"      = "Konum izni verilmedi. Ayarlardan izin verebilirsiniz.";
+"error.locationUnavailable" = "Konum alınamıyor. Daha sonra tekrar deneyin.";
+"error.networkFailed"       = "İnternet bağlantınızı kontrol edin.";
+"error.prayerCalcFailed"    = "Vakitler hesaplanamadı. Lütfen tekrar deneyin.";
+"error.quranLoadFailed"     = "Kur'an yüklenemedi. Bağlantınızı kontrol edin.";
+"error.action.openSettings" = "Ayarları Aç";
+"error.action.retry"        = "Tekrar Dene";
+"error.action.refresh"      = "Yenile";
+"error.action.skip"         = "Atla";
+
+// MARK: - EMPTY STATES
+"empty.quranSearch"     = "Sonuç Bulunamadı";
+"empty.quranSearchSub"  = "Farklı bir sure adı veya numarası deneyin.";
+"empty.bookmarks"       = "Henüz Yer İşareti Yok";
+"empty.bookmarksSub"    = "Bir ayeti uzun basarak yer işareti ekleyebilirsiniz.";
+"empty.noAlarms"        = "Alarm Kurulmamış";
+"empty.noAlarmsSub"     = "Vakit bildirimleri almak için alarm kurabilirsiniz.";
+"empty.noLocation"      = "Vakit Bilgisi Yok";
+"empty.noLocationSub"   = "Konumunuzu etkinleştirdiğinizde vakitler burada görünecek.";
+
+// MARK: - NOTIFICATIONS
+"notif.prayerAlert"    = "%@ vakti geldi";
+"notif.prayerBefore"   = "%@ vaktine %d dakika kaldı";
+"notif.kandil"         = "Mübarek %@ hayırlı olsun";
+"notif.permissionBody" = "Namaz vakitleri için bildirim almak ister misiniz?";
+
+// MARK: - ACCESSIBILITY
+"a11y.prayerRow"        = "%@, %@, %@";
+"a11y.notifOn"          = "%@ bildirimi açık. Çift dokunarak kapat.";
+"a11y.notifOff"         = "%@ bildirimi kapalı. Çift dokunarak aç.";
+"a11y.dhikrCounter"     = "%@ sayacı — %d, %d hedefinden. Çift dokunarak artır.";
+"a11y.dhikrReset"       = "Sayacı sıfırla";
+"a11y.countdown"        = "Sonraki Vakit: %@ — %@ kaldı";
+"a11y.qiblaCompass"     = "Kıble yönü %d derece";
+
+// MARK: - HIJRI MONTHS
+"hijri.month.1"  = "Muharrem";
+"hijri.month.2"  = "Safer";
+"hijri.month.3"  = "Rebiülevvel";
+"hijri.month.4"  = "Rebiülahir";
+"hijri.month.5"  = "Cemaziyelevvel";
+"hijri.month.6"  = "Cemaziyelahir";
+"hijri.month.7"  = "Recep";
+"hijri.month.8"  = "Şaban";
+"hijri.month.9"  = "Ramazan";
+"hijri.month.10" = "Şevval";
+"hijri.month.11" = "Zilkade";
+"hijri.month.12" = "Zilhicce";
+
+// MARK: - GENERAL
+"general.ok"     = "Tamam";
+"general.loading" = "Yükleniyor...";
+"general.minutesShort" = "dk";
+"general.copy"    = "Kopyala";
+"general.share"   = "Paylaş";
+"general.done"   = "Bitti";
+"general.close"  = "Kapat";
+"general.share"  = "Paylaş";
+"guidance.dailyAyat" = "Günün Ayeti";
+"guidance.dailyHadith" = "Günün Hadis-i Şerifi";
+"calendar_title" = "Dini Günler Takvimi";
+"tasbih_title" = "Namaz Sonrası Tesbihat";
+"tasbih_start" = "Tesbihat Başlat";
+"tasbih_subhanallah" = "Sübhânallah";
+"tasbih_alhamdulillah" = "Elhamdülillâh";
+"tasbih_allahuakbar" = "Allâhu Ekber";
+"tasbih_finish" = "Tesbihat Tamamlandı";
+"tasbih_next" = "Sıradaki: %@";
+"zakat.title" = "Zekat Hesaplayıcı";
+"zakat.step.cash" = "Nakit ve Alacaklar";
+"zakat.step.precious" = "Altın ve Gümüş";
+"zakat.step.trade" = "Ticari Mallar";
+"zakat.step.debts" = "Borçlar";
+"zakat.cash" = "Eldeki Nakit ve Mevduat";
+"zakat.receivables" = "Tahsil Edilecek Alacaklar";
+"zakat.gold" = "Altın Miktarı";
+"zakat.silver" = "Gümüş Miktarı";
+"zakat.tradeGoods" = "Ticari Mal Varlığı";
+"zakat.debts" = "Ödenecek Borçlar";
+"zakat.result.eligible" = "Zekat Vermeniz Gerekmektedir";
+"zakat.result.notEligible" = "Zekat Yükümlülüğünüz Bulunmamaktadır";
+"zakat.result.due" = "Ödenmesi Gereken Zekat";
+"zakat.totalAssets" = "Toplam Varlık";
+"zakat.nisabThreshold" = "Nisab Eşiği";
+"menu_zakat" = "Zekat Hesapla";
+"general.copy"   = "Kopyala";
+"general.delete" = "Sil";
+"general.edit"   = "Düzenle";
+"general.add"    = "Ekle";
+"general.save"   = "Kaydet";
+"general.cancel" = "İptal";
+"general.back"   = "Geri";
+"general.next"   = "İleri";
+"general.yes"    = "Evet";
+"general.no"     = "Hayır";

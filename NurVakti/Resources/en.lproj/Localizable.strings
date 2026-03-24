@@ -1,0 +1,321 @@
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// NurVakti — English Localizable.strings
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+// MARK: - TAB BAR
+"tab.home"     = "Prayer Times";
+"tab.quran"    = "Quran";
+"tab.dhikr"    = "Dhikr";
+"tab.alarms"   = "Alarms";
+"tab.settings" = "Settings";
+
+// MARK: - MENU
+"menu_quran"    = "Holy Quran";
+"menu_dhikr"    = "Dhikr Counter";
+"menu_qibla"    = "Qibla Finder";
+"menu_calendar" = "Religious Days";
+
+// MARK: - PRAYER NAMES
+"prayer.imsak"   = "Imsak";
+"prayer.fajr"    = "Fajr";
+"prayer.sunrise" = "Sunrise";
+"prayer.dhuhr"   = "Dhuhr";
+"prayer.asr"     = "Asr";
+"prayer.maghrib" = "Maghrib";
+"prayer.isha"    = "Isha";
+
+// MARK: - HOME
+"home.nextPrayer"        = "Next Prayer";
+"home.completedToday"    = "%d prayers passed today";
+"home.quranShortcut"     = "Holy Quran";
+"home.dhikrShortcut"     = "Dhikr Counter";
+"home.qiblaShortcut"     = "Qibla Finder";
+"home.loading"           = "Loading...";
+"home.cityUnknown"       = "Location Unknown";
+"home.prayerTimesTitle"  = "Prayer Times";
+"home.allCompleted"      = "All prayers completed";
+"home.noLocation"        = "Location permission not granted";
+
+// MARK: - AMBIENT
+"ambient.imsak"   = "Pre-dawn";
+"ambient.fajr"    = "Dawn brightness";
+"ambient.sunrise" = "Sun is rising";
+"ambient.dhuhr"   = "Midday";
+"ambient.asr"     = "Afternoon";
+"ambient.maghrib" = "Sunset";
+"ambient.isha"    = "Nighttime";
+
+// MARK: - DHIKR
+"dhikr.subhanallah"    = "Subhanallah";
+"dhikr.elhamdulillah"  = "Alhamdulillah";
+"dhikr.allahuekber"    = "Allahu Akbar";
+"dhikr.lailaheillallah"= "La ilaha illallah";
+"dhikr.salawat"        = "Allahumma salli ala Muhammad";
+"dhikr.estağfirullah"  = "Astaghfirullah";
+"dhikr.target"         = "Target: %d";
+"dhikr.spiritualJourney" = "Spiritual Journey";
+"dhikr.zikirAndDua"    = "Dhikr & Dua";
+"dhikr.collection"     = "Dhikr Collection";
+"dhikr.prayers"        = "Prayers";
+"dhikr.morning"        = "Morning";
+"dhikr.evening"        = "Evening";
+"dhikr.peaceReport"    = "Peace Report";
+"dhikr.dailyTotal"     = "Daily Total";
+"dhikr.grandTotal"     = "Grand Total";
+"dhikr.completed"      = "MashaAllah! Completed 🎉";
+"dhikr.dailyCount"     = "Completed %d times today";
+"dhikr.reset"          = "Reset";
+"dhikr.addNew"         = "Add New Dhikr";
+"dhikr.editTitle"      = "Edit Dhikr";
+"dhikr.name"           = "Dhikr Name";
+"dhikr.targetCount"    = "Target Count";
+"dhikr.vibrate"        = "Vibrate";
+"dhikr.save"           = "Save";
+"dhikr.cancel"         = "Cancel";
+"dhikr.delete"         = "Delete";
+"dhikr.arabicOptional" = "Arabic (Optional)";
+"dhikr.addHint"        = "Create your own custom dhikr and add to your list.";
+
+// MARK: - QURAN
+"quran.searchPlaceholder" = "Search surah name or number...";
+"quran.ayahs"            = "Ayahs";
+"quran.addBookmark"      = "Add Bookmark";
+"quran.removeBookmark"   = "Remove Bookmark";
+"quran.surahCount"        = "%d Surahs";
+"quran.ayahCount"         = "%d Ayahs";
+"quran.meccan"            = "Meccan";
+"quran.medinan"           = "Medinan";
+"quran.continueReading"   = "Continue Reading";
+"quran.resumeFrom"        = "From: Surah %d, Ayah %d";
+"quran.bookmarks"         = "My Bookmarks";
+"quran.noBookmarks"       = "No bookmarks yet";
+"quran.addBookmark"       = "Add Bookmark";
+"quran.removeBookmark"    = "Remove Bookmark";
+"quran.share"             = "Share";
+"quran.copy"              = "Copy";
+"quran.loading"           = "Loading...";
+"quran.loadError"         = "Could not load Quran";
+"quran.retry"             = "Try Again";
+"quran.translation"       = "Translation";
+"quran.arabic"            = "Arabic";
+"quran.fontSize.small"    = "Small";
+"quran.fontSize.medium"   = "Medium";
+"quran.fontSize.large"    = "Large";
+"quran.hatimJourney"      = "Hatim Journey";
+"quran.pageLabel"         = "Page";
+"quran.surahLabel"        = "Surah";
+"quran.ayahLabel"         = "Ayah";
+"quran.surahsTitle"       = "Surahs";
+"quran.startFromFirst"    = "Start from page 1";
+"quran.continueWhereLeft" = "Continue where you left off";
+"quran.lastRead"          = "Last Read";
+"quran.goToLastAyah"      = "Go to last read ayah";
+"quran.mushafView"        = "Mushaf View";
+"quran.listView"          = "List View";
+"quran.onlyArabic"        = "Arabic Only";
+"quran.withTranslation"   = "With Translation";
+"dua.listenArabic"        = "Listen Arabic";
+"dua.transliteration"     = "Transliteration";
+"dua.translation"         = "Meaning";
+"dua.loadingAudio"        = "Loading audio...";
+
+// MARK: - QIBLA
+"qibla.title"        = "Qibla";
+"qibla.qiblaDirection" = "Qibla Direction";
+"qibla.kaabaDirection" = "Kaaba Direction";
+"qibla.calibrateHint"  = "Hold your phone flat and ensure the compass is calibrated.";
+"qibla.calibrate"    = "Calibrate: Move phone in a figure-8 pattern";
+"qibla.veryAccurate" = "Very accurate";
+"qibla.accurate"     = "Accurate";
+"qibla.lowAccuracy"  = "Low accuracy";
+"qibla.noCompass"    = "Compass not supported on this device";
+"qibla.north"        = "N";
+"qibla.east"         = "E";
+"qibla.south"        = "S";
+"qibla.west"         = "W";
+
+// MARK: - ALARMS
+"alarm.title"             = "Alarms";
+"alarm.addAlarm"          = "Add Alarm";
+"alarm.editAlarm"         = "Edit Alarm";
+"alarm.noAlarms"          = "No Alarms Set";
+"alarm.noAlarmsSubtitle"  = "Add alarms to receive prayer time notifications";
+"alarm.prayer"            = "Prayer";
+"alarm.offset"            = "Offset (minutes)";
+"alarm.offsetBefore"      = "%d min before";
+"alarm.offsetAfter"       = "%d min after";
+"alarm.sound"             = "Sound";
+"alarm.enabled"           = "Enabled";
+"alarm.disabled"          = "Disabled";
+"alarm.delete"            = "Delete Alarm";
+"alarm.save"              = "Save";
+"alarm.sound.ezan"        = "Adhan";
+"alarm.sound.fajr"        = "Fajr Adhan";
+"alarm.sound.system"      = "System Sound";
+"alarm.sound.silent"      = "Vibrate Only";
+"alarm.permissionRequired" = "Notification Required";
+"alarm.permissionDesc"     = "We need permission to send you notifications for prayer times.";
+"alarm.allowNow"           = "Allow Now";
+"alarm.vakitReminder"      = "Prayer Reminders";
+"alarm.footerNote"         = "Alarms will sound according to selected sound even if phone is silent.";
+"alarm.minutesBeforeLabel" = "Minutes before?";
+"alarm.soundLabel"         = "Alert Sound";
+"alarm.editSettings"       = "Edit Settings";
+"alarm.vakitBased"         = "Prayer based reminder";
+
+// MARK: - ONBOARDING
+"onboarding.language.title"    = "Choose Your Language";
+"onboarding.language.subtitle" = "Dilinizi seçin";
+"onboarding.location.title"    = "Location Permission";
+"onboarding.location.body"     = "We calculate prayer times based on your city.";
+"onboarding.location.allow"    = "Allow Location";
+"onboarding.location.skip"     = "Not Now";
+"onboarding.notif.title"       = "Prayer Reminders";
+"onboarding.notif.body"        = "Let us notify you when each prayer time arrives.";
+"onboarding.notif.allow"       = "Allow Notifications";
+"onboarding.notif.skip"        = "Skip";
+"onboarding.back"              = "Back";
+"onboarding.next"              = "Continue";
+"onboarding.finish"            = "Get Started";
+"onboarding.feature.autoUpdate" = "Auto-update when traveling";
+"onboarding.feature.noUpload"   = "Location never sent to server";
+"onboarding.feature.prayerTimes"= "Daily prayer times";
+"onboarding.feature.customAlert"= "Custom reminder before prayer";
+"onboarding.feature.adhan"      = "Adhan sound notification";
+"onboarding.feature.customEach" = "Customize each prayer";
+
+// MARK: - SETTINGS
+"settings.title"           = "Settings";
+"settings.language"        = "App Language";
+"settings.fontSize"        = "Font Size";
+"settings.fontSize.small"  = "Small";
+"settings.fontSize.medium" = "Medium";
+"settings.fontSize.large"  = "Large";
+"settings.calcMethod"      = "Calculation Method";
+"settings.madhab"          = "Madhab";
+"settings.hanafi"          = "Hanafi";
+"settings.shafii"          = "Shafi'i";
+"settings.notifications"   = "Notifications";
+"settings.notifEnabled"    = "Enable Notifications";
+"settings.location"        = "Location";
+"settings.manualCity"      = "Manual City";
+"settings.useAutoLocation" = "Use Auto Location";
+"settings.about"           = "About App";
+"settings.version"         = "Version";
+"settings.privacyPolicy"   = "Privacy Policy";
+"settings.openSource"      = "Open Source Licenses";
+"settings.resetSettings"   = "Reset Settings";
+"settings.resetConfirm"    = "All settings will be reset. Are you sure?";
+"settings.confirm"         = "Confirm";
+"settings.cancel"          = "Cancel";
+"settings.saved"           = "Saved";
+"settings.journeyHint"     = "A NurVakti experience configured just for you.";
+"settings.appearance"      = "Appearance and Font";
+"settings.previewText"     = "Live Preview";
+"settings.calculation"     = "Location and Calculation";
+"settings.notifications"   = "Notification Permissions";
+"settings.goToApps"        = "Go to Device Settings";
+"settings.madhab"          = "Madhab Selection";
+"settings.method"          = "Calculation Method";
+"settings.notifAuthorized" = "Permissions Active";
+"settings.notifRequired"   = "Access Required";
+"settings.rateApp"         = "Rate the App";
+"settings.versionInfo"     = "Version %@ • Build %@";
+
+// MARK: - ERRORS
+"error.title.generic"       = "An Error Occurred";
+"error.locationDenied"      = "Location permission denied. You can grant it in Settings.";
+"error.locationUnavailable" = "Cannot get location. Please try again later.";
+"error.networkFailed"       = "Please check your internet connection.";
+"error.prayerCalcFailed"    = "Could not calculate prayer times. Please try again.";
+"error.quranLoadFailed"     = "Could not load Quran. Check your connection.";
+"error.action.openSettings" = "Open Settings";
+"error.action.retry"        = "Try Again";
+"error.action.refresh"      = "Retry";
+"error.action.skip"         = "Skip";
+
+// MARK: - EMPTY STATES
+"empty.quranSearch"     = "No Results Found";
+"empty.quranSearchSub"  = "Try a different surah name or number.";
+"empty.bookmarks"       = "No Bookmarks Yet";
+"empty.bookmarksSub"    = "Long press an ayah to add a bookmark.";
+"empty.noAlarms"        = "No Alarms Set";
+"empty.noAlarmsSub"     = "Set up alarms to receive prayer time notifications.";
+"empty.noLocation"      = "No Prayer Times";
+"empty.noLocationSub"   = "Enable your location to see prayer times here.";
+
+// MARK: - NOTIFICATIONS
+"notif.prayerAlert"    = "%@ prayer time has arrived";
+"notif.prayerBefore"   = "%d minutes until %@";
+"notif.kandil"         = "Blessed %@ — May it be sacred";
+"notif.permissionBody" = "Would you like to be notified for prayer times?";
+
+// MARK: - ACCESSIBILITY
+"a11y.prayerRow"        = "%@, %@, %@";
+"a11y.notifOn"          = "%@ notification on. Double-tap to turn off.";
+"a11y.notifOff"         = "%@ notification off. Double-tap to turn on.";
+"a11y.dhikrCounter"     = "%@ counter — %d of %d. Double-tap to increment.";
+"a11y.dhikrReset"       = "Reset counter";
+"a11y.countdown"        = "Next prayer: %@ — %@ remaining";
+"a11y.qiblaCompass"     = "Qibla direction: %d degrees";
+
+// MARK: - HIJRI MONTHS
+"hijri.month.1"  = "Muharram";
+"hijri.month.2"  = "Safar";
+"hijri.month.3"  = "Rabi' al-Awwal";
+"hijri.month.4"  = "Rabi' al-Thani";
+"hijri.month.5"  = "Jumada al-Awwal";
+"hijri.month.6"  = "Jumada al-Thani";
+"hijri.month.7"  = "Rajab";
+"hijri.month.8"  = "Sha'ban";
+"hijri.month.9"  = "Ramadan";
+"hijri.month.10" = "Shawwal";
+"hijri.month.11" = "Dhu al-Qa'dah";
+"hijri.month.12" = "Dhu al-Hijjah";
+
+// MARK: - GENERAL
+"general.ok"     = "OK";
+"general.loading" = "Loading...";
+"general.minutesShort" = "min";
+"general.copy"    = "Copy";
+"general.share"   = "Share";
+"general.done"   = "Done";
+"general.close"  = "Close";
+"general.share"  = "Share";
+"guidance.dailyAyat" = "Ayat of the Day";
+"guidance.dailyHadith" = "Hadith of the Day";
+"calendar_title" = "Religious Calendar";
+"tasbih_title" = "Post-Prayer Tasbihat";
+"tasbih_start" = "Start Tasbihat";
+"tasbih_subhanallah" = "Subhanallah";
+"tasbih_alhamdulillah" = "Alhamdulillah";
+"tasbih_allahuakbar" = "Allahu Akbar";
+"tasbih_finish" = "Tasbihat Completed";
+"tasbih_next" = "Next: %@";
+"zakat.title" = "Zakat Calculator";
+"zakat.step.cash" = "Cash & Receivables";
+"zakat.step.precious" = "Gold & Silver";
+"zakat.step.trade" = "Trade Goods";
+"zakat.step.debts" = "Debts";
+"zakat.cash" = "Cash on Hand";
+"zakat.receivables" = "Receivables";
+"zakat.gold" = "Gold Amount";
+"zakat.silver" = "Silver Amount";
+"zakat.tradeGoods" = "Trade Assets";
+"zakat.debts" = "Payable Debts";
+"zakat.result.eligible" = "You are Eligible for Zakat";
+"zakat.result.notEligible" = "No Zakat Eligibility Found";
+"zakat.result.due" = "Total Zakat Due";
+"zakat.totalAssets" = "Total Assets";
+"zakat.nisabThreshold" = "Nisab Threshold";
+"menu_zakat" = "Zakat Calculator";
+"general.copy"   = "Copy";
+"general.delete" = "Delete";
+"general.edit"   = "Edit";
+"general.add"    = "Add";
+"general.save"   = "Save";
+"general.cancel" = "Cancel";
+"general.back"   = "Back";
+"general.next"   = "Next";
+"general.yes"    = "Yes";
+"general.no"     = "No";

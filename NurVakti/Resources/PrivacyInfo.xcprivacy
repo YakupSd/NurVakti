@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+
+    <!-- ──────────────────────────────────────────────────────────
+         NSPrivacyTracking
+         NurVakti does NOT track users across apps or websites.
+    ────────────────────────────────────────────────────────────── -->
+    <key>NSPrivacyTracking</key>
+    <false/>
+
+    <!-- ──────────────────────────────────────────────────────────
+         NSPrivacyTrackingDomains
+         No tracking domains — empty array.
+    ────────────────────────────────────────────────────────────── -->
+    <key>NSPrivacyTrackingDomains</key>
+    <array/>
+
+    <!-- ──────────────────────────────────────────────────────────
+         NSPrivacyCollectedDataTypes
+         Data collected by NurVakti and its purpose.
+    ────────────────────────────────────────────────────────────── -->
+    <key>NSPrivacyCollectedDataTypes</key>
+    <array>
+
+        <!-- 1. Precise Location (prayer time calculation) -->
+        <dict>
+            <key>NSPrivacyCollectedDataType</key>
+            <string>NSPrivacyCollectedDataTypePreciseLocation</string>
+            <key>NSPrivacyCollectedDataTypeLinked</key>
+            <false/>
+            <key>NSPrivacyCollectedDataTypeTracking</key>
+            <false/>
+            <key>NSPrivacyCollectedDataTypePurposes</key>
+            <array>
+                <string>NSPrivacyCollectedDataTypePurposeAppFunctionality</string>
+            </array>
+        </dict>
+
+        <!-- 2. Coarse Location (city name fallback) -->
+        <dict>
+            <key>NSPrivacyCollectedDataType</key>
+            <string>NSPrivacyCollectedDataTypeCoarseLocation</string>
+            <key>NSPrivacyCollectedDataTypeLinked</key>
+            <false/>
+            <key>NSPrivacyCollectedDataTypeTracking</key>
+            <false/>
+            <key>NSPrivacyCollectedDataTypePurposes</key>
+            <array>
+                <string>NSPrivacyCollectedDataTypePurposeAppFunctionality</string>
+            </array>
+        </dict>
+
+        <!-- 3. User Content – Quran bookmarks & dhikr data (stored only on device) -->
+        <dict>
+            <key>NSPrivacyCollectedDataType</key>
+            <string>NSPrivacyCollectedDataTypeOtherUserContent</string>
+            <key>NSPrivacyCollectedDataTypeLinked</key>
+            <false/>
+            <key>NSPrivacyCollectedDataTypeTracking</key>
+            <false/>
+            <key>NSPrivacyCollectedDataTypePurposes</key>
+            <array>
+                <string>NSPrivacyCollectedDataTypePurposeAppFunctionality</string>
+            </array>
+        </dict>
+
+    </array>
+
+    <!-- ──────────────────────────────────────────────────────────
+         NSPrivacyAccessedAPITypes
+         Required Reasons APIs used by NurVakti.
+    ────────────────────────────────────────────────────────────── -->
+    <key>NSPrivacyAccessedAPITypes</key>
+    <array>
+
+        <!-- UserDefaults — store app settings, language, prayer cache -->
+        <dict>
+            <key>NSPrivacyAccessedAPIType</key>
+            <string>NSPrivacyAccessedAPICategoryUserDefaults</string>
+            <key>NSPrivacyAccessedAPITypeReasons</key>
+            <array>
+                <!-- CA92.1: Access info from same app -->
+                <string>CA92.1</string>
+            </array>
+        </dict>
+
+        <!-- File timestamp — reading cached prayer time JSON files -->
+        <dict>
+            <key>NSPrivacyAccessedAPIType</key>
+            <string>NSPrivacyAccessedAPICategoryFileTimestamp</string>
+            <key>NSPrivacyAccessedAPITypeReasons</key>
+            <array>
+                <!-- C617.1: Read file timestamp of files the app created -->
+                <string>C617.1</string>
+            </array>
+        </dict>
+
+        <!-- System boot time — used indirectly by AVAudioPlayer for timing -->
+        <dict>
+            <key>NSPrivacyAccessedAPIType</key>
+            <string>NSPrivacyAccessedAPICategorySystemBootTime</string>
+            <key>NSPrivacyAccessedAPITypeReasons</key>
+            <array>
+                <!-- 35F9.1: Measure elapsed time -->
+                <string>35F9.1</string>
+            </array>
+        </dict>
+
+    </array>
+
+</dict>
+</plist>

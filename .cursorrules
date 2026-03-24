@@ -1,0 +1,38 @@
+# Cursor Rules
+# Bu dosyaya eklediğin her kural, yapay zeka tarafından okunur ve uygulanır.
+
+## Genel Kurallar
+- Yanıtları her zaman Türkçe ver.
+- Kod açıklamalarını kısa ve net tut.
+
+## Kod Standartları
+- SwiftUI kullanırken View yapısını küçük parçalara böl.
+- SwiftUI dosyalarında Preview kodunu (`PreviewProvider`) mutlaka ekle.
+- Force unwrap (`!`) kullanmaktan kaçın.
+- Değişken ve fonksiyon isimlendirmelerinde CamelCase kullan.
+
+## Tasarım Kuralları
+- **Renk Yönetimi**: 
+  - Projeye renk eklemeden önce `Yolchu/Utils/Managers/ThemeColors.swift` dosyasını kontrol et.
+  - Eğer renk mevcutsa onu kullan.
+  - Eğer yoksa, yeni rengi `ThemeColors` struct'ına ekle ve yanına açıklama (comment) yazarak rengin ne için kullanıldığını belirt.
+- Fontlar için özel font ailesi (`Raleway`) kullan.
+
+## Metin Yönetimi (String Management)
+- **Tüm Metinler**: Uygulamada görünen tüm metinler (Text, Button title, Alert message vb.) `Yolchu/Data/UserManager/UserEnvironment.swift` dosyasına yazılmalıdır.
+- **Organizasyon**: 
+  - Yeni eklediğin metinleri `UserEnvironment` içinde ilgili bölüme ekle.
+  - Modül veya özellik bazında ayrım yapmak için `// MARK: - [Kategori Adı]` yapısını kullan (Örn: `// MARK: - Authentication`).
+  - Değişken isimlendirmelerinde tutarlı ol (Örn: `txtLoginButton`, `txtErrorMessage`).
+
+## UI/UX Asistanı Kuralları
+- Kod yazarken her zaman bir **UI/UX Auditor** gibi davran.
+- Yeni bir UI bileşeni oluşturmadan önce `Designs/UX_GUIDELINES.md` dosyasını oku ve kurallara uy.
+- **Premium Design**: Tasarımların her zaman modern, temiz ve yüksek kaliteli (luxury/premium) görünmesini sağla.
+- Eğer bir tasarım karmaşıksa veya görselleştirilmesi gerekiyorsa, önce `generate_image` ile bir mockup öner.
+- SwiftUI geçişlerinde yumuşak animasyonlar (`withAnimation`, `.transition`) kullanmayı teklif et.
+
+## Proje Özelinde
+- Yeni dosya oluştururken projeye uygun klasör yapısını takip et.
+- Authentication gibi yeni modüller eklediğinde, ilgili metinleri `UserEnvironment`'a eklemeyi unutma.
+- Her büyük UI değişikliğinden sonra `Designs/Mockups/` klasörüne (varsa) görsel referans ekle veya iste.

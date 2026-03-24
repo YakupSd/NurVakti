@@ -1,0 +1,19 @@
+/Users/yakupsuda/YakupSuda_Projeler/QuranApp/NurVakti/Resources/tr.lproj/Localizable.strings
+"NSLocationWhenInUseUsageDescription" = "Namaz vakitlerini bulunduğunuz konuma göre en doğru şekilde hesaplayabilmek için konum iznine ihtiyacımız var.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Namaz vakitlerini ve bildirimleri bulunduğunuz konuma göre her zaman doğru almak için konum izni gereklidir.";
+
+/Users/yakupsuda/YakupSuda_Projeler/QuranApp/NurVakti/Resources/en.lproj/Localizable.strings
+"NSLocationWhenInUseUsageDescription" = "We need your location permission to calculate prayer times accurately based on your current location.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Location permission is required to always get accurate prayer times and notifications based on your location.";
+
+/Users/yakupsuda/YakupSuda_Projeler/QuranApp/NurVakti/Resources/ar.lproj/Localizable.strings
+"NSLocationWhenInUseUsageDescription" = "نحتاج إلى إذن الموقع لحساب مواقيت الصلاة بدقة بناءً على موقعك الحالي.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "مطلوب إذن الموقع للحصول دائمًا على مواقيت صلاة وإشعارات دقيقة بناءً على موقعك.";
+
+/Users/yakupsuda/YakupSuda_Projeler/QuranApp/NurVakti/Resources/de.lproj/Localizable.strings
+"NSLocationWhenInUseUsageDescription" = "Wir benötigen Ihre Standorterlaubnis, um die Gebetszeiten basierend auf Ihrem aktuellen Standort genau zu berechnen.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Die Standorterlaubnis ist erforderlich, um immer genaue Gebetszeiten und Benachrichtigungen basierend auf Ihrem Standort zu erhalten.";
+
+/Users/yakupsuda/YakupSuda_Projeler/QuranApp/NurVakti/Resources/pt.lproj/Localizable.strings
+"NSLocationWhenInUseUsageDescription" = "Precisamos da sua permissão de localização para calcular os horários das orações com precisão, com base na sua localização atual.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "A permissão de localização é necessária para obter sempre horários de oração e notificações precisos com base na sua localização.";
