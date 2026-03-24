@@ -83,25 +83,60 @@ final class HomeViewModel: ObservableObject {
     }
     
     private func handleLocationUpdate(_ location: CLLocation, force: Bool = false) async {
-        // Mesafe kontrolü: 10km'den az değişim varsa ve bugün için vakitler varsa çekme
-        if !force, let lastLoc = persistService.lastKnownLocation {
-            let distance = location.distance(from: lastLoc)
-            if distance < 10000 && todayPrayers != nil { // 10km
+        let lastLoc = persistService.lastKnownLocation
+        // GÜNCELLEME: Kullanıcının yeni matematik formüllerini görmesi için mesafeyi zorla büyük tutuyoruz
+        let distance = (force || lastLoc == nil) ? Double.greatestFiniteMagnitude : location.distance(from: lastLoc!)
+        
+        let settings = persistService.settings
+        
+        // 1. Mesafe kontrolü: 10km'den az değişim varsa ve bugün için vakitler varsa çekme
+        if !force, distance < 10000 {
+            if let cached = prayerService.loadCached(for: Date()) {
+                applyPrayers(cached)
+                self.cityName = cached.cityName
+                isLoading = false
                 return
             }
         }
         
+        // 2. Konum değiştiyse veya cache yoksa
         let city = await locationService.resolveCity(for: location)
         self.cityName = city
         persistService.saveLastKnownLocation(location)
         
-        let settings = persistService.settings
-        let prayers = prayerService.calculate(for: location, method: settings.calculationMethod, madhab: settings.madhab)
-        
-        applyPrayers(prayers)
-        
-        // Bildirimleri planla
-        await notifService.scheduleAll(prayers: [prayers], alarms: persistService.loadAlarms(), language: settings.language)
+        // 30 günlük veriyi API'den çek (async)
+        do {
+            let monthlyPrayers = try await prayerService.calculateMonthly(
+                for: location,
+                method: settings.calculationMethod,
+                madhab: settings.madhab
+            )
+            
+            if let first = monthlyPrayers.first(where: { Calendar.current.isDateInToday($0.date) }) {
+                // Struct immutable olduğu için city ismini manuel ekliyoruz
+                let prayerWithCity = PrayerTime(
+                    id: first.id,
+                    date: first.date,
+                    imsak: first.imsak,
+                    fajr: first.fajr,
+                    sunrise: first.sunrise,
+                    dhuhr: first.dhuhr,
+                    asr: first.asr,
+                    maghrib: first.maghrib,
+                    isha: first.isha,
+                    cityName: city,
+                    hijriDate: first.hijriDate,
+                    calculationMethod: first.calculationMethod
+                )
+                applyPrayers(prayerWithCity)
+                
+                // Bildirimleri planla
+                await notifService.scheduleAll(prayers: monthlyPrayers, alarms: persistService.loadAlarms(), language: settings.language)
+            }
+        } catch {
+            self.errorMessage = "Vakitler güncellenemedi: \(error.localizedDescription)"
+            print("HomeViewModel: API Error — \(error)")
+        }
         
         isLoading = false
     }

@@ -89,6 +89,7 @@
 		F32CDD752F719000006F2D78 /* DuaItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F32CDD742F719000006F2D78 /* DuaItem.swift */; };
 		F32CDD772F719000006F2D78 /* AudioService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F32CDD762F719000006F2D78 /* AudioService.swift */; };
 		F32CDD792F719000006F2D78 /* AddDhikrView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F32CDD782F719000006F2D78 /* AddDhikrView.swift */; };
+		F37685BB2F72B37900179634 /* PrayerCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F37685BA2F72B37900179634 /* PrayerCalculator.swift */; };
 		F68F7DC68DC504FBC9ED7431 /* AlarmViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7211D5C2BAF5D8D48B8BD669 /* AlarmViewModel.swift */; };
 		F7A8EA8B9D39EF775242E9CA /* NurWidgetData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A3E7E1A1FD313450DB56244 /* NurWidgetData.swift */; };
 		FF2540A1BFB5E6D6D04F02CF /* ZakatModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966A08345BE3C4F432483005 /* ZakatModel.swift */; };
@@ -182,6 +183,7 @@
 		F32CDD742F719000006F2D78 /* DuaItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuaItem.swift; sourceTree = "<group>"; };
 		F32CDD762F719000006F2D78 /* AudioService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioService.swift; sourceTree = "<group>"; };
 		F32CDD782F719000006F2D78 /* AddDhikrView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDhikrView.swift; sourceTree = "<group>"; };
+		F37685BA2F72B37900179634 /* PrayerCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerCalculator.swift; sourceTree = "<group>"; };
 		F5E729BBBBAA5955ED82FF9B /* QiblaSheet.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = QiblaSheet.swift; sourceTree = "<group>"; };
 		F960B8629AFDDC8AB7A1FD64 /* QuranViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = QuranViewModel.swift; sourceTree = "<group>"; };
 		FDB7502A792AFA416CEC04D3 /* RootNavigationController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RootNavigationController.swift; path = Core/Navigation/RootNavigationController.swift; sourceTree = "<group>"; };
@@ -470,6 +472,7 @@
 		D3F7DAD44D0FA1F376423F97 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				F37685BA2F72B37900179634 /* PrayerCalculator.swift */,
 				EE910DA401DC61A213B26C91 /* BackgroundRefreshService.swift */,
 				5C402A95CA9729FA94C9C4EA /* PrayerTimeService.swift */,
 				CDF110FC8B01595AC57479D6 /* SoundService.swift */,
@@ -643,6 +646,7 @@
 				BA4A60F4296CF7CE1F2735AB /* PrayerTimeRow.swift in Sources */,
 				60167FB0AABE61C05BF4CA6F /* IslamicEventBanner.swift in Sources */,
 				60088BDBDBC7BFD96CD6377A /* LanguagePicker.swift in Sources */,
+				F37685BB2F72B37900179634 /* PrayerCalculator.swift in Sources */,
 				43B5F92E8FA88FFC9E495535 /* NurCard.swift in Sources */,
 				DAEEF4545A416747C6E47241 /* EmptyStateView.swift in Sources */,
 				B84C0B945EAFDD183291D46A /* NurButton.swift in Sources */,
