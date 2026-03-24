@@ -33,6 +33,43 @@ struct AyahDTO: Codable {
     let surah: SurahDTO?
 }
 
+// MARK: - Aladhan Prayer Times API DTOs
+struct AladhanResponse: Codable {
+    let code: Int
+    let status: String
+    let data: [AladhanDayData]
+}
+
+struct AladhanDayData: Codable {
+    let timings: [String: String]
+    let date: AladhanDate
+}
+
+struct AladhanDate: Codable {
+    let readable: String
+    let timestamp: String
+    let hijri: AladhanHijri
+}
+
+struct AladhanHijri: Codable {
+    let date: String
+    let day: String
+    let weekday: AladhanWeekday
+    let month: AladhanMonth
+    let year: String
+}
+
+struct AladhanWeekday: Codable {
+    let en: String
+    let ar: String?
+}
+
+struct AladhanMonth: Codable {
+    let number: Int
+    let en: String
+    let ar: String?
+}
+
 // MARK: - Domain Models for Quran
 struct SurahInfo: Identifiable, Codable {
     let id: Int

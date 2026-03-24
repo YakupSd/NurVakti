@@ -23,11 +23,11 @@ struct PrayerTheme: Equatable {
     
     static let fajrTheme = PrayerTheme(
         prayerName: .fajr,
-        topColor: Color(hex: "0d1b2a"),
-        bottomColor: Color(hex: "000000"),
-        starOpacity: 0.6,
-        sunPosition: -0.1,
-        auraColor: Color(hex: "6a11cb").opacity(0.2),
+        topColor: Color(hex: "0f2027"),
+        bottomColor: Color(hex: "2c5364"),
+        starOpacity: 0.0,
+        sunPosition: 0.1,
+        auraColor: Color(hex: "ffb347").opacity(0.4),
         ambientLabel: "Tan Yeri"
     )
     
@@ -86,13 +86,13 @@ struct PrayerTheme: Equatable {
 extension PrayerTheme {
     static func theme(for prayer: PrayerName) -> PrayerTheme {
         switch prayer {
-        case .imsak: return imsakTheme
-        case .fajr: return fajrTheme
-        case .sunrise: return sunriseTheme
-        case .dhuhr: return dhuhrTheme
-        case .asr: return asrTheme
-        case .maghrib: return maghribTheme
-        case .isha: return ishaTheme
+        case .imsak: return PrayerTheme.imsakTheme
+        case .fajr: return PrayerTheme.fajrTheme
+        case .sunrise: return PrayerTheme.sunriseTheme
+        case .dhuhr: return PrayerTheme.dhuhrTheme
+        case .asr: return PrayerTheme.asrTheme
+        case .maghrib: return PrayerTheme.maghribTheme
+        case .isha: return PrayerTheme.ishaTheme
         }
     }
 }

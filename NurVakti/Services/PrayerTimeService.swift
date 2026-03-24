@@ -16,40 +16,9 @@ final class PrayerTimeService: ObservableObject {
         startCountdownTimer()
     }
     
-    // Adhan Swift kullanarak hesapla (Mock logic - Adhan entegrasyonu için yapı)
-    func calculate(for location: CLLocation, 
-                   method: String, 
-                   madhab: Madhab) -> PrayerTime {
-        // Gerçek implementasyonda Adhan kütüphanesi kullanılacak
-        // Örn: let params = CalculationMethod.turkey().params
-        // let prayers = PrayerTimes(coordinates: coordinates, date: date, calculationParameters: params)
-        
-        // Mock veri dönelim (şimdilik)
-        let now = Date()
-        let prayer = PrayerTime(
-            id: UUID(),
-            date: now,
-            imsak: now.addingTimeInterval(3600),
-            fajr: now.addingTimeInterval(5000),
-            sunrise: now.addingTimeInterval(10000),
-            dhuhr: now.addingTimeInterval(20000),
-            asr: now.addingTimeInterval(30000),
-            maghrib: now.addingTimeInterval(40000),
-            isha: now.addingTimeInterval(50000),
-            cityName: "İstanbul",
-            hijriDate: hijriDate(from: now, language: .tr),
-            calculationMethod: method
-        )
-        
-        DispatchQueue.main.async {
-            self.todayPrayers = prayer
-            self.nextPrayer = self.findNextPrayer(from: prayer)
-            // ── Persistence & Widget ────────────────────────────────────
-            self.saveToCache([prayer])
-            self.writeWidgetData(prayer: prayer)
-        }
-        return prayer
-    }
+    // Verilen koordinat için vakitleri Aladhan API'den (Diyanet Metodu) çeker.
+    // Artık astronomik hesaplama yerine servis tabanlı çalışıyoruz.
+    // ------------------------------------------------------------------
 
     // MARK: - Widget Veri Yazma (App Group)
     private func writeWidgetData(prayer: PrayerTime) {
@@ -97,15 +66,89 @@ final class PrayerTimeService: ObservableObject {
         }
     }
     
-    // 30 günlük hesapla ve cache'le
+    // API'den 30 günlük (veya takvim ayı bazlı) çek
     func calculateMonthly(for location: CLLocation,
                           method: String,
-                          madhab: Madhab) -> [PrayerTime] {
-        var results: [PrayerTime] = []
-        // Loop for 30 days...
-        self.monthlyPrayers = results
-        saveToCache(results)
+                          madhab: Madhab) async throws -> [PrayerTime] {
+        
+        let lat = location.coordinate.latitude
+        let lng = location.coordinate.longitude
+        
+        // Aladhan API Calendar RPC (method=13 Diyanet)
+        // https://api.aladhan.com/v1/calendar?latitude=...&longitude=...&method=13
+        let urlString = "https://api.aladhan.com/v1/calendar?latitude=\(lat)&longitude=\(lng)&method=13"
+        guard let url = URL(string: urlString) else {
+            throw URLError(.badURL)
+        }
+        
+        let (data, _) = try await URLSession.shared.data(from: url)
+        let response = try JSONDecoder().decode(AladhanResponse.self, from: data)
+        
+        let results = response.data.compactMap { day -> PrayerTime? in
+            let timings = day.timings
+            let dateStr = day.date.readable // "24 Mar 2026"
+            
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "dd MMM yyyy"
+            dateFormatter.locale = Locale(identifier: "en_US")
+            guard let date = dateFormatter.date(from: dateStr) else { return nil }
+            
+            func parseTime(_ timeStr: String) -> Date {
+                // "13:10 (EET)" -> "13:10"
+                let cleanTime = timeStr.components(separatedBy: " ").first ?? timeStr
+                let timeFormatter = DateFormatter()
+                timeFormatter.dateFormat = "yyyy-MM-dd HH:mm"
+                timeFormatter.timeZone = TimeZone.current
+                
+                let dayFormatter = DateFormatter()
+                dayFormatter.dateFormat = "yyyy-MM-dd"
+                let dayStr = dayFormatter.string(from: date)
+                
+                return timeFormatter.date(from: "\(dayStr) \(cleanTime)") ?? date
+            }
+            
+            let hijri = HijriDate(
+                day: Int(day.date.hijri.day) ?? 1,
+                month: day.date.hijri.month.number,
+                year: Int(day.date.hijri.year) ?? 1447
+            )
+            
+            return PrayerTime(
+                id: UUID(),
+                date: date,
+                imsak:   parseTime(timings["Imsak"] ?? ""),
+                fajr:    parseTime(timings["Fajr"] ?? ""),
+                sunrise: parseTime(timings["Sunrise"] ?? ""),
+                dhuhr:   parseTime(timings["Dhuhr"] ?? ""),
+                asr:     parseTime(timings["Asr"] ?? ""),
+                maghrib: parseTime(timings["Maghrib"] ?? ""),
+                isha:    parseTime(timings["Isha"] ?? ""),
+                cityName: "", 
+                hijriDate: hijri,
+                calculationMethod: "Diyanet (API)"
+            )
+        }
+        
+        DispatchQueue.main.async {
+            self.monthlyPrayers = results
+            if let firstToday = results.first(where: { Calendar.current.isDateInToday($0.date) }) {
+                self.todayPrayers = firstToday
+                self.nextPrayer = self.findNextPrayer(from: firstToday)
+            }
+            self.saveToCache(results)
+        }
+        
         return results
+    }
+    
+    // MARK: - Deprecated Calculation (Astronomical)
+    @available(*, deprecated, message: "Use async calculateMonthly instead")
+    func calculate(for location: CLLocation,
+                   method: String,
+                   madhab: Madhab) -> PrayerTime {
+        // Fallback or legacy support
+        let prayer = PrayerCalculator.shared.calculate(for: location, method: method, madhab: madhab)
+        return prayer
     }
     
     // Bir sonraki vakti bul
@@ -124,13 +167,6 @@ final class PrayerTimeService: ObservableObject {
     // Kalan süre (saniye)
     func secondsUntil(_ date: Date) -> TimeInterval {
         date.timeIntervalSince(Date())
-    }
-    
-    // Hicri tarih (Foundation built-in)
-    func hijriDate(from date: Date, language: LanguageCode) -> HijriDate {
-        let calendar = Calendar(identifier: .islamicUmmAlQura)
-        let components = calendar.dateComponents([.day, .month, .year], from: date)
-        return HijriDate(day: components.day ?? 1, month: components.month ?? 1, year: components.year ?? 1446)
     }
     
     // Timer: her saniye countdown güncelle
