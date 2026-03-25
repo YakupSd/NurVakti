@@ -305,3 +305,6 @@
 "general.next"   = "التالي";
 "general.yes"    = "نعم";
 "general.no"     = "لا";
+"completed_prayers_count" = "تمت %d صلوات اليوم";
+"alarm.repeatDays"    = "أيام التكرار";
+"alarm.everyDay"       = "كل يوم";

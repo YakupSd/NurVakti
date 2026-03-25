@@ -50,10 +50,24 @@ final class AlarmViewModel: ObservableObject {
         }
     }
     
+    func updateRepeatDays(_ day: Weekday, for alarmID: UUID) {
+        if let index = alarms.firstIndex(where: { $0.id == alarmID }) {
+            if alarms[index].repeatDays.contains(day) {
+                alarms[index].repeatDays.remove(day)
+            } else {
+                alarms[index].repeatDays.insert(day)
+            }
+            saveAndReschedule()
+        }
+    }
+    
     private func saveAndReschedule() {
         persistService.saveAlarms(alarms)
-        // Bildirimleri yeniden planlamak için NotificationService çağrılmalı
-        // Task { await notifService.scheduleAll(...) }
+        let prayers = persistService.loadPrayerCache()
+        let language = LocalizationManager.shared.currentLanguage
+        Task {
+            await notifService.scheduleAll(prayers: prayers, alarms: alarms, language: language)
+        }
     }
     
     func requestPermission() async {

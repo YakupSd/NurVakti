@@ -14,6 +14,11 @@ struct NurWidgetData: Codable {
     var nextPrayerTime: Date
     // Bugünkü tüm vakitler (widget'ı zenginleştirmek için)
     var allPrayers: [WidgetPrayerEntry]
+    // Zikirmatik (Yeni)
+    var activeDhikrName: String?
+    var activeDhikrCount: Int?
+    var activeDhikrTarget: Int?
+
     // Konum
     var cityName: String
     // Hicri tarih
@@ -57,5 +62,44 @@ extension NurWidgetData {
             return nil
         }
         return decoded
+    }
+
+    /// Sadece zikir verisini günceller (Prayer verisini korur)
+    static func updateDhikr(name: String, count: Int, target: Int) {
+        var data = load() ?? createEmpty()
+        data.activeDhikrName = name
+        data.activeDhikrCount = count
+        data.activeDhikrTarget = target
+        save(data)
+    }
+
+    /// Sadece vakit verisini günceller (Zikir verisini korur)
+    static func updatePrayers(nextName: String, nextNameEn: String, nextTime: Date, all: [WidgetPrayerEntry], city: String, hijri: String, lang: String) {
+        var data = load() ?? createEmpty()
+        data.nextPrayerName = nextName
+        data.nextPrayerNameEn = nextNameEn
+        data.nextPrayerTime = nextTime
+        data.allPrayers = all
+        data.cityName = city
+        data.hijriDateString = hijri
+        data.languageCode = lang
+        data.lastUpdated = Date()
+        save(data)
+    }
+
+    private static func createEmpty() -> NurWidgetData {
+        NurWidgetData(
+            nextPrayerName: "--",
+            nextPrayerNameEn: "--",
+            nextPrayerTime: Date(),
+            allPrayers: [],
+            activeDhikrName: nil,
+            activeDhikrCount: nil,
+            activeDhikrTarget: nil,
+            cityName: "NurVakti",
+            hijriDateString: "",
+            languageCode: "tr",
+            lastUpdated: Date()
+        )
     }
 }

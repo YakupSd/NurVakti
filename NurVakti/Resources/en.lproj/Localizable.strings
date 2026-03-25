@@ -319,3 +319,6 @@
 "general.next"   = "Next";
 "general.yes"    = "Yes";
 "general.no"     = "No";
+"completed_prayers_count" = "%d prayers passed today";
+"alarm.repeatDays"    = "Repeat Days";
+"alarm.everyDay"       = "Every day";

@@ -18,7 +18,7 @@ struct PrayerTheme: Equatable {
         starOpacity: 0.9,
         sunPosition: -0.2,
         auraColor: Color(hex: "4b6cb7").opacity(0.3),
-        ambientLabel: "Seher Vakti"
+        ambientLabel: NSLocalizedString("ambient.imsak", comment: "")
     )
     
     static let fajrTheme = PrayerTheme(
@@ -28,7 +28,7 @@ struct PrayerTheme: Equatable {
         starOpacity: 0.0,
         sunPosition: 0.1,
         auraColor: Color(hex: "ffb347").opacity(0.4),
-        ambientLabel: "Tan Yeri"
+        ambientLabel: NSLocalizedString("ambient.fajr", comment: "")
     )
     
     static let sunriseTheme = PrayerTheme(
@@ -38,7 +38,7 @@ struct PrayerTheme: Equatable {
         starOpacity: 0.0,
         sunPosition: 0.1,
         auraColor: Color(hex: "ffb347").opacity(0.4),
-        ambientLabel: "Gün Doğumu"
+        ambientLabel: NSLocalizedString("ambient.sunrise", comment: "")
     )
     
     static let dhuhrTheme = PrayerTheme(
@@ -48,7 +48,7 @@ struct PrayerTheme: Equatable {
         starOpacity: 0.0,
         sunPosition: 0.9,
         auraColor: Color(hex: "4facfe").opacity(0.3),
-        ambientLabel: "Öğle Güneşi"
+        ambientLabel: NSLocalizedString("ambient.dhuhr", comment: "")
     )
     
     static let asrTheme = PrayerTheme(
@@ -58,7 +58,7 @@ struct PrayerTheme: Equatable {
         starOpacity: 0.0,
         sunPosition: 0.5,
         auraColor: Color(hex: "f093fb").opacity(0.2),
-        ambientLabel: "İkindi Vakti"
+        ambientLabel: NSLocalizedString("ambient.asr", comment: "")
     )
     
     static let maghribTheme = PrayerTheme(
@@ -68,7 +68,7 @@ struct PrayerTheme: Equatable {
         starOpacity: 0.3,
         sunPosition: 0.0,
         auraColor: Color(hex: "f83600").opacity(0.3),
-        ambientLabel: "Akşam Sefası"
+        ambientLabel: NSLocalizedString("ambient.maghrib", comment: "")
     )
     
     static let ishaTheme = PrayerTheme(
@@ -78,7 +78,7 @@ struct PrayerTheme: Equatable {
         starOpacity: 1.0,
         sunPosition: -0.5,
         auraColor: Color(hex: "7f7fd5").opacity(0.2),
-        ambientLabel: "Yatsı Huzuru"
+        ambientLabel: NSLocalizedString("ambient.isha", comment: "")
     )
 }
 

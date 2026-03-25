@@ -178,19 +178,38 @@ struct AlarmCard: View {
                                 }
                             }
                             
-                            // Günler (Basitleştirilmiş)
-                            HStack(spacing: 8) {
-                                ForEach(Weekday.allCases, id: \.self) { day in
-                                    Text(day.shortName(for: language))
-                                        .nurFont(10, weight: .bold)
-                                        .frame(width: 32, height: 32)
-                                        .background(day.isFriday ? Color.nurGold.opacity(0.2) : Color.white.opacity(0.05))
-                                        .foregroundColor(day.isFriday ? .nurGold : .white.opacity(0.6))
-                                        .cornerRadius(8)
-                                        .overlay(
-                                            RoundedRectangle(cornerRadius: 8)
-                                                .stroke(day.isFriday ? Color.nurGold.opacity(0.5) : Color.clear, lineWidth: 1)
-                                        )
+                            // Günler
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text(LocalizationManager.shared.localizedString("alarm.repeatDays"))
+                                    .nurFont(13, weight: .medium)
+                                    .foregroundColor(.white.opacity(0.6))
+                                
+                                HStack(spacing: 6) {
+                                    ForEach(Weekday.allCases, id: \.self) { day in
+                                        let isSelected = alarm.repeatDays.isEmpty || alarm.repeatDays.contains(day)
+                                        Button(action: {
+                                            HapticManager.shared.light()
+                                            vm.updateRepeatDays(day, for: alarm.id)
+                                        }) {
+                                            Text(day.shortName(for: language))
+                                                .nurFont(10, weight: .bold)
+                                                .frame(width: 34, height: 34)
+                                                .background(isSelected ? Color.nurGold.opacity(0.2) : Color.white.opacity(0.05))
+                                                .foregroundColor(isSelected ? .nurGold : .white.opacity(0.3))
+                                                .cornerRadius(8)
+                                                .overlay(
+                                                    RoundedRectangle(cornerRadius: 8)
+                                                        .stroke(isSelected ? Color.nurGold.opacity(0.5) : Color.white.opacity(0.08), lineWidth: 1)
+                                                )
+                                        }
+                                        .buttonStyle(.plain)
+                                    }
+                                }
+                                
+                                if alarm.repeatDays.isEmpty {
+                                    Text(LocalizationManager.shared.localizedString("alarm.everyDay"))
+                                        .nurFont(11)
+                                        .foregroundColor(.nurGold.opacity(0.6))
                                 }
                             }
                         }

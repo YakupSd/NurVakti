@@ -49,13 +49,7 @@ struct QuranView: View {
                         
                         Button(action: { 
                             let page = vm.hatimProgress?.currentPage ?? 1
-                            router.pushTo(
-                                view: MainNavigationView.builder.makeView(
-                                    HatimPageView(currentPage: page, vm: vm),
-                                    withNavigationTitle: "Hatim",
-                                    isShowRightButton: false
-                                )
-                            )
+                            router.push(to: .hatim(page: page, vm: vm))
                         }) {
                             NurCard(title: "Kur'an-ı Hatmet", icon: "sparkles") {
                                 HStack {
@@ -119,13 +113,7 @@ struct QuranView: View {
                             } else {
                                 ForEach(vm.filteredSurahs) { surah in
                                     Button(action: { 
-                                        router.pushTo(
-                                            view: MainNavigationView.builder.makeView(
-                                                AyahListView(surah: surah, vm: vm),
-                                                withNavigationTitle: surah.englishName,
-                                                isShowRightButton: false
-                                            )
-                                        )
+                                        router.push(to: .ayahList(surah: surah))
                                     }) {
                                         SurahRowView(surah: surah, language: localization.currentLanguage, fontSize: .medium)
                                     }

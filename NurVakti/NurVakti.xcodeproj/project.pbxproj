@@ -134,7 +134,6 @@
 		66179756EB7B6EF368C32765 /* CustomHostingController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CustomHostingController.swift; path = Core/Navigation/CustomHostingController.swift; sourceTree = "<group>"; };
 		7211D5C2BAF5D8D48B8BD669 /* AlarmViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AlarmViewModel.swift; sourceTree = "<group>"; };
 		725BD9D00568EE2EBAC5C87A /* GuidanceService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = GuidanceService.swift; sourceTree = "<group>"; };
-		74C0376AD4F9E7A1F030B077 /* NurVaktiWidget.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NurVaktiWidget.swift; path = Widgets/NurVaktiWidget.swift; sourceTree = "<group>"; };
 		7C99CED12E29C52651309A7C /* SplashView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		80E2A2F8177E0D3844821CC8 /* AppTheme.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
 		84FB327D09ED40094E0B97A1 /* DhikrView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DhikrView.swift; sourceTree = "<group>"; };
@@ -261,8 +260,6 @@
 				929E47256A0D1D2D45656AC2 /* Info_Plist_Strings.txt */,
 				0FCFBAC226D0E7ABE3D46E85 /* NurVakti.xcdatamodeld */,
 				8B3A60DC4FCB841615C3B427 /* PrivacyInfo.xcprivacy */,
-				D8C57459DFC0913A847006E3 /* Assets */,
-				C9FA224C2E252FCD2A47FB81 /* Localizable */,
 				55098DB5DD683B8FE1EE4380 /* Localizable.strings */,
 			);
 			path = Resources;
@@ -462,13 +459,6 @@
 			name = Tools;
 			sourceTree = "<group>";
 		};
-		C9FA224C2E252FCD2A47FB81 /* Localizable */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Localizable;
-			sourceTree = "<group>";
-		};
 		D3F7DAD44D0FA1F376423F97 /* Services */ = {
 			isa = PBXGroup;
 			children = (
@@ -486,13 +476,6 @@
 				725BD9D00568EE2EBAC5C87A /* GuidanceService.swift */,
 			);
 			path = Services;
-			sourceTree = "<group>";
-		};
-		D8C57459DFC0913A847006E3 /* Assets */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Assets;
 			sourceTree = "<group>";
 		};
 		DA074303DB1B0BAF9B586592 /* Theme */ = {
@@ -519,14 +502,6 @@
 			path = Alarm;
 			sourceTree = "<group>";
 		};
-		EB989781B8CBF41C00EC6D25 /* Widgets */ = {
-			isa = PBXGroup;
-			children = (
-				74C0376AD4F9E7A1F030B077 /* NurVaktiWidget.swift */,
-			);
-			name = Widgets;
-			sourceTree = "<group>";
-		};
 		F32CDD2A2F717CB2006F2D78 = {
 			isa = PBXGroup;
 			children = (
@@ -538,7 +513,6 @@
 				19902586EC950B32AC01E865 /* ViewModels */,
 				1590842286BE717A2781082C /* Views */,
 				1C348435D488FD4898F69CB3 /* Resources */,
-				EB989781B8CBF41C00EC6D25 /* Widgets */,
 				4CF83214D72028482678D11D /* NurVakti */,
 			);
 			sourceTree = "<group>";
@@ -784,7 +758,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -842,7 +816,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;

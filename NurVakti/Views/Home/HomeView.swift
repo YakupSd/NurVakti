@@ -82,13 +82,7 @@ struct HomeView: View {
                             }
                             
                             Button(action: { 
-                                router.pushTo(
-                                    view: MainNavigationView.builder.makeView(
-                                        SettingsView(vm: SettingsViewModel()),
-                                        withNavigationTitle: localization.localizedString("settings.title"),
-                                        isShowRightButton: false
-                                    )
-                                )
+                                router.push(to: .settings)
                             }) {
                                 Image(systemName: "gearshape.fill")
                                     .font(.title3)
@@ -121,7 +115,7 @@ struct HomeView: View {
                                                        time: prayerDate(for: name, in: prayers), 
                                                        isActive: vm.nextPrayer?.name == name, 
                                                        isPast: isPast(prayer: name, in: prayers), 
-                                                       notificationEnabled: true, 
+                                                       notificationEnabled: vm.isNotificationEnabled(for: name), 
                                                        fontSize: .medium, 
                                                        language: localization.currentLanguage) {
                                             vm.toggleNotification(for: name)
@@ -144,13 +138,7 @@ struct HomeView: View {
                                     NotificationCenter.default.post(name: Notification.Name("NavigateToTab"), object: 1)
                                 }
                                 quickAccessButton(title: localization.localizedString("menu_calendar"), icon: "calendar") {
-                                    router.pushTo(
-                                        view: MainNavigationView.builder.makeView(
-                                            IslamicCalendarView(),
-                                            withNavigationTitle: localization.localizedString("home.calendar"),
-                                            isShowRightButton: false
-                                        )
-                                    )
+                                    router.push(to: .calendar)
                                 }
                             }
                             HStack(spacing: 12) {
@@ -158,25 +146,12 @@ struct HomeView: View {
                                     NotificationCenter.default.post(name: Notification.Name("NavigateToTab"), object: 2)
                                 }
                                 quickAccessButton(title: localization.localizedString("menu_qibla"), icon: "safari.fill") {
-                                    router.pushTo(
-                                        view: MainNavigationView.builder.makeView(
-                                            QiblaView(),
-                                            withNavigationTitle: localization.localizedString("home.qiblaShortcut"),
-                                            navigationBarHidden: false,
-                                            isShowRightButton: false
-                                        )
-                                    )
+                                    router.push(to: .qibla)
                                 }
                             }
                             HStack(spacing: 12) {
                                 quickAccessButton(title: localization.localizedString("menu_zakat"), icon: "dollarsign.circle.fill") {
-                                    router.pushTo(
-                                        view: MainNavigationView.builder.makeView(
-                                            ZakatCalculatorView(),
-                                            withNavigationTitle: localization.localizedString("home.zakatCalculator"),
-                                            isShowRightButton: false
-                                        )
-                                    )
+                                    router.push(to: .zakat)
                                 }
                                 quickAccessButton(title: localization.localizedString("home.searchShortcut"), icon: "magnifyingglass") {
                                     NotificationCenter.default.post(name: Notification.Name("NavigateToTab"), object: 1)
@@ -186,14 +161,7 @@ struct HomeView: View {
                         
                         // ── TESBİHAT BUTONU ──
                         Button(action: { 
-                            router.pushTo(
-                                view: MainNavigationView.builder.makeView(
-                                    TasbihModeView(),
-                                    withNavigationTitle: "Tasbihat",
-                                    navigationBarHidden: false,
-                                    isShowRightButton: false
-                                )
-                            )
+                            router.push(to: .tasbih)
                         }) {
                             HStack {
                                 Image(systemName: "hand.tap.fill")

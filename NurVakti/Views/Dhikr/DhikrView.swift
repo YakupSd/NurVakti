@@ -301,18 +301,7 @@ struct PrayerDuaList: View {
                 
                 ForEach(currentDuas) { dua in
                     Button(action: { 
-                        router.pushTo(
-                            view: MainNavigationView.builder.makeView(
-                                DuaDetailView(dua: dua, language: language),
-                                withNavigationTitle: "Dua",
-                                isShowRightButton: true,
-                                rightImage: "square.and.arrow.up",
-                                rightButtonAction: {
-                                    // Örnek Paylaşım Aksiyonu
-                                    print("Dua paylaşıldı: \(dua.title[language] ?? "")")
-                                }
-                            )
-                        )
+                        router.push(to: .duaDetail(dua: dua))
                     }) {
                         VStack(alignment: .trailing, spacing: 12) {
                             HStack {
