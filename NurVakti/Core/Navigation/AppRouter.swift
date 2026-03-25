@@ -71,7 +71,9 @@ final class AppRouter: ObservableObject, Router {
         let view = destination.view
         let vc = CustomHostingController(rootView: view, 
                                         navigationBarTitle: destination.title, 
-                                        navigationBarHidden: destination.isNavBarHidden)
+                                        navigationBarHidden: destination.isNavBarHidden,
+                                        rightImage: destination.rightImage,
+                                        rightButtonAction: destination.rightButtonAction)
         
         // Premium Transition Animation (matching example)
         let transition = CATransition()
@@ -151,8 +153,28 @@ extension AppDestination {
     
     var isNavBarHidden: Bool {
         switch self {
-        case .home, .qibla, .tasbih: return true
+        case .home: return true
         default: return false
+        }
+    }
+    
+    var rightImage: String? {
+        switch self {
+        case .duaDetail: return "square.and.arrow.up"
+        default: return nil
+        }
+    }
+    
+    var rightButtonAction: (() -> Void)? {
+        switch self {
+        case .duaDetail(let dua):
+            return {
+                let text = "\(dua.arabicText)\n\n\(dua.translation[.tr] ?? "")"
+                let vc = UIActivityViewController(activityItems: [text], applicationActivities: nil)
+                AppRouter.shared.nav?.present(vc, animated: true)
+            }
+        default:
+            return nil
         }
     }
 }

@@ -109,10 +109,9 @@ struct AyahRowView: View {
     
     var body: some View {
         VStack(alignment: .trailing, spacing: 16) {
-            // Arapça Metin
-            Text(ayah.arabicText)
+            // Arapça Metin (Tajweed Destekli)
+            Text(TajweedFormatter.shared.format(ayah.tajweedText ?? ayah.arabicText, defaultColor: .white))
                 .font(.system(size: arabicFontSize))
-                .foregroundColor(.white)
                 .multilineTextAlignment(.trailing)
                 .lineSpacing(10)
             

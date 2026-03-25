@@ -24,6 +24,7 @@ final class HomeViewModel: ObservableObject {
     @Published var dailyGuidance: GuidanceItem? = nil
     
     private var cancellables = Set<AnyCancellable>()
+    private var hasAppeared = false
     
     init(prayerService: PrayerTimeService = PrayerTimeService(),
          locationService: LocationService = LocationService(),
@@ -48,8 +49,10 @@ final class HomeViewModel: ObservableObject {
             }
             .store(in: &cancellables)
             
-        // Timer/Countdown binding
-        prayerService.$countdown
+        // Saniyede bir bağımsız timer — prayerService.nextPrayer'a değil,
+        // kendi nextPrayer'ına bakıyor; cache'den yüklenince de çalışır
+        Timer.publish(every: 1, on: .main, in: .common)
+            .autoconnect()
             .sink { [weak self] _ in
                 self?.updateCountdown()
             }
@@ -61,6 +64,15 @@ final class HomeViewModel: ObservableObject {
     }
     
     func onAppear() async {
+        // Sayfa geri dönüşlerinde mevcut prayer verisini uygula (timer için)
+        if hasAppeared {
+            if let cached = prayerService.loadCached(for: Date()) {
+                applyPrayers(cached)
+            }
+            return
+        }
+        hasAppeared = true
+        
         // 1. Önce cache kontrolü
         if let cached = prayerService.loadCached(for: Date()) {
             applyPrayers(cached)
@@ -194,7 +206,43 @@ final class HomeViewModel: ObservableObject {
     }
     
     func toggleNotification(for prayer: PrayerName) {
-        // Notif servise bildirimi aç/kapat komutu
+        var allAlarms = persistService.loadAlarms()
+        
+        if let index = allAlarms.firstIndex(where: { $0.prayerName == prayer }) {
+            // Mevcut alarmı kapat/aç
+            allAlarms[index].isActive.toggle()
+        } else {
+            // Yeni aktif alarm oluştur (varsayılan: 0 dk önce, ezan sesi)
+            let newAlarm = AlarmModel(
+                id: UUID(),
+                prayerName: prayer,
+                minutesBefore: 0,
+                isActive: true,
+                soundType: .ezan,
+                repeatDays: []
+            )
+            allAlarms.append(newAlarm)
+        }
+        
+        persistService.saveAlarms(allAlarms)
+        
+        // Bildirimleri sistemde güncelle
+        if let monthly = prayerService.monthlyPrayers.isEmpty ? nil : prayerService.monthlyPrayers {
+            Task {
+                await notifService.scheduleAll(
+                    prayers: monthly,
+                    alarms: allAlarms,
+                    language: persistService.settings.language
+                )
+            }
+        }
+        
+        // UI'ı güncellemek için
+        objectWillChange.send()
+    }
+    
+    func isNotificationEnabled(for prayer: PrayerName) -> Bool {
+        return persistService.loadAlarms().first(where: { $0.prayerName == prayer })?.isActive ?? false
     }
     
     func formattedTime(_ date: Date, language: LanguageCode) -> String {

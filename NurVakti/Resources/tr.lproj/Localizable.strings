@@ -322,3 +322,6 @@
 "general.next"   = "İleri";
 "general.yes"    = "Evet";
 "general.no"     = "Hayır";
+"completed_prayers_count" = "Bugün %d vakit tamamlandı";
+"alarm.repeatDays"    = "Tekrar Günleri";
+"alarm.everyDay"       = "Her gün";

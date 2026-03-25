@@ -38,17 +38,15 @@ final class PrayerTimeService: ObservableObject {
             )
         }
 
-        let widgetData = NurWidgetData(
-            nextPrayerName: next.name.localizedName(for: language),
-            nextPrayerNameEn: next.name.localizedName(for: .en),
-            nextPrayerTime: next.time,
-            allPrayers: allEntries,
-            cityName: prayer.cityName,
-            hijriDateString: "\(prayer.hijriDate.day) \(prayer.hijriDate.monthName(for: language)) \(prayer.hijriDate.year)",
-            languageCode: language.rawValue,
-            lastUpdated: Date()
+        NurWidgetData.updatePrayers(
+            nextName: next.name.localizedName(for: language),
+            nextNameEn: next.name.localizedName(for: .en),
+            nextTime: next.time,
+            all: allEntries,
+            city: prayer.cityName,
+            hijri: "\(prayer.hijriDate.day) \(prayer.hijriDate.monthName(for: language)) \(prayer.hijriDate.year)",
+            lang: language.rawValue
         )
-        NurWidgetData.save(widgetData)
 
         // Widget timeline'ını zorla güncelle
         WidgetCenter.shared.reloadAllTimelines()
@@ -74,9 +72,19 @@ final class PrayerTimeService: ObservableObject {
         let lat = location.coordinate.latitude
         let lng = location.coordinate.longitude
         
-        // Aladhan API Calendar RPC (method=13 Diyanet)
-        // https://api.aladhan.com/v1/calendar?latitude=...&longitude=...&method=13
-        let urlString = "https://api.aladhan.com/v1/calendar?latitude=\(lat)&longitude=\(lng)&method=13"
+        // Aladhan API Calendar RPC (Diyanet=13, default=method)
+        let methodParam: String
+        switch method.lowercased() {
+        case "diyanet": methodParam = "13"
+        case "muslim world league": methodParam = "3"
+        case "isna": methodParam = "2"
+        case "egypt": methodParam = "5"
+        case "karachi": methodParam = "1"
+        case "tehran": methodParam = "7"
+        default: methodParam = "13"
+        }
+        
+        let urlString = "https://api.aladhan.com/v1/calendar?latitude=\(lat)&longitude=\(lng)&method=\(methodParam)"
         guard let url = URL(string: urlString) else {
             throw URLError(.badURL)
         }
@@ -95,7 +103,8 @@ final class PrayerTimeService: ObservableObject {
             
             func parseTime(_ timeStr: String) -> Date {
                 // "13:10 (EET)" -> "13:10"
-                let cleanTime = timeStr.components(separatedBy: " ").first ?? timeStr
+                let cleanTime = (timeStr.components(separatedBy: " ").first ?? timeStr).replacingOccurrences(of: "(EET)", with: "").replacingOccurrences(of: "(EEST)", with: "").trimmingCharacters(in: .whitespaces)
+                
                 let timeFormatter = DateFormatter()
                 timeFormatter.dateFormat = "yyyy-MM-dd HH:mm"
                 timeFormatter.timeZone = TimeZone.current
@@ -134,6 +143,8 @@ final class PrayerTimeService: ObservableObject {
             if let firstToday = results.first(where: { Calendar.current.isDateInToday($0.date) }) {
                 self.todayPrayers = firstToday
                 self.nextPrayer = self.findNextPrayer(from: firstToday)
+                // Widget verisini yaz
+                self.writeWidgetData(prayer: firstToday)
             }
             self.saveToCache(results)
         }
@@ -146,21 +157,36 @@ final class PrayerTimeService: ObservableObject {
     func calculate(for location: CLLocation,
                    method: String,
                    madhab: Madhab) -> PrayerTime {
-        // Fallback or legacy support
         let prayer = PrayerCalculator.shared.calculate(for: location, method: method, madhab: madhab)
         return prayer
     }
     
-    // Bir sonraki vakti bul
-    func findNextPrayer(from prayers: PrayerTime) -> (name: PrayerName, time: Date)? {
+    // Bir sonraki vakti bul (Bugün bittiyse yarına bak)
+    func findNextPrayer(from today: PrayerTime) -> (name: PrayerName, time: Date)? {
         let now = Date()
-        if prayers.imsak > now { return (.imsak, prayers.imsak) }
-        if prayers.fajr > now { return (.fajr, prayers.fajr) }
-        if prayers.sunrise > now { return (.sunrise, prayers.sunrise) }
-        if prayers.dhuhr > now { return (.dhuhr, prayers.dhuhr) }
-        if prayers.asr > now { return (.asr, prayers.asr) }
-        if prayers.maghrib > now { return (.maghrib, prayers.maghrib) }
-        if prayers.isha > now { return (.isha, prayers.isha) }
+        
+        // Bugün içindeki vakitleri kontrol et
+        let allToday: [(PrayerName, Date)] = [
+            (.imsak, today.imsak),
+            (.fajr, today.fajr),
+            (.sunrise, today.sunrise),
+            (.dhuhr, today.dhuhr),
+            (.asr, today.asr),
+            (.maghrib, today.maghrib),
+            (.isha, today.isha)
+        ].sorted { $0.1 < $1.1 }
+        
+        for p in allToday {
+            if p.1 > now {
+                return p
+            }
+        }
+        
+        // Bugün bittiyse yarının İmsak vaktine bak
+        if let tomorrow = monthlyPrayers.first(where: { Calendar.current.isDate($0.date, inSameDayAs: Date().addingTimeInterval(86400)) }) {
+            return (.imsak, tomorrow.imsak)
+        }
+        
         return nil
     }
     

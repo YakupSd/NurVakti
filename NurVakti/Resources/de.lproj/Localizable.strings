@@ -319,4 +319,7 @@
 "general.next"   = "Weiter";
 "general.yes"    = "Ja";
 "general.no"     = "Nein";
+"completed_prayers_count" = "Heute sind %d Gebete vergangen";
 
+"alarm.repeatDays"    = "Wiederholungstage";
+"alarm.everyDay"       = "Jeden Tag";

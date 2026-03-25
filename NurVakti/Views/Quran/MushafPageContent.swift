@@ -6,90 +6,95 @@ struct MushafPageContent: View {
     let readingMode: QuranReadingMode
     
     var body: some View {
-        ScrollView {
-            VStack(spacing: 20) {
-                // Mushaf Alanı
+        ScrollView(showsIndicators: false) {
+            VStack(spacing: 0) {
+                // MARK: - Mushaf Paper
                 VStack(spacing: 0) {
-                    // Sayfa içeriği - Akışkan Metin
-                    Group {
-                        if let firstAyah = ayahs.first {
-                            let surahId = firstAyah.surahNumber
-                            VStack(spacing: 16) {
-                                // Surah Header (Opsiyonel: Eğer sayfa başıysa)
-                                if firstAyah.id == 1 {
-                                    Text("\(LocalizationManager.shared.localizedString("quran.surahLabel")) \(surahName(for: surahId))")
-                                        .font(.custom("Traditional Arabic", size: 32))
-                                        .padding(.vertical, 8)
-                                        .frame(maxWidth: .infinity)
-                                        .background(
-                                            RoundedRectangle(cornerRadius: 8)
-                                                .stroke(Color.nurGold.opacity(0.5), lineWidth: 1)
-                                        )
-                                    
-                                    if surahId != 1 && surahId != 9 {
-                                        Text("بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ")
-                                            .font(.custom("Traditional Arabic", size: 28))
-                                            .padding(.vertical, 8)
-                                    }
-                                }
-                                
-                                if readingMode == .arabicOnly {
-                                    arabicFlowView
-                                } else {
-                                    translationListView
-                                }
+                    if let firstAyah = ayahs.first {
+                        let surahId = firstAyah.surahNumber
+                        VStack(spacing: 16) {
+                            
+                            // Surah Header
+                            if firstAyah.id == 1 {
+                                surahHeader(id: surahId)
+                            }
+                            
+                            if readingMode == .arabicOnly {
+                                arabicFlowView
+                            } else {
+                                translationListView
                             }
                         }
                     }
-                    .padding(24)
                 }
-                .background(Color(hex: "F4ECD8")) // Kağıt rengi
-                .cornerRadius(12)
+                .padding(32)
+                .background(Color(hex: "FDFBF0")) // Daha sıcak Premium Mushaf Kağıdı
+                .cornerRadius(4)
+                .shadow(color: .black.opacity(0.15), radius: 15, x: 0, y: 5)
                 .overlay(
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(Color.nurGold.opacity(0.3), lineWidth: 2)
+                    RoundedRectangle(cornerRadius: 4)
+                        .stroke(Color.nurGold.opacity(0.2), lineWidth: 1)
                 )
-                .shadow(color: .black.opacity(0.1), radius: 10)
             }
             .padding()
         }
+        .background(Color(hex: "1a1a1a")) // Arka planla kontrast
     }
     
-    // Geleneksel Akışkan Metin
-    private var arabicFlowView: some View {
-        var combinedText = Text("")
-        
-        for ayah in ayahs {
-            let ayahText = Text(ayah.arabicText + " ")
-                .font(.custom("Traditional Arabic", size: arabicFontSize))
-            
-            let marker = Text(" ﴿\(ayah.id)﴾ ")
-                .font(.system(size: arabicFontSize * 0.6))
+    private func surahHeader(id: Int) -> some View {
+        VStack(spacing: 12) {
+            Text("\(id). \(LocalizationManager.shared.localizedString("quran.surahLabel"))")
+                .nurFont(14, weight: .bold)
                 .foregroundColor(.nurGold)
             
-            combinedText = combinedText + ayahText + marker
+            if id != 1 && id != 9 {
+                Text("بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ")
+                    .font(.custom("Traditional Arabic", size: 36))
+                    .foregroundColor(.black)
+                    .padding(.vertical, 8)
+            }
+            
+            Divider()
+                .background(Color.nurGold.opacity(0.3))
+        }
+        .padding(.bottom, 20)
+    }
+
+    // Geleneksel Akışkan Metin (Tajweed Destekli)
+    private var arabicFlowView: some View {
+        var combinedText = AttributedString("")
+        
+        for ayah in ayahs {
+            let tajweed = TajweedFormatter.shared.format(ayah.tajweedText ?? ayah.arabicText, defaultColor: .black)
+            combinedText.append(tajweed)
+            
+            var marker = AttributedString(" ﴿\(ayah.id)﴾ ")
+            marker.foregroundColor = .nurGold
+            marker.font = .system(size: arabicFontSize * 0.6)
+            combinedText.append(marker)
         }
         
-        return combinedText
+        return Text(combinedText)
+            .font(.custom("Traditional Arabic", size: arabicFontSize))
             .multilineTextAlignment(.trailing)
-            .lineSpacing(12)
-            .foregroundColor(.black)
+            .lineSpacing(15)
     }
     
     private var translationListView: some View {
-        VStack(spacing: 24) {
+        VStack(spacing: 32) {
             ForEach(ayahs) { ayah in
-                VStack(alignment: .trailing, spacing: 8) {
-                    Text(ayah.arabicText)
+                VStack(alignment: .trailing, spacing: 12) {
+                    Text(TajweedFormatter.shared.format(ayah.tajweedText ?? ayah.arabicText, defaultColor: .black))
                         .font(.custom("Traditional Arabic", size: arabicFontSize))
                         .multilineTextAlignment(.trailing)
-                        .foregroundColor(.black)
+                        .lineSpacing(10)
                     
                     Text(ayah.translation)
-                        .nurFont(14)
-                        .foregroundColor(.black.opacity(0.7))
+                        .nurFont(16)
+                        .foregroundColor(.black.opacity(0.6))
                         .multilineTextAlignment(.trailing)
                         .italic()
+                        .padding(.trailing, 8)
                 }
                 .padding(.bottom, 8)
                 Divider()
@@ -97,17 +102,11 @@ struct MushafPageContent: View {
             }
         }
     }
-    
-    private func surahName(for id: Int) -> String {
-        // Bu normalde bir data'dan gelmeli ama basitçe mocklayalım veya ID döndürelim
-        // Uygulamanın kalanında SurahInfo kullanılıyor.
-        return "\(id)" 
-    }
 }
 
 #Preview {
     MushafPageContent(ayahs: [
-        AyahItem(id: 1, arabicText: "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ", translation: "Rahman ve Rahim olan Allah'ın adıyla", surahNumber: 1),
-        AyahItem(id: 2, arabicText: "الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ", translation: "Hamd alemlerin rabbi olan Allah'adır", surahNumber: 1)
+        AyahItem(id: 1, arabicText: "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ", translation: "Rahman ve Rahim olan Allah'ın adıyla", surahNumber: 1, tajweedText: "[h:2255[بِ][s:1044[سْمِ] اللَّهِ الرَّحْمَ[n:1033[نِ] الرَّحِي[n:1033[مِ]"),
+        AyahItem(id: 2, arabicText: "الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ", translation: "Hamd alemlerin rabbi olan Allah'adır", surahNumber: 1, tajweedText: "الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِي[n:1033[نَ]")
     ], arabicFontSize: 28, readingMode: .arabicOnly)
 }

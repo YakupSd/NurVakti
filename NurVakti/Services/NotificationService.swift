@@ -34,19 +34,28 @@ final class NotificationService: NSObject, ObservableObject {
                      language: LanguageCode) async {
         cancelAll()
         for prayer in prayers {
-            for alarm in alarms {
-                if alarm.isActive {
-                    let targetDate = prayerDate(for: alarm.prayerName, in: prayer)
-                    let notifyDate = targetDate.addingTimeInterval(Double(-alarm.minutesBefore * 60))
-                    
-                    if notifyDate > Date() {
-                        await schedule(prayer: alarm.prayerName,
-                                       at: notifyDate,
-                                       minutesBefore: alarm.minutesBefore,
-                                       sound: alarm.soundType,
-                                       language: language)
-                    }
+            // Bu gün hangi haftanın günü?
+            let weekdayRaw = Calendar.current.component(.weekday, from: prayer.date)
+            let currentWeekday = Weekday(rawValue: weekdayRaw)
+            
+            for alarm in alarms where alarm.isActive {
+                // repeatDays doluysa sadece seçili günlerde planla
+                if !alarm.repeatDays.isEmpty,
+                   let wd = currentWeekday,
+                   !alarm.repeatDays.contains(wd) {
+                    continue
                 }
+                
+                let targetDate = prayerDate(for: alarm.prayerName, in: prayer)
+                let notifyDate = targetDate.addingTimeInterval(Double(-alarm.minutesBefore * 60))
+                
+                guard notifyDate > Date() else { continue }
+                
+                await schedule(prayer: alarm.prayerName,
+                               at: notifyDate,
+                               minutesBefore: alarm.minutesBefore,
+                               sound: alarm.soundType,
+                               language: language)
             }
         }
     }
@@ -58,9 +67,23 @@ final class NotificationService: NSObject, ObservableObject {
                   sound: AlarmSound,
                   language: LanguageCode) async {
         let content = UNMutableNotificationContent()
-        content.title = "NurVakti"
+        content.title = "NurVakti 🕌"
         content.body = notificationBody(prayer: prayer, minutes: minutesBefore, language: language)
-        content.sound = sound == .ezan ? .default : .default // Özelleştirilebilir
+        // Time-sensitive seviye: cihaz Odak modu'nda bile görünsün
+        content.interruptionLevel = .timeSensitive
+        
+        // Ses ayarı
+        // Not: ezan.caf / fajr.caf için Resources/Sounds/ klasörüne ses dosyası eklenmelidir.
+        switch sound {
+        case .ezan:
+            content.sound = UNNotificationSound(named: UNNotificationSoundName("ezan.caf"))
+        case .fajr:
+            content.sound = UNNotificationSound(named: UNNotificationSoundName("fajr.caf"))
+        case .silent:
+            content.sound = nil
+        case .system:
+            content.sound = .default
+        }
         
         let components = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)

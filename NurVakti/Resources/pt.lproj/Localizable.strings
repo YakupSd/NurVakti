@@ -305,3 +305,6 @@
 "general.next"   = "Próximo";
 "general.yes"    = "Sim";
 "general.no"     = "Não";
+"completed_prayers_count" = "%d orações concluídas hoje";
+"alarm.repeatDays"    = "Dias de Repetição";
+"alarm.everyDay"       = "Todo dia";

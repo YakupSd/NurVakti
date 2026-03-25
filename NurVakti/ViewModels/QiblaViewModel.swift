@@ -52,15 +52,26 @@ final class QiblaViewModel: ObservableObject {
 
     // MARK: - Heading Update
     func updateHeading(_ newHeading: CLHeading) {
-        heading = newHeading.magneticHeading
+        // Manyetik kuzey bilgisi al
+        let val = newHeading.magneticHeading
+        
+        // Gürültü engelleme: Çok küçük değişimleri yok sayma (Opsiyonel)
+        if abs(val - heading) > 0.1 {
+            heading = val
+        }
+        
         accuracy = newHeading.headingAccuracy
-        isCalibrating = newHeading.headingAccuracy < 0
+        
+        // Kalibrasyon gereksinimi: Hata payı çok yüksekse (örn > 45) veya negatifse
+        isCalibrating = newHeading.headingAccuracy < 0 || newHeading.headingAccuracy > 45
+        
         relativeAngle = (qiblaAngle - heading + 360).truncatingRemainder(dividingBy: 360)
     }
 
     func updateLocation(_ location: CLLocation) {
         calculateQiblaAngle(from: location.coordinate)
-        locationManager.stopUpdatingLocation()
+        // Konum bir kez yetebilir, ancak hassasiyet için açık bırakılabilir 
+        // veya belirli aralıklarla güncellenebilir.
     }
 
     // MARK: - Kıble Hesabı (Great Circle / Bearing formülü)

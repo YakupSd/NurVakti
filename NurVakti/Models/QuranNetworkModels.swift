@@ -101,6 +101,7 @@ struct AyahItem: Identifiable, Codable {
     let arabicText: String
     let translation: String
     let surahNumber: Int
+    var tajweedText: String? = nil
 }
 
 enum QuranReadingMode: String, Codable {

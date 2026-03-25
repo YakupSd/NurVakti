@@ -87,22 +87,28 @@ final class QuranViewModel: ObservableObject {
         let edition = getEdition(for: language)
         let arabicURL = "\(baseURL)/surah/\(surah.id)/quran-uthmani"
         let translationURL = "\(baseURL)/surah/\(surah.id)/\(edition)"
+        let tajweedURL = "\(baseURL)/surah/\(surah.id)/ar.tajweed"
         
         do {
             async let (arabicData, _) = URLSession.shared.data(from: URL(string: arabicURL)!)
             async let (translationData, _) = URLSession.shared.data(from: URL(string: translationURL)!)
+            async let (tajweedData, _) = URLSession.shared.data(from: URL(string: tajweedURL)!)
             
             let arabicRes = try await JSONDecoder().decode(SurahDetailResponse.self, from: arabicData)
             let translationRes = try await JSONDecoder().decode(SurahDetailResponse.self, from: translationData)
+            let tajweedRes = try await JSONDecoder().decode(SurahDetailResponse.self, from: tajweedData)
             
             var items: [AyahItem] = []
             for i in 0..<arabicRes.data.ayahs.count {
                 let arabic = arabicRes.data.ayahs[i]
                 let translation = translationRes.data.ayahs[i]
+                let tajweed = tajweedRes.data.ayahs[i].text
+                
                 items.append(AyahItem(id: arabic.numberInSurah,
                                      arabicText: arabic.text,
                                      translation: translation.text,
-                                     surahNumber: surah.id))
+                                     surahNumber: surah.id,
+                                     tajweedText: tajweed))
             }
             self.ayahs = items
         } catch {
@@ -117,22 +123,28 @@ final class QuranViewModel: ObservableObject {
         let edition = getEdition(for: language)
         let arabicURL = "\(baseURL)/page/\(page)/quran-uthmani"
         let translationURL = "\(baseURL)/page/\(page)/\(edition)"
+        let tajweedURL = "\(baseURL)/page/\(page)/ar.tajweed"
         
         do {
             async let (arabicData, _) = URLSession.shared.data(from: URL(string: arabicURL)!)
             async let (translationData, _) = URLSession.shared.data(from: URL(string: translationURL)!)
+            async let (tajweedData, _) = URLSession.shared.data(from: URL(string: tajweedURL)!)
             
             let arabicRes = try await JSONDecoder().decode(SurahDetailResponse.self, from: arabicData)
             let translationRes = try await JSONDecoder().decode(SurahDetailResponse.self, from: translationData)
+            let tajweedRes = try await JSONDecoder().decode(SurahDetailResponse.self, from: tajweedData)
             
             var items: [AyahItem] = []
             for i in 0..<arabicRes.data.ayahs.count {
                 let arabic = arabicRes.data.ayahs[i]
                 let translation = translationRes.data.ayahs[i]
+                let tajweed = tajweedRes.data.ayahs[i].text
+                
                 items.append(AyahItem(id: arabic.numberInSurah,
                                      arabicText: arabic.text,
                                      translation: translation.text,
-                                     surahNumber: arabic.surah?.number ?? 0))
+                                     surahNumber: arabic.surah?.number ?? 0,
+                                     tajweedText: tajweed))
             }
             self.ayahs = items
             saveHatimProgress(page: page)
