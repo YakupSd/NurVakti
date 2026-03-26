@@ -2,6 +2,7 @@ import Foundation
 import Combine
 import CoreLocation
 
+@MainActor
 final class LocationService: NSObject, ObservableObject {
     @Published var authStatus: CLAuthorizationStatus = .notDetermined
     @Published var currentLocation: CLLocation?
@@ -38,9 +39,11 @@ final class LocationService: NSObject, ObservableObject {
             let placemarks = try await geocoder.reverseGeocodeLocation(location)
             if let placemark = placemarks.first {
                 let city = placemark.locality ?? placemark.administrativeArea ?? ""
-                DispatchQueue.main.async {
-                    self.cityName = city
-                    self.countryCode = placemark.isoCountryCode ?? ""
+                if !city.isEmpty {
+                    DispatchQueue.main.async {
+                        self.cityName = city
+                        self.countryCode = placemark.isoCountryCode ?? ""
+                    }
                 }
                 return city
             }

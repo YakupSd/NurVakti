@@ -22,7 +22,7 @@ struct StarFieldView: View {
         .opacity(twinkle ? 0.6 : 1.0)
         .animation(.easeInOut(duration: Double.random(in: 1...3)).repeatForever(autoreverses: true), value: twinkle)
         .onAppear { twinkle.toggle() }
-        .drawingGroup() // Performans için
+        .drawingGroup() 
     }
 }
 

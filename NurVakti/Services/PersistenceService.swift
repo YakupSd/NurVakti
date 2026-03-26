@@ -16,12 +16,14 @@ final class PersistenceService: ObservableObject {
     @Published var readingProgress: ReadingProgress
     // Background refresh distance check
     @Published var lastKnownLocation: CLLocation?
+    @Published var lastKnownCityName: String = ""
     
     private let defaults = UserDefaults.standard
     
     // Custom key for location dictionary
     private let locationLatKey = "lastKnownLat"
     private let locationLonKey = "lastKnownLon"
+    private let cityNameKey = "lastKnownCityName"
     
     private enum Keys: String {
         case settings, dhikr, alarms
@@ -64,12 +66,20 @@ final class PersistenceService: ObservableObject {
         if lat != 0 || lon != 0 {
             self.lastKnownLocation = CLLocation(latitude: lat, longitude: lon)
         }
+        
+        self.lastKnownCityName = defaults.string(forKey: cityNameKey) ?? ""
     }
     
     func saveLastKnownLocation(_ location: CLLocation) {
         self.lastKnownLocation = location
         defaults.set(location.coordinate.latitude, forKey: locationLatKey)
         defaults.set(location.coordinate.longitude, forKey: locationLonKey)
+    }
+    
+    func saveLastKnownCityName(_ name: String) {
+        guard !name.isEmpty else { return }
+        self.lastKnownCityName = name
+        defaults.set(name, forKey: cityNameKey)
     }
     
     func save<T: Encodable>(_ object: T, key: String) {

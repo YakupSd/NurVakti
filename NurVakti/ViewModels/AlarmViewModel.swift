@@ -12,10 +12,12 @@ final class AlarmViewModel: ObservableObject {
     private let persistService: PersistenceService
     private let notifService: NotificationService
     
-    init(persistService: PersistenceService = .shared, notifService: NotificationService = .shared) {
-        self.persistService = persistService
-        self.notifService = notifService
-        self.alarms = persistService.alarms
+    init(persistService: PersistenceService? = nil, notifService: NotificationService? = nil) {
+        let actualPersistService = persistService ?? .shared
+        let actualNotifService = notifService ?? .shared
+        self.persistService = actualPersistService
+        self.notifService = actualNotifService
+        self.alarms = actualPersistService.alarms
     }
     
     func onAppear() async {

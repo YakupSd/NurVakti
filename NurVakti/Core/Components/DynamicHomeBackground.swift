@@ -50,10 +50,14 @@ struct DynamicHomeBackground: View {
             }
             .ignoresSafeArea()
             
-            // LAYER 4: Stars (Context Sensitive)
-            StarFieldView(opacity: theme.starOpacity)
+            // LAYER 4: Stars (Context Sensitive - Now sharing AnimatedStarField)
+            AnimatedStarFieldView(opacity: theme.starOpacity)
                 .ignoresSafeArea()
-                .animation(.easeInOut(duration: 2.0), value: theme.starOpacity)
+            
+            // LAYER 5: Clouds (Context Sensitive - Same as Simulation)
+            CloudLayerView(opacity: theme.starOpacity > 0.5 ? 0.3 : 0.7, 
+                           cloudColor: theme.starOpacity > 0.5 ? Color(hex: "#37474F") : .white)
+                .ignoresSafeArea()
         }
     }
     

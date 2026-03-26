@@ -73,12 +73,12 @@ final class NotificationService: NSObject, ObservableObject {
         content.interruptionLevel = .timeSensitive
         
         // Ses ayarı
-        // Not: ezan.caf / fajr.caf için Resources/Sounds/ klasörüne ses dosyası eklenmelidir.
+        // Not: ezan.mp3 / fajr.mp3 için Resources/Sounds/ klasörüne ses dosyası eklenmelidir.
         switch sound {
         case .ezan:
-            content.sound = UNNotificationSound(named: UNNotificationSoundName("ezan.caf"))
+            content.sound = UNNotificationSound(named: UNNotificationSoundName("ezan.mp3"))
         case .fajr:
-            content.sound = UNNotificationSound(named: UNNotificationSoundName("fajr.caf"))
+            content.sound = UNNotificationSound(named: UNNotificationSoundName("fajr.mp3"))
         case .silent:
             content.sound = nil
         case .system:

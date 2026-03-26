@@ -1,6 +1,7 @@
 import SwiftUI
 import Combine
 
+@MainActor
 final class BackgroundGradientService: ObservableObject {
     @Published var currentTheme: PrayerTheme = .dhuhrTheme
     @Published var gradient: LinearGradient = LinearGradient(colors: [.blue, .white], startPoint: .top, endPoint: .bottom)
@@ -9,23 +10,22 @@ final class BackgroundGradientService: ObservableObject {
     @Published var sunPosition: Double = 0.5
     
     func updateTheme(prayers: PrayerTime, currentTime: Date) {
-        let theme: PrayerTheme
+        let hour = Double(Calendar.current.component(.hour, from: currentTime)) +
+                   Double(Calendar.current.component(.minute, from: currentTime)) / 60.0
         
-        if currentTime < prayers.imsak || currentTime > prayers.isha {
-            theme = .ishaTheme
-        } else if currentTime < prayers.fajr {
-            theme = .imsakTheme
-        } else if currentTime < prayers.sunrise {
-            theme = .fajrTheme
-        } else if currentTime < prayers.dhuhr {
-            theme = .sunriseTheme
-        } else if currentTime < prayers.asr {
-            theme = .dhuhrTheme
-        } else if currentTime < prayers.maghrib {
-            theme = .asrTheme
-        } else {
-            theme = .maghribTheme
-        }
+        let (currentPhase, nextPhase, progress) = SkyPhase.current(for: hour)
+        let skyGradient = SkyColorPalette.interpolate(from: currentPhase, to: nextPhase, progress: progress)
+        
+        // Map SkyPhase to a dynamic PrayerTheme for compatibility with existing views
+        let theme = PrayerTheme(
+            prayerName: .imsak, // Dummy as it's no longer strictly 1:1 with prayers
+            topColor: skyGradient.top,
+            bottomColor: skyGradient.horizon,
+            starOpacity: calculateStarOpacity(for: currentPhase, progress: progress),
+            sunPosition: calculateSunPosition(for: hour),
+            auraColor: skyGradient.horizon.opacity(0.3),
+            ambientLabel: currentPhase.rawValue
+        )
         
         DispatchQueue.main.async {
             self.currentTheme = theme
@@ -33,6 +33,26 @@ final class BackgroundGradientService: ObservableObject {
             self.showStars = theme.starOpacity > 0.5
             self.sunPosition = theme.sunPosition
         }
+    }
+    
+    private func calculateStarOpacity(for phase: SkyPhase, progress: Double) -> Double {
+        switch phase {
+        case .night, .deepNight: return 1.0
+        case .earlyNight: return progress
+        case .preDawn: return 1.0 - progress
+        case .dusk: return 0.3 * progress
+        default: return 0
+        }
+    }
+    
+    private func calculateSunPosition(for hour: Double) -> Double {
+        // Simple 24h mapping to 0..1..0 arc
+        // 6:00 (0) -> 12:00 (1.0) -> 18:00 (0)
+        if hour >= 6 && hour <= 18 {
+            let progress = (hour - 6) / 12.0
+            return sin(progress * .pi)
+        }
+        return -0.2 // below horizon
     }
     
     // İki tema arasında interpolasyon logic placeholder

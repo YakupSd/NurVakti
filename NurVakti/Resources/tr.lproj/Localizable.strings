@@ -117,6 +117,8 @@
 "quran.listView"          = "Liste Görünümü";
 "quran.onlyArabic"        = "Sadece Arapça";
 "quran.withTranslation"   = "Mealli";
+"quran.tajweedFatiha"      = "Tecvidli Fatiha";
+"quran.tajweedDescription" = "Dar Al-Marifa standartlarında tecvidli okuma";
 "dua.listenArabic"        = "Arapça Dinle";
 "dua.transliteration"     = "Okunuşu";
 "dua.translation"         = "Anlamı";

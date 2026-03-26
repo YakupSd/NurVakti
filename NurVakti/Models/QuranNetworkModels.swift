@@ -78,6 +78,10 @@ struct SurahInfo: Identifiable, Codable {
     let englishName: String
     let ayahCount: Int
     let revelationType: RevelationType
+    
+    static var fatihaMock: SurahInfo {
+        SurahInfo(id: 1, nameArabic: "الفاتحة", nameLocalized: [.tr: "Fatiha"], englishName: "Al-Fatiha", ayahCount: 7, revelationType: .makkah)
+    }
 }
 
 enum RevelationType: String, Codable {

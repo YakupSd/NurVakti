@@ -22,20 +22,22 @@ final class HomeViewModel: ObservableObject {
     @Published var isLoading: Bool = true
     @Published var errorMessage: String? = nil
     @Published var dailyGuidance: GuidanceItem? = nil
+    @Published var prayerProgress: [PrayerName: Double] = [:]
+    @Published var remTimeStrings: [PrayerName: String] = [:]
     
     private var cancellables = Set<AnyCancellable>()
     private var hasAppeared = false
     
-    init(prayerService: PrayerTimeService = PrayerTimeService(),
-         locationService: LocationService = LocationService(),
-         bgService: BackgroundGradientService = BackgroundGradientService(),
-         notifService: NotificationService = .shared,
-         persistService: PersistenceService = .shared) {
-        self.prayerService = prayerService
-        self.locationService = locationService
-        self.bgService = bgService
-        self.notifService = notifService
-        self.persistService = persistService
+    init(prayerService: PrayerTimeService? = nil,
+         locationService: LocationService? = nil,
+         bgService: BackgroundGradientService? = nil,
+         notifService: NotificationService? = nil,
+         persistService: PersistenceService? = nil) {
+        self.prayerService = prayerService ?? PrayerTimeService()
+        self.locationService = locationService ?? LocationService()
+        self.bgService = bgService ?? BackgroundGradientService()
+        self.notifService = notifService ?? .shared
+        self.persistService = persistService ?? .shared
         
         setupBindings()
     }
@@ -76,7 +78,8 @@ final class HomeViewModel: ObservableObject {
         // 1. Önce cache kontrolü
         if let cached = prayerService.loadCached(for: Date()) {
             applyPrayers(cached)
-            self.cityName = cached.cityName
+            let city = (cached.cityName.isEmpty) ? persistService.lastKnownCityName : cached.cityName
+            self.cityName = city.isEmpty ? NSLocalizedString("general.calculating", comment: "") : city
             isLoading = false
         }
         
@@ -105,16 +108,21 @@ final class HomeViewModel: ObservableObject {
         if !force, distance < 10000 {
             if let cached = prayerService.loadCached(for: Date()) {
                 applyPrayers(cached)
-                self.cityName = cached.cityName
+                let city = (cached.cityName.isEmpty) ? persistService.lastKnownCityName : cached.cityName
+                self.cityName = city.isEmpty ? NSLocalizedString("general.calculating", comment: "") : city
                 isLoading = false
                 return
             }
         }
         
         // 2. Konum değiştiyse veya cache yoksa
-        let city = await locationService.resolveCity(for: location)
-        self.cityName = city
+        let resolvedCity = await locationService.resolveCity(for: location)
+        let finalCity = (resolvedCity.isEmpty) ? persistService.lastKnownCityName : resolvedCity
+        self.cityName = finalCity
         persistService.saveLastKnownLocation(location)
+        if !resolvedCity.isEmpty {
+            persistService.saveLastKnownCityName(resolvedCity)
+        }
         
         // 30 günlük veriyi API'den çek (async)
         do {
@@ -136,7 +144,7 @@ final class HomeViewModel: ObservableObject {
                     asr: first.asr,
                     maghrib: first.maghrib,
                     isha: first.isha,
-                    cityName: city,
+                    cityName: finalCity,
                     hijriDate: first.hijriDate,
                     calculationMethod: first.calculationMethod
                 )
@@ -189,6 +197,47 @@ final class HomeViewModel: ObservableObject {
         
         // Tamamlanan vakit sayısını güncelle
         updateCompletedPrayersCount()
+        
+        // Bireysel vakit sayaçlarını ve progreslerini güncelle
+        updateIndividualPrayerProgress()
+    }
+    
+    private func updateIndividualPrayerProgress() {
+        guard let prayers = todayPrayers else { return }
+        let now = Date()
+        var newProgress: [PrayerName: Double] = [:]
+        var newRemStrings: [PrayerName: String] = [:]
+        
+        // Vakitlerin başlangıç/bitişlerini hesapla (basitleştirilmiş periyotlar)
+        let periods: [(PrayerName, Date, Date)] = [
+            (.imsak, prayers.imsak, prayers.fajr),
+            (.fajr, prayers.fajr, prayers.sunrise),
+            (.sunrise, prayers.sunrise, prayers.dhuhr),
+            (.dhuhr, prayers.dhuhr, prayers.asr),
+            (.asr, prayers.asr, prayers.maghrib),
+            (.maghrib, prayers.maghrib, prayers.isha),
+            (.isha, prayers.isha, prayers.imsak.addingTimeInterval(86400))
+        ]
+        
+        for (name, start, end) in periods {
+            if now >= start && now < end {
+                let total = end.timeIntervalSince(start)
+                let elapsed = now.timeIntervalSince(start)
+                newProgress[name] = min(1.0, max(0.0, elapsed / total))
+                
+                let rem = end.timeIntervalSince(now)
+                let h = Int(rem) / 3600
+                let m = (Int(rem) % 3600) / 60
+                newRemStrings[name] = String(format: "%02d:%02d", h, m)
+            } else if now >= end {
+                newProgress[name] = 1.0
+            } else {
+                newProgress[name] = 0.0
+            }
+        }
+        
+        self.prayerProgress = newProgress
+        self.remTimeStrings = newRemStrings
     }
     
     private func updateCompletedPrayersCount() {

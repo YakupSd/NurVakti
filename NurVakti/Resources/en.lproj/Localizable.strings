@@ -114,6 +114,8 @@
 "quran.listView"          = "List View";
 "quran.onlyArabic"        = "Arabic Only";
 "quran.withTranslation"   = "With Translation";
+"quran.tajweedFatiha"      = "Tajweed Fatiha";
+"quran.tajweedDescription" = "Tajweed reading with Dar Al-Marifa standards";
 "dua.listenArabic"        = "Listen Arabic";
 "dua.transliteration"     = "Transliteration";
 "dua.translation"         = "Meaning";

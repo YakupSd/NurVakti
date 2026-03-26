@@ -161,6 +161,7 @@ final class QuranViewModel: ObservableObject {
         } else {
             filteredSurahs = surahs.filter { 
                 $0.englishName.localizedCaseInsensitiveContains(text) ||
+                $0.nameArabic.contains(text) ||
                 String($0.id).contains(text)
             }
         }

@@ -7,12 +7,12 @@ import UIKit
 //
 // Ses Dosyası Kararı:
 //   → Bundle'a dahil edilecek. Toplam dosya boyutu ~3MB.
-//   → Dosya adı: "ezan.mp3" (varsayılan) ve "ezan_fajr.mp3" (sabah ezanı, farklı makam)
+//   → Dosya adı: "ezan.mp3" (varsayılan) ve "fajr.mp3" (sabah ezanı, farklı makam)
 //   → Xcode'da "NurVakti" target'ına eklenmeleri gerekir.
 //
 // Desteklenen AlarmSound case'leri:
 //   .ezan   → Bundle'daki ezan.mp3
-//   .fajr   → Bundle'daki ezan_fajr.mp3 (sabah için daha yavaş)
+//   .fajr   → Bundle'daki fajr.mp3 (sabah için daha yavaş)
 //   .system → Sistem sesleri (UINotificationFeedbackGenerator)
 //   .silent → Sadece haptic, ses yok
 
@@ -46,7 +46,7 @@ final class SoundService: NSObject {
         case .ezan:
             playBundleAudio(named: "ezan", ext: "mp3")
         case .fajr:
-            playBundleAudio(named: "ezan_fajr", ext: "mp3")
+            playBundleAudio(named: "fajr", ext: "mp3")
         case .system:
             AudioServicesPlaySystemSound(1005) // SMS alındı sesi
             HapticManager.shared.prayerAlert()

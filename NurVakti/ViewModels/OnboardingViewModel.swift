@@ -18,13 +18,16 @@ final class OnboardingViewModel: ObservableObject {
     private let notifService: NotificationService
     private var cancellables = Set<AnyCancellable>()
 
-    init(locationService: LocationService = LocationService(),
-         notifService: NotificationService = .shared) {
-        self.locationService = locationService
-        self.notifService = notifService
+    init(locationService: LocationService? = nil,
+         notifService: NotificationService? = nil) {
+        let actualLocationService = locationService ?? LocationService()
+        let actualNotifService = notifService ?? .shared
+        
+        self.locationService = actualLocationService
+        self.notifService = actualNotifService
         
         // Konum izni verildiğinde otomatik ilerle
-        locationService.$authStatus
+        actualLocationService.$authStatus
             .dropFirst() // İlk değeri (notDetermined) atla
             .receive(on: DispatchQueue.main)
             .sink { [weak self] status in

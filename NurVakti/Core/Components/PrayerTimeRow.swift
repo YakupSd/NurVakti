@@ -5,78 +5,116 @@ struct PrayerTimeRow: View {
     let time: Date
     let isActive: Bool        // Şu anki vakit
     let isPast: Bool          // Geçmiş vakit
+    let progress: Double?     // 0.0 - 1.0 arası ilerleme
+    let remainingTime: String? // Kalan süre (örn: "01:24")
     let notificationEnabled: Bool
     let fontSize: FontSize
     let language: LanguageCode
     let onNotificationToggle: () -> Void
     
     var body: some View {
-        HStack(spacing: 16) {
-            // Sol: İkon
-            ZStack {
-                Circle()
-                    .fill(prayer.startColor.opacity(isActive ? 0.3 : 0.1))
-                    .frame(width: 44, height: 44)
-                
-                Image(systemName: prayer.symbol)
-                    .font(.system(size: 20, weight: .bold))
-                    .foregroundColor(isActive ? .nurGold : prayer.startColor)
-            }
-            
-            // Orta: İsimler
-            VStack(alignment: .leading, spacing: 2) {
-                Text(prayer.localizedName(for: language))
-                    .nurFont(fontSize.body, weight: .bold)
-                    .foregroundColor(isActive ? .nurGold : .white)
-                
-                Text(prayer.arabicText)
-                    .nurFont(fontSize.caption)
-                    .foregroundColor(.white.opacity(0.6))
-            }
-            
-            Spacer()
-            
-            // Sağ: Saat ve Zil
-            HStack(spacing: 8) {
-                Text(timeFormatter.string(from: time))
-                    .nurFont(20, weight: .bold, design: .monospaced)
-                    .foregroundColor(.white)
-                    .lineLimit(1)
-                    .fixedSize(horizontal: true, vertical: false)
-                    .layoutPriority(1)
-                
-                Button(action: onNotificationToggle) {
-                    Image(systemName: notificationEnabled ? "bell.fill" : "bell.slash")
-                        .foregroundColor(notificationEnabled ? .nurGold : .white.opacity(0.4))
-                        .font(.system(size: 16))
+        VStack(spacing: 0) {
+            HStack(spacing: 16) {
+                // Sol: İkon (Premium Style)
+                ZStack {
+                    Circle()
+                        .fill(isActive ? prayer.startColor.opacity(0.3) : .white.opacity(0.05))
+                        .frame(width: 48, height: 48)
+                    
+                    Image(systemName: isActive ? prayer.symbol : (isPast ? "checkmark.circle.fill" : prayer.symbol))
+                        .font(.system(size: 22, weight: .bold))
+                        .foregroundColor(isActive ? .nurGold : (isPast ? .green.opacity(0.6) : .white.opacity(0.5)))
                 }
-                .padding(4)
-                // Bildirim butonu accessibility
-                .accessibilityLabel("\(prayer.localizedName(for: language)) bildirimi \(notificationEnabled ? "açık" : "kapalı")")
-                .accessibilityHint(notificationEnabled ? "Çift dokunarak bildirimi kapat" : "Çift dokunarak bildirimi aç")
-                .accessibilityAddTraits(.isButton)
+                .shadow(color: isActive ? prayer.startColor.opacity(0.5) : .clear, radius: 10)
+                
+                // Orta: İsimler
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(prayer.localizedName(for: language))
+                        .nurFont(fontSize.body + 2, weight: .bold)
+                        .foregroundColor(isActive ? .white : (isPast ? .white.opacity(0.4) : .white))
+                    
+                    if isActive, let rem = remainingTime {
+                        Text("\(rem) \(NSLocalizedString("general.remaining", comment: ""))")
+                            .nurFont(12, weight: .medium)
+                            .foregroundColor(.nurGold)
+                    } else {
+                        Text(prayer.arabicText)
+                            .nurFont(12)
+                            .foregroundColor(.white.opacity(0.4))
+                    }
+                }
+                
+                Spacer()
+                
+                // Sağ: Saat ve Zil
+                VStack(alignment: .trailing, spacing: 4) {
+                    Text(timeFormatter.string(from: time))
+                        .nurFont(20, weight: .bold, design: .monospaced)
+                        .foregroundColor(isActive ? .white : (isPast ? .white.opacity(0.3) : .white))
+                    
+                    if !isPast {
+                        Button(action: onNotificationToggle) {
+                            HStack(spacing: 4) {
+                                Image(systemName: notificationEnabled ? "bell.fill" : "bell.slash")
+                                    .font(.system(size: 12))
+                                if isActive {
+                                    Text("ACTIVE")
+                                        .nurFont(10, weight: .black)
+                                }
+                            }
+                            .foregroundColor(notificationEnabled ? .nurGold : .white.opacity(0.3))
+                        }
+                    } else {
+                        Text("Completed")
+                            .nurFont(10, weight: .bold)
+                            .foregroundColor(.green.opacity(0.6))
+                    }
+                }
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 16)
+            
+            // Progress Bar (Sadece aktif vakit için)
+            if isActive, let p = progress {
+                GeometryReader { geo in
+                    ZStack(alignment: .leading) {
+                        Capsule()
+                            .fill(Color.white.opacity(0.1))
+                            .frame(height: 6)
+                        
+                        Capsule()
+                            .fill(
+                                LinearGradient(colors: [.nurGold, .nurGoldLight], startPoint: .leading, endPoint: .trailing)
+                            )
+                            .frame(width: geo.size.width * CGFloat(p), height: 6)
+                            .shadow(color: .nurGold.opacity(0.5), radius: 4)
+                    }
+                }
+                .frame(height: 6)
+                .padding(.horizontal, 20)
+                .padding(.bottom, 16)
             }
         }
-        .padding(.horizontal, 20)
-        .padding(.vertical, 12)
-        .frame(minHeight: 56)
-        .background(isActive ? Color.nurGold.opacity(0.12) : Color.clear)
-        .cornerRadius(16)
-        .overlay(
-            RoundedRectangle(cornerRadius: 16)
-                .stroke(isActive ? Color.nurGold.opacity(0.5) : Color.clear, lineWidth: 2)
+        .background(
+            ZStack {
+                if isActive {
+                    LinearGradient(colors: [prayer.startColor.opacity(0.4), .black.opacity(0.2)], 
+                                  startPoint: .topLeading, 
+                                  endPoint: .bottomTrailing)
+                } else {
+                    Color.white.opacity(0.03)
+                }
+            }
         )
-        .opacity(isPast ? 0.45 : 1.0)
-        .environment(\.layoutDirection, language.isRTL ? .rightToLeft : .leftToRight)
-        // ── Satır accessibility ────────────────────────────────────
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel(rowAccessibilityLabel)
-        .accessibilityValue(isActive ? "Aktif vakit" : isPast ? "Geçmiş vakit" : "Gelecek vakit")
-    }
-    
-    private var rowAccessibilityLabel: String {
-        let timePart = timeFormatter.string(from: time)
-        return "\(prayer.localizedName(for: language)), \(timePart)"
+        .cornerRadius(24)
+        .overlay(
+            RoundedRectangle(cornerRadius: 24)
+                .stroke(isActive ? Color.nurGold.opacity(0.6) : Color.white.opacity(0.05), lineWidth: isActive ? 2 : 1)
+        )
+        .shadow(color: isActive ? .black.opacity(0.3) : .clear, radius: 15, y: 10)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 6)
+        .opacity(isPast ? 0.6 : 1.0)
     }
     
     private var timeFormatter: DateFormatter {
@@ -102,10 +140,10 @@ fileprivate extension PrayerName {
 
 #Preview {
     VStack(spacing: 12) {
-        PrayerTimeRow(prayer: .fajr, time: Date(), isActive: false, isPast: true, notificationEnabled: true, fontSize: .medium, language: .tr) {}
-        PrayerTimeRow(prayer: .dhuhr, time: Date(), isActive: true, isPast: false, notificationEnabled: true, fontSize: .large, language: .tr) {}
-        PrayerTimeRow(prayer: .asr, time: Date(), isActive: false, isPast: false, notificationEnabled: false, fontSize: .medium, language: .ar) {}
+        PrayerTimeRow(prayer: .fajr, time: Date(), isActive: false, isPast: true, progress: 1.0, remainingTime: nil, notificationEnabled: true, fontSize: .medium, language: .tr) {}
+        PrayerTimeRow(prayer: .dhuhr, time: Date(), isActive: true, isPast: false, progress: 0.4, remainingTime: "01:24", notificationEnabled: true, fontSize: .large, language: .tr) {}
+        PrayerTimeRow(prayer: .asr, time: Date(), isActive: false, isPast: false, progress: 0.0, remainingTime: nil, notificationEnabled: false, fontSize: .medium, language: .ar) {}
     }
     .padding()
-    .background(Color.black)
+    .background(Color.mushafBackground)
 }

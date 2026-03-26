@@ -1,4 +1,5 @@
 import SwiftUI
+import Foundation
 
 struct PrayerTheme: Equatable {
     let prayerName: PrayerName
@@ -11,7 +12,7 @@ struct PrayerTheme: Equatable {
     
     // MARK: - Static Factory Metotları
     
-    static let imsakTheme = PrayerTheme(
+    static let imsakTheme: PrayerTheme = PrayerTheme(
         prayerName: .imsak,
         topColor: Color(hex: "020111"),
         bottomColor: Color(hex: "1a2a6c"),
@@ -21,7 +22,7 @@ struct PrayerTheme: Equatable {
         ambientLabel: NSLocalizedString("ambient.imsak", comment: "")
     )
     
-    static let fajrTheme = PrayerTheme(
+    static let fajrTheme: PrayerTheme = PrayerTheme(
         prayerName: .fajr,
         topColor: Color(hex: "0f2027"),
         bottomColor: Color(hex: "2c5364"),
@@ -31,7 +32,7 @@ struct PrayerTheme: Equatable {
         ambientLabel: NSLocalizedString("ambient.fajr", comment: "")
     )
     
-    static let sunriseTheme = PrayerTheme(
+    static let sunriseTheme: PrayerTheme = PrayerTheme(
         prayerName: .sunrise,
         topColor: Color(hex: "0f2027"),
         bottomColor: Color(hex: "2c5364"),
@@ -41,7 +42,7 @@ struct PrayerTheme: Equatable {
         ambientLabel: NSLocalizedString("ambient.sunrise", comment: "")
     )
     
-    static let dhuhrTheme = PrayerTheme(
+    static let dhuhrTheme: PrayerTheme = PrayerTheme(
         prayerName: .dhuhr,
         topColor: Color(hex: "0D1B2A"),
         bottomColor: Color(hex: "1B263B"),
@@ -51,7 +52,7 @@ struct PrayerTheme: Equatable {
         ambientLabel: NSLocalizedString("ambient.dhuhr", comment: "")
     )
     
-    static let asrTheme = PrayerTheme(
+    static let asrTheme: PrayerTheme = PrayerTheme(
         prayerName: .asr,
         topColor: Color(hex: "0f0c29"),
         bottomColor: Color(hex: "302b63"),
@@ -61,7 +62,7 @@ struct PrayerTheme: Equatable {
         ambientLabel: NSLocalizedString("ambient.asr", comment: "")
     )
     
-    static let maghribTheme = PrayerTheme(
+    static let maghribTheme: PrayerTheme = PrayerTheme(
         prayerName: .maghrib,
         topColor: Color(hex: "141e30"),
         bottomColor: Color(hex: "243b55"),
@@ -71,7 +72,7 @@ struct PrayerTheme: Equatable {
         ambientLabel: NSLocalizedString("ambient.maghrib", comment: "")
     )
     
-    static let ishaTheme = PrayerTheme(
+    static let ishaTheme: PrayerTheme = PrayerTheme(
         prayerName: .isha,
         topColor: Color(hex: "000000"),
         bottomColor: Color(hex: "0f2027"),
