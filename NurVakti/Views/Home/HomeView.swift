@@ -94,38 +94,36 @@ struct HomeView: View {
                         }
                         .padding(.top, 20)
                         
-                        // ── COUNTDOWN RING ──
+                        // ── SKY SIMULATION & COUNTDOWN ──
                         if let next = vm.nextPrayer {
-                            VStack(spacing: 12) {
-                                CountdownRing(nextPrayerName: next.name, 
-                                              timeRemaining: vm.todayPrayers != nil ? next.time.timeIntervalSince(Date()) : 0, 
-                                              totalInterval: 14400, // Örnek aralık
-                                              language: localization.currentLanguage, 
-                                              fontSize: .large)
-                            }
+                            SkySimulationCard(
+                                nextPrayerName: next.name,
+                                timeRemaining: vm.todayPrayers != nil ? next.time.timeIntervalSince(Date()) : 0,
+                                totalInterval: 14400, // TODO: Optimize based on actual interval
+                                language: localization.currentLanguage
+                            )
                             .padding(.vertical, 10)
                         }
                         
                         // ── VAKİTLER LİSTESİ ──
-                        NurCard(title: localization.localizedString("home.prayerTimesTitle"), icon: "timer", padding: 0) {
-                            VStack(spacing: 0) {
+                        NurCard(title: localization.localizedString("home.prayerTimesTitle"), icon: "timer", padding: 8) {
+                            VStack(spacing: 4) {
                                 if let prayers = vm.todayPrayers {
                                     ForEach(PrayerName.allCases, id: \.self) { name in
                                         PrayerTimeRow(prayer: name, 
                                                        time: prayerDate(for: name, in: prayers), 
                                                        isActive: vm.nextPrayer?.name == name, 
-                                                       isPast: isPast(prayer: name, in: prayers), 
+                                                       isPast: isPast(prayer: name, in: prayers),
+                                                       progress: vm.prayerProgress[name],
+                                                       remainingTime: vm.remTimeStrings[name],
                                                        notificationEnabled: vm.isNotificationEnabled(for: name), 
                                                        fontSize: .medium, 
                                                        language: localization.currentLanguage) {
                                             vm.toggleNotification(for: name)
                                         }
                                         
-                                        if name != .isha {
-                                            Divider()
-                                                .background(Color.white.opacity(0.1))
-                                                .padding(.horizontal)
-                                        }
+                                        // Divider removed as we now use Card spacing
+
                                     }
                                 }
                             }
@@ -153,8 +151,8 @@ struct HomeView: View {
                                 quickAccessButton(title: localization.localizedString("menu_zakat"), icon: "dollarsign.circle.fill") {
                                     router.push(to: .zakat)
                                 }
-                                quickAccessButton(title: localization.localizedString("home.searchShortcut"), icon: "magnifyingglass") {
-                                    NotificationCenter.default.post(name: Notification.Name("NavigateToTab"), object: 1)
+                                quickAccessButton(title: localization.localizedString("quran.tajweedFatiha"), icon: "book.closed.fill") {
+                                    router.push(to: .mushaf())
                                 }
                             }
                         }

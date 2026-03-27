@@ -142,9 +142,9 @@ struct CounterButtonStyle: ButtonStyle {
 }
 
 #Preview {
-    @State var item = DhikrItem(id: UUID(), type: .subhanallah, arabicText: "سبحان الله", transliterationTR: "", meanings: [:], targetCount: 33, currentCount: 10, isCustom: false, vibrateOnCount: true, dailyCompletions: 0, totalCompletions: 0)
+    @Previewable @State var item = DhikrItem(id: UUID(), type: .subhanallah, arabicText: "سبحان الله", transliterationTR: "", meanings: [:], targetCount: 33, currentCount: 10, isCustom: false, vibrateOnCount: true, dailyCompletions: 0, totalCompletions: 0)
     
-    return ZStack {
+    ZStack {
         Color(hex: "0D1B2A").ignoresSafeArea()
         DhikrCounterView(item: $item, language: .tr, fontSize: .large) {}
     }

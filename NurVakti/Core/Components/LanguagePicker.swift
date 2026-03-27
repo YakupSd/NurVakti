@@ -45,8 +45,8 @@ struct LanguagePicker: View {
 }
 
 #Preview {
-    @State var lang: LanguageCode = .tr
-    return LanguagePicker(selectedLanguage: $lang) { _ in }
+    @Previewable @State var lang: LanguageCode = .tr
+    LanguagePicker(selectedLanguage: $lang) { _ in }
         .padding(.vertical)
         .background(Color.black)
 }

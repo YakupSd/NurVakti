@@ -25,9 +25,10 @@ final class DhikrViewModel: ObservableObject {
     
     private let persistService: PersistenceService
     
-    init(persistService: PersistenceService = .shared) {
-        self.persistService = persistService
-        var items = persistService.dhikrItems
+    init(persistService: PersistenceService? = nil) {
+        let actualPersistService = persistService ?? .shared
+        self.persistService = actualPersistService
+        var items = actualPersistService.dhikrItems
         
         // Eksik anlamları tamamla (Eski veriler için)
         for i in 0..<items.count {

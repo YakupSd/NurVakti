@@ -19,6 +19,8 @@ struct NurCard<Content: View>: View {
                         Text(title)
                             .nurFont(18, weight: .bold)
                             .foregroundColor(.white)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.8)
                     }
                     Spacer()
                 }

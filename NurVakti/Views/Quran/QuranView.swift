@@ -26,7 +26,7 @@ struct QuranView: View {
                     HStack {
                         Image(systemName: "magnifyingglass")
                             .foregroundColor(.white.opacity(0.6))
-                        TextField(localization.localizedString("quran_search_placeholder"), text: $vm.searchText)
+                        TextField(localization.localizedString("quran.searchPlaceholder"), text: $vm.searchText)
                             .textFieldStyle(.plain)
                             .foregroundColor(.white)
                     }
@@ -49,29 +49,47 @@ struct QuranView: View {
                         
                         Button(action: { 
                             let page = vm.hatimProgress?.currentPage ?? 1
-                            router.push(to: .hatim(page: page, vm: vm))
+                            router.push(to: .mushaf(page: page))
                         }) {
-                            NurCard(title: "Kur'an-ı Hatmet", icon: "sparkles") {
-                                HStack {
-                                    VStack(alignment: .leading, spacing: 4) {
-                                        let page = vm.hatimProgress?.currentPage ?? 1
-                                        Text("\(localization.localizedString("quran.pageLabel")) \(page) / 604")
-                                            .nurFont(18, weight: .bold)
+                            NurCard(title: localization.localizedString("quran.hatimJourney"), icon: "sparkles") {
+                                let page = vm.hatimProgress?.currentPage ?? 1
+                                HStack(spacing: 20) {
+                                    VStack(alignment: .leading, spacing: 10) {
+                                        HStack(alignment: .lastTextBaseline, spacing: 4) {
+                                            Text("\(page)")
+                                                .nurFont(32, weight: .bold)
+                                                .foregroundColor(.nurGold)
+                                            Text("/ 604")
+                                                .nurFont(16, weight: .medium)
+                                                .foregroundColor(.white.opacity(0.4))
+                                                                            
+                                            Text(localization.localizedString("quran.pageLabel"))
+                                                .nurFont(14)
+                                                .foregroundColor(.white.opacity(0.6))
+                                                .padding(.leading, 8)
+                                        }
                                         
                                         ProgressView(value: Double(page), total: 604)
                                             .tint(.nurGold)
                                             .scaleEffect(x: 1, y: 1.5, anchor: .center)
-                                            .padding(.vertical, 8)
                                         
                                         Text(page == 1 ? localization.localizedString("quran.startFromFirst") : localization.localizedString("quran.continueWhereLeft"))
-                                            .nurFont(12)
-                                            .foregroundColor(.white.opacity(0.5))
+                                            .nurFont(13, weight: .medium)
+                                            .foregroundColor(.white.opacity(0.7))
                                     }
+                                    
                                     Spacer()
-                                    Image(systemName: "play.fill")
-                                        .font(.title2)
-                                        .foregroundColor(.nurGold)
+                                    
+                                    ZStack {
+                                        Circle()
+                                            .fill(Color.nurGold.opacity(0.1))
+                                            .frame(width: 50, height: 50)
+                                        Image(systemName: page == 1 ? "arrow.right" : "play.fill")
+                                            .font(.title3)
+                                            .foregroundColor(.nurGold)
+                                    }
                                 }
+                                .padding(.vertical, 8)
                             }
                         }
                         
@@ -82,16 +100,23 @@ struct QuranView: View {
                             // Not: Burada surenin SurahInfo nesnesine ihtiyacı var. 
                             // Basitleştirmek için veya progress içinde surahInfo tutulabilir.
                             // Şimdilik sadece Hatim'e yönelelim veya progress'i butona bağlayalım.
-                            NurCard(title: "\(localization.localizedString("quran.surahLabel")) \(progress.lastSurah), \(localization.localizedString("quran.ayahLabel")) \(progress.lastAyah)", icon: "book.fill") {
-                                HStack {
-                                    Text(localization.localizedString("quran.goToLastAyah"))
-                                        .nurFont(12)
-                                        .foregroundColor(.white.opacity(0.5))
-                                    Spacer()
-                                    Image(systemName: "chevron.right")
-                                        .foregroundColor(.nurGold)
+                            Button(action: {
+                                if let surah = vm.surahs.first(where: { $0.id == progress.lastSurah }) {
+                                    router.push(to: .mushaf(surah: surah))
+                                }
+                            }) {
+                                NurCard(title: "\(localization.localizedString("quran.surahLabel")) \(progress.lastSurah), \(localization.localizedString("quran.ayahLabel")) \(progress.lastAyah)", icon: "book.fill") {
+                                    HStack {
+                                        Text(localization.localizedString("quran.goToLastAyah"))
+                                            .nurFont(12)
+                                            .foregroundColor(.white.opacity(0.5))
+                                        Spacer()
+                                        Image(systemName: "chevron.right")
+                                            .foregroundColor(.nurGold)
+                                    }
                                 }
                             }
+                            .buttonStyle(.plain)
                         }
                         
                         SectionHeader(title: localization.localizedString("quran.surahsTitle"))
@@ -113,7 +138,7 @@ struct QuranView: View {
                             } else {
                                 ForEach(vm.filteredSurahs) { surah in
                                     Button(action: { 
-                                        router.push(to: .ayahList(surah: surah))
+                                        router.push(to: .mushaf(surah: surah))
                                     }) {
                                         SurahRowView(surah: surah, language: localization.currentLanguage, fontSize: .medium)
                                     }

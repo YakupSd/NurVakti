@@ -16,11 +16,13 @@ final class SettingsViewModel: ObservableObject {
     private let persistService: PersistenceService
     private let notifService: NotificationService
     
-    init(persistService: PersistenceService = .shared, notifService: NotificationService = .shared) {
-        self.persistService = persistService
-        self.notifService = notifService
+    init(persistService: PersistenceService? = nil, notifService: NotificationService? = nil) {
+        let actualPersistService = persistService ?? .shared
+        let actualNotifService = notifService ?? .shared
+        self.persistService = actualPersistService
+        self.notifService = actualNotifService
         
-        let initialSettings = persistService.settings
+        let initialSettings = actualPersistService.settings
         self.settings = initialSettings
         self.selectedLanguage = initialSettings.language
         self.fontSize = initialSettings.fontSize

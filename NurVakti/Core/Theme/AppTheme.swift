@@ -113,95 +113,11 @@ extension FontSize {
     }
 }
 
+// MARK: - Blur View Helper
 private struct BlurView: UIViewRepresentable {
     let style: UIBlurEffect.Style
     func makeUIView(context: Context) -> UIVisualEffectView {
         UIVisualEffectView(effect: UIBlurEffect(style: style))
     }
     func updateUIView(_ uiView: UIVisualEffectView, context: Context) {}
-}
-// MARK: - Tajweed Formatter
-struct TajweedFormatter {
-    static let shared = TajweedFormatter()
-    
-    private let colorMap: [String: Color] = [
-        "h": Color(hex: "#AAAAAA"), // Hamzat ul Wasl
-        "s": Color(hex: "#AAAAAA"), // Silent
-        "l": Color(hex: "#AAAAAA"), // Lam Shamsiyyah
-        "n": Color(hex: "#537FFF"), // Normal Prolongation
-        "p": Color(hex: "#4050FF"), // Permissible Prolongation
-        "m": Color(hex: "#000EBC"), // Necessary Prolongation
-        "q": Color(hex: "#DD0008"), // Qalaqah
-        "o": Color(hex: "#2144C1"), // Obligatory Prolongation
-        "c": Color(hex: "#D500B7"), // Ikhfa Shafawi
-        "f": Color(hex: "#9400A8"), // Ikhfa
-        "w": Color(hex: "#58B800"), // Idgham Shafawi
-        "i": Color(hex: "#26BFFD"), // Iqlab
-        "a": Color(hex: "#169777"), // Idgham With Ghunnah
-        "u": Color(hex: "#169200"), // Idgham Without Ghunnah
-        "g": Color(hex: "#FF7E1E"), // Ghunnah
-        "d": Color(hex: "#A1A1A1"), // Idgham Mutajanisayn
-        "b": Color(hex: "#A1A1A1")  // Idgham Mutaqaribayn
-    ]
-
-    func format(_ text: String, defaultColor: Color = .primary) -> AttributedString {
-        var attributedString = AttributedString("")
-        attributedString.foregroundColor = defaultColor
-        var remainingText = text
-        
-        while !remainingText.isEmpty {
-            if let openBracketRange = remainingText.range(of: "[") {
-                let beforeText = String(remainingText[..<openBracketRange.lowerBound])
-                var beforeAttr = AttributedString(beforeText)
-                beforeAttr.foregroundColor = defaultColor
-                attributedString.append(beforeAttr)
-                remainingText = String(remainingText[openBracketRange.lowerBound...])
-                
-                if let firstScopeEnd = remainingText.range(of: "[", options: [], range: remainingText.index(after: remainingText.startIndex)..<remainingText.endIndex) {
-                    let markerPart = String(remainingText[remainingText.index(after: remainingText.startIndex)..<firstScopeEnd.lowerBound])
-                    let ruleCode = markerPart.split(separator: ":").first.map(String.init) ?? ""
-                    
-                    var depth = 0
-                    var closingIndex: String.Index? = nil
-                    for i in remainingText.indices {
-                        if remainingText[i] == "[" { depth += 1 }
-                        else if remainingText[i] == "]" {
-                            depth -= 1
-                            if depth == 0 {
-                                closingIndex = i
-                                break
-                            }
-                        }
-                    }
-                    
-                    if let endIdx = closingIndex {
-                        let contentStart = remainingText.index(after: firstScopeEnd.lowerBound)
-                        let innerContent = String(remainingText[contentStart..<endIdx])
-                        var coloredSegment = format(innerContent, defaultColor: defaultColor) 
-                        if let color = colorMap[ruleCode] {
-                            coloredSegment.foregroundColor = color
-                        }
-                        attributedString.append(coloredSegment)
-                        remainingText = String(remainingText[remainingText.index(after: endIdx)...])
-                    } else {
-                        var bracket = AttributedString("[")
-                        bracket.foregroundColor = defaultColor
-                        attributedString.append(bracket)
-                        remainingText.removeFirst()
-                    }
-                } else {
-                    var bracket = AttributedString("[")
-                    bracket.foregroundColor = defaultColor
-                    attributedString.append(bracket)
-                    remainingText.removeFirst()
-                }
-            } else {
-                var finalPart = AttributedString(remainingText)
-                finalPart.foregroundColor = defaultColor
-                attributedString.append(finalPart)
-                break
-            }
-        }
-        return attributedString
-    }
 }

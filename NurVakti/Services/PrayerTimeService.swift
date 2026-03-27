@@ -4,6 +4,7 @@ import Combine
 import WidgetKit
 // import Adhan // SPM ile eklendiği varsayılıyor
 
+@MainActor
 final class PrayerTimeService: ObservableObject {
     @Published var todayPrayers: PrayerTime?
     @Published var monthlyPrayers: [PrayerTime] = []

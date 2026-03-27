@@ -4,8 +4,8 @@ struct OnboardingView: View {
     @StateObject private var vm: OnboardingViewModel
     @EnvironmentObject var localization: LocalizationManager
 
-    init(locationService: LocationService = LocationService()) {
-        _vm = StateObject(wrappedValue: OnboardingViewModel(locationService: locationService))
+    init(locationService: LocationService? = nil) {
+        _vm = StateObject(wrappedValue: OnboardingViewModel(locationService: locationService ?? LocationService()))
     }
 
     var body: some View {

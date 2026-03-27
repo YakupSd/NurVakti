@@ -15,7 +15,7 @@ enum AppDestination: Hashable {
     case addDhikr
     case hatim(page: Int, vm: QuranViewModel)
     case duaDetail(dua: DuaItem)
-    case ayahList(surah: SurahInfo)
+    case mushaf(surah: SurahInfo? = nil, page: Int? = nil)
     
     func hash(into hasher: inout Hasher) {
         switch self {
@@ -30,7 +30,10 @@ enum AppDestination: Hashable {
         case .addDhikr: hasher.combine(8)
         case .hatim(let page, _): hasher.combine(9); hasher.combine(page)
         case .duaDetail(let dua): hasher.combine(10); hasher.combine(dua.id)
-        case .ayahList(let surah): hasher.combine(11); hasher.combine(surah.id)
+        case .mushaf(let surah, let page): 
+            hasher.combine(11)
+            hasher.combine(surah?.id)
+            hasher.combine(page)
         }
     }
     
@@ -42,8 +45,8 @@ enum AppDestination: Hashable {
             return lPage == rPage
         case (.duaDetail(let lDua), .duaDetail(let rDua)):
             return lDua.id == rDua.id
-        case (.ayahList(let lSurah), .ayahList(let rSurah)):
-            return lSurah.id == rSurah.id
+        case (.mushaf(let lSurah, let lPage), .mushaf(let rSurah, let rPage)):
+            return lSurah?.id == rSurah?.id && lPage == rPage
         default:
             return false
         }
@@ -128,9 +131,14 @@ extension AppDestination {
         case .dhikr: DhikrView(vm: DhikrViewModel())
         case .settings: SettingsView(vm: SettingsViewModel())
         case .addDhikr: AddDhikrView(vm: DhikrViewModel())
-        case .hatim(let page, let vm): HatimPageView(currentPage: page, vm: vm)
+        case .hatim(let page, _): MushafMainView(page: page)
         case .duaDetail(let dua): DuaDetailView(dua: dua, language: LocalizationManager.shared.currentLanguage)
-        case .ayahList(let surah): AyahListView(surah: surah, vm: QuranViewModel())
+        case .mushaf(let surah, let page):
+            if let surah = surah {
+                MushafMainView(surah: surah)
+            } else {
+                MushafMainView(page: page ?? 1)
+            }
         }
     }
     
@@ -147,13 +155,14 @@ extension AppDestination {
         case .addDhikr: return LocalizationManager.shared.localizedString("dhikr.addNew")
         case .hatim: return "Hatim"
         case .duaDetail(let dua): return "Dua"
-        case .ayahList(let surah): return surah.englishName
+        case .mushaf(let surah, _): return surah?.englishName ?? "Mushaf"
         }
     }
     
     var isNavBarHidden: Bool {
         switch self {
         case .home: return true
+        case .mushaf: return false
         default: return false
         }
     }

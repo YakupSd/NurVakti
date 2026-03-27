@@ -65,7 +65,6 @@
 		B6B2C9E408E0D74EEABEFE58 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 290E799F80FDE42A27FC7E59 /* AppSettings.swift */; };
 		B84C0B945EAFDD183291D46A /* NurButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF8DFF2F8DFF6C7578DFAF2 /* NurButton.swift */; };
 		BA4A60F4296CF7CE1F2735AB /* PrayerTimeRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 528E03492A14481939034934 /* PrayerTimeRow.swift */; };
-		C19E92F6A28220FF05449544 /* StarFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D98C75FCFACEEE827B506F2 /* StarFieldView.swift */; };
 		C1ACF8C0ED69698B4A06F5AF /* IslamicCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A538DC2438A4D9CA486700C8 /* IslamicCalendarView.swift */; };
 		C342A7B89265D7F8A18A1EC5 /* UIColor+Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E3A1CC59A0C1ADAC37F4483 /* UIColor+Theme.swift */; };
 		C7CDD35178202299E6F25B7A /* QiblaSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5E729BBBBAA5955ED82FF9B /* QiblaSheet.swift */; };
@@ -80,16 +79,35 @@
 		EC2BA06E7A6AD464EB5F1FD4 /* ZakatCalculatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD0ED24ABB905A16A4897A61 /* ZakatCalculatorView.swift */; };
 		F217FE0486CD93A684406994 /* AlarmView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B4194E88D65FCC3DAE1EAB /* AlarmView.swift */; };
 		F2862AC625C77F4CDA490677 /* DhikrViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B927DB9EF951829D0E82EEE /* DhikrViewModel.swift */; };
-		F2E58AAFECF717F529FC2E4A /* AyahListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0181A8D955BA69A0FC747E55 /* AyahListView.swift */; };
-		F32CDD622F718C19006F2D78 /* HatimPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F32CDD612F718C19006F2D78 /* HatimPageView.swift */; };
+		F30D26B12F757DD20075FF67 /* BirdLayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30D26B02F757DD20075FF67 /* BirdLayerView.swift */; };
+		F30D26B32F757E6D0075FF67 /* StarFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30D26B22F757E6D0075FF67 /* StarFieldView.swift */; };
 		F32CDD642F718F1C006F2D78 /* DuaDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F32CDD632F718F1C006F2D78 /* DuaDetailView.swift */; };
-		F32CDD662F718F35006F2D78 /* MushafPageContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = F32CDD652F718F35006F2D78 /* MushafPageContent.swift */; };
 		F32CDD712F719000006F2D78 /* NurFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = F32CDD702F719000006F2D78 /* NurFont.swift */; };
 		F32CDD732F719000006F2D78 /* SectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F32CDD722F719000006F2D78 /* SectionHeader.swift */; };
 		F32CDD752F719000006F2D78 /* DuaItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F32CDD742F719000006F2D78 /* DuaItem.swift */; };
 		F32CDD772F719000006F2D78 /* AudioService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F32CDD762F719000006F2D78 /* AudioService.swift */; };
 		F32CDD792F719000006F2D78 /* AddDhikrView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F32CDD782F719000006F2D78 /* AddDhikrView.swift */; };
 		F37685BB2F72B37900179634 /* PrayerCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F37685BA2F72B37900179634 /* PrayerCalculator.swift */; };
+		F3B9058A2F7405F500254779 /* fajr.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F3B905892F7405F500254779 /* fajr.mp3 */; };
+		F3B9058B2F7405F500254779 /* ezan.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F3B905882F7405F500254779 /* ezan.mp3 */; };
+		F3B905952F74087600254779 /* SkyColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3B9058E2F74087600254779 /* SkyColorPalette.swift */; };
+		F3B905962F74087600254779 /* SkyPhase.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3B9058F2F74087600254779 /* SkyPhase.swift */; };
+		F3B905972F74087600254779 /* AnimatedStarFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3B905932F74087600254779 /* AnimatedStarFieldView.swift */; };
+		F3B905982F74087600254779 /* SkySimulationCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3B905902F74087600254779 /* SkySimulationCard.swift */; };
+		F3B905992F74087600254779 /* SkySimulationPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3B905912F74087600254779 /* SkySimulationPreview.swift */; };
+		F3B9059A2F74087600254779 /* CloudLayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3B9058D2F74087600254779 /* CloudLayerView.swift */; };
+		F3B9059B2F74087600254779 /* SkySimulationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3B905922F74087600254779 /* SkySimulationView.swift */; };
+		F3B9059C2F74087600254779 /* CelestialBodyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3B9058C2F74087600254779 /* CelestialBodyView.swift */; };
+		F3B905A92F740FA100254779 /* MushafPageView+Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3B905A82F740FA100254779 /* MushafPageView+Preview.swift */; };
+		F3B905AA2F740FA100254779 /* MushafPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3B905A72F740FA100254779 /* MushafPageView.swift */; };
+		F3B905B02F7416DE00254779 /* SurahHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3B905AF2F7416DE00254779 /* SurahHeaderView.swift */; };
+		F3B905B12F7416DE00254779 /* AyahTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3B905AB2F7416DE00254779 /* AyahTextView.swift */; };
+		F3B905B22F7416DE00254779 /* MushafMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3B905AD2F7416DE00254779 /* MushafMainView.swift */; };
+		F3B905B32F7416DE00254779 /* BesmeleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3B905AC2F7416DE00254779 /* BesmeleView.swift */; };
+		F3B905B42F7416DE00254779 /* MushafPageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3B905AE2F7416DE00254779 /* MushafPageController.swift */; };
+		F3B905B62F7416EE00254779 /* MushafViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3B905B52F7416EE00254779 /* MushafViewModel.swift */; };
+		F3B905B82F7419CB00254779 /* MushafPageCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3B905B72F7419CB00254779 /* MushafPageCard.swift */; };
+		F3B905BA2F74277100254779 /* MushafModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3B905B92F74277100254779 /* MushafModels.swift */; };
 		F68F7DC68DC504FBC9ED7431 /* AlarmViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7211D5C2BAF5D8D48B8BD669 /* AlarmViewModel.swift */; };
 		F7A8EA8B9D39EF775242E9CA /* NurWidgetData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A3E7E1A1FD313450DB56244 /* NurWidgetData.swift */; };
 		FF2540A1BFB5E6D6D04F02CF /* ZakatModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966A08345BE3C4F432483005 /* ZakatModel.swift */; };
@@ -97,7 +115,6 @@
 
 /* Begin PBXFileReference section */
 		006385E4F13680A1455DF199 /* OnboardingView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
-		0181A8D955BA69A0FC747E55 /* AyahListView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AyahListView.swift; sourceTree = "<group>"; };
 		01B0E4D94D9B6B6C3C5D29EA /* DynamicHomeBackground.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DynamicHomeBackground.swift; sourceTree = "<group>"; };
 		01D425669BB92C83BCB65A8B /* QuranNetworkModels.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = QuranNetworkModels.swift; sourceTree = "<group>"; };
 		0644DEDF590A0B98207C5F37 /* HapticManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
@@ -116,7 +133,6 @@
 		3946473EBBD3E0FEA4B2CB58 /* NurVaktiApp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NurVaktiApp.swift; sourceTree = "<group>"; };
 		3C2F791107E0E0D830848608 /* Assets.xcassets */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3D243BC81FF696C3426EE2A1 /* DailyGuidanceView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DailyGuidanceView.swift; sourceTree = "<group>"; };
-		3D98C75FCFACEEE827B506F2 /* StarFieldView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = StarFieldView.swift; sourceTree = "<group>"; };
 		411A71D40092ED80D62F116B /* DhikrCounterView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DhikrCounterView.swift; sourceTree = "<group>"; };
 		47C4CB5D1B6CAE3C7294755D /* DhikrItem.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DhikrItem.swift; sourceTree = "<group>"; };
 		4E550A32854F56D6FD588037 /* PrayerTime.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PrayerTime.swift; sourceTree = "<group>"; };
@@ -173,16 +189,36 @@
 		E5489F1AE9B631B321944B1E /* DeepLinkHandler.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DeepLinkHandler.swift; sourceTree = "<group>"; };
 		E61287AF7C1DC13D8C13A888 /* PrayerSettings.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PrayerSettings.swift; sourceTree = "<group>"; };
 		EE910DA401DC61A213B26C91 /* BackgroundRefreshService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BackgroundRefreshService.swift; sourceTree = "<group>"; };
+		F30D26B02F757DD20075FF67 /* BirdLayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirdLayerView.swift; sourceTree = "<group>"; };
+		F30D26B22F757E6D0075FF67 /* StarFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarFieldView.swift; sourceTree = "<group>"; };
 		F32CDD332F717CB2006F2D78 /* NurVakti.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NurVakti.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		F32CDD612F718C19006F2D78 /* HatimPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HatimPageView.swift; sourceTree = "<group>"; };
 		F32CDD632F718F1C006F2D78 /* DuaDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuaDetailView.swift; sourceTree = "<group>"; };
-		F32CDD652F718F35006F2D78 /* MushafPageContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MushafPageContent.swift; sourceTree = "<group>"; };
 		F32CDD702F719000006F2D78 /* NurFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NurFont.swift; sourceTree = "<group>"; };
 		F32CDD722F719000006F2D78 /* SectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeader.swift; sourceTree = "<group>"; };
 		F32CDD742F719000006F2D78 /* DuaItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuaItem.swift; sourceTree = "<group>"; };
 		F32CDD762F719000006F2D78 /* AudioService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioService.swift; sourceTree = "<group>"; };
 		F32CDD782F719000006F2D78 /* AddDhikrView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDhikrView.swift; sourceTree = "<group>"; };
 		F37685BA2F72B37900179634 /* PrayerCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerCalculator.swift; sourceTree = "<group>"; };
+		F3B905882F7405F500254779 /* ezan.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ezan.mp3; sourceTree = "<group>"; };
+		F3B905892F7405F500254779 /* fajr.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = fajr.mp3; sourceTree = "<group>"; };
+		F3B9058C2F74087600254779 /* CelestialBodyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CelestialBodyView.swift; sourceTree = "<group>"; };
+		F3B9058D2F74087600254779 /* CloudLayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudLayerView.swift; sourceTree = "<group>"; };
+		F3B9058E2F74087600254779 /* SkyColorPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkyColorPalette.swift; sourceTree = "<group>"; };
+		F3B9058F2F74087600254779 /* SkyPhase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkyPhase.swift; sourceTree = "<group>"; };
+		F3B905902F74087600254779 /* SkySimulationCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkySimulationCard.swift; sourceTree = "<group>"; };
+		F3B905912F74087600254779 /* SkySimulationPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkySimulationPreview.swift; sourceTree = "<group>"; };
+		F3B905922F74087600254779 /* SkySimulationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkySimulationView.swift; sourceTree = "<group>"; };
+		F3B905932F74087600254779 /* AnimatedStarFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedStarFieldView.swift; sourceTree = "<group>"; };
+		F3B905A72F740FA100254779 /* MushafPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MushafPageView.swift; sourceTree = "<group>"; };
+		F3B905A82F740FA100254779 /* MushafPageView+Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MushafPageView+Preview.swift"; sourceTree = "<group>"; };
+		F3B905AB2F7416DE00254779 /* AyahTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AyahTextView.swift; sourceTree = "<group>"; };
+		F3B905AC2F7416DE00254779 /* BesmeleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BesmeleView.swift; sourceTree = "<group>"; };
+		F3B905AD2F7416DE00254779 /* MushafMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MushafMainView.swift; sourceTree = "<group>"; };
+		F3B905AE2F7416DE00254779 /* MushafPageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MushafPageController.swift; sourceTree = "<group>"; };
+		F3B905AF2F7416DE00254779 /* SurahHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurahHeaderView.swift; sourceTree = "<group>"; };
+		F3B905B52F7416EE00254779 /* MushafViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MushafViewModel.swift; sourceTree = "<group>"; };
+		F3B905B72F7419CB00254779 /* MushafPageCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MushafPageCard.swift; sourceTree = "<group>"; };
+		F3B905B92F74277100254779 /* MushafModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MushafModels.swift; sourceTree = "<group>"; };
 		F5E729BBBBAA5955ED82FF9B /* QiblaSheet.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = QiblaSheet.swift; sourceTree = "<group>"; };
 		F960B8629AFDDC8AB7A1FD64 /* QuranViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = QuranViewModel.swift; sourceTree = "<group>"; };
 		FDB7502A792AFA416CEC04D3 /* RootNavigationController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RootNavigationController.swift; path = Core/Navigation/RootNavigationController.swift; sourceTree = "<group>"; };
@@ -203,6 +239,7 @@
 		007C4DB929BC91E9954E1DBE /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				F3B905942F74087600254779 /* SkySimulation */,
 				B537F3EE376CC5AE1FC208A6 /* HomeView.swift */,
 				F5E729BBBBAA5955ED82FF9B /* QiblaSheet.swift */,
 				3D243BC81FF696C3426EE2A1 /* DailyGuidanceView.swift */,
@@ -242,6 +279,7 @@
 		19902586EC950B32AC01E865 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				F3B905B52F7416EE00254779 /* MushafViewModel.swift */,
 				9F5A1044997628B6869DAE39 /* HomeViewModel.swift */,
 				8C979C7333AB220E87EF966B /* SettingsViewModel.swift */,
 				5B927DB9EF951829D0E82EEE /* DhikrViewModel.swift */,
@@ -256,6 +294,8 @@
 		1C348435D488FD4898F69CB3 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				F3B905882F7405F500254779 /* ezan.mp3 */,
+				F3B905892F7405F500254779 /* fajr.mp3 */,
 				3C2F791107E0E0D830848608 /* Assets.xcassets */,
 				929E47256A0D1D2D45656AC2 /* Info_Plist_Strings.txt */,
 				0FCFBAC226D0E7ABE3D46E85 /* NurVakti.xcdatamodeld */,
@@ -295,6 +335,8 @@
 		429E0E146200BA55B28E1A3B /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				F30D26B22F757E6D0075FF67 /* StarFieldView.swift */,
+				F3B905B72F7419CB00254779 /* MushafPageCard.swift */,
 				31D2AB2691619B2FE5CB381C /* HijriDateBadge.swift */,
 				E1E7FB3F7613475BAE805AB3 /* CountdownRing.swift */,
 				D52D4AD4989465D53E36C145 /* SunMoonArcView.swift */,
@@ -305,7 +347,6 @@
 				0D453E21561AB3568D361773 /* NurCard.swift */,
 				D1D9868734596F0554DC6E68 /* EmptyStateView.swift */,
 				9EF8DFF2F8DFF6C7578DFAF2 /* NurButton.swift */,
-				3D98C75FCFACEEE827B506F2 /* StarFieldView.swift */,
 				411A71D40092ED80D62F116B /* DhikrCounterView.swift */,
 				F32CDD722F719000006F2D78 /* SectionHeader.swift */,
 				01B0E4D94D9B6B6C3C5D29EA /* DynamicHomeBackground.swift */,
@@ -316,10 +357,14 @@
 		48EDF9031220757C0F01BE02 /* Quran */ = {
 			isa = PBXGroup;
 			children = (
-				F32CDD652F718F35006F2D78 /* MushafPageContent.swift */,
-				F32CDD612F718C19006F2D78 /* HatimPageView.swift */,
+				F3B905AB2F7416DE00254779 /* AyahTextView.swift */,
+				F3B905AC2F7416DE00254779 /* BesmeleView.swift */,
+				F3B905AD2F7416DE00254779 /* MushafMainView.swift */,
+				F3B905AE2F7416DE00254779 /* MushafPageController.swift */,
+				F3B905AF2F7416DE00254779 /* SurahHeaderView.swift */,
+				F3B905A72F740FA100254779 /* MushafPageView.swift */,
+				F3B905A82F740FA100254779 /* MushafPageView+Preview.swift */,
 				C0B37EE67D154FD95F8678FD /* QuranView.swift */,
-				0181A8D955BA69A0FC747E55 /* AyahListView.swift */,
 			);
 			path = Quran;
 			sourceTree = "<group>";
@@ -427,6 +472,7 @@
 		C556CFB9E4D758A36EAF708C /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				F3B905B92F74277100254779 /* MushafModels.swift */,
 				290E799F80FDE42A27FC7E59 /* AppSettings.swift */,
 				C6FE220698F77D67E1D1BC00 /* AlarmModel.swift */,
 				213E2E528DC3DA3C920CC9C0 /* BackgroundTheme.swift */,
@@ -525,6 +571,22 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		F3B905942F74087600254779 /* SkySimulation */ = {
+			isa = PBXGroup;
+			children = (
+				F30D26B02F757DD20075FF67 /* BirdLayerView.swift */,
+				F3B9058C2F74087600254779 /* CelestialBodyView.swift */,
+				F3B9058D2F74087600254779 /* CloudLayerView.swift */,
+				F3B9058E2F74087600254779 /* SkyColorPalette.swift */,
+				F3B9058F2F74087600254779 /* SkyPhase.swift */,
+				F3B905902F74087600254779 /* SkySimulationCard.swift */,
+				F3B905912F74087600254779 /* SkySimulationPreview.swift */,
+				F3B905922F74087600254779 /* SkySimulationView.swift */,
+				F3B905932F74087600254779 /* AnimatedStarFieldView.swift */,
+			);
+			path = SkySimulation;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -589,6 +651,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				0BB7B2B0B6496FFB5BDF5182 /* Assets.xcassets in Resources */,
+				F3B9058A2F7405F500254779 /* fajr.mp3 in Resources */,
+				F3B9058B2F7405F500254779 /* ezan.mp3 in Resources */,
 				536B6482AAB6F23592714A00 /* Info_Plist_Strings.txt in Resources */,
 				38E2393B537F5BCEEE33C2DC /* NurVakti.xcdatamodeld in Resources */,
 				69CAA192A585072F6FB5517B /* PrivacyInfo.xcprivacy in Resources */,
@@ -612,7 +676,7 @@
 				707283B1722B1103DAE7F5E1 /* Bundle+Language.swift in Sources */,
 				B1DE5E177516DA17EE433DF0 /* HijriDateBadge.swift in Sources */,
 				AB6C0141B030867F984DDC6A /* CountdownRing.swift in Sources */,
-				F32CDD622F718C19006F2D78 /* HatimPageView.swift in Sources */,
+				F3B905B82F7419CB00254779 /* MushafPageCard.swift in Sources */,
 				F32CDD712F719000006F2D78 /* NurFont.swift in Sources */,
 				F32CDD732F719000006F2D78 /* SectionHeader.swift in Sources */,
 				B60DEC555077169175E3CF5D /* SunMoonArcView.swift in Sources */,
@@ -624,7 +688,6 @@
 				43B5F92E8FA88FFC9E495535 /* NurCard.swift in Sources */,
 				DAEEF4545A416747C6E47241 /* EmptyStateView.swift in Sources */,
 				B84C0B945EAFDD183291D46A /* NurButton.swift in Sources */,
-				C19E92F6A28220FF05449544 /* StarFieldView.swift in Sources */,
 				8CB0863F7DBC78B4CC4FFE92 /* DhikrCounterView.swift in Sources */,
 				DBD417AB9603A5411C6C2AA2 /* AppTheme.swift in Sources */,
 				D4787C81436EB15103C644EF /* AppConstants.swift in Sources */,
@@ -642,11 +705,22 @@
 				58AB88C22147A317444238C0 /* BackgroundRefreshService.swift in Sources */,
 				1BDF037A091A3810C68FA952 /* PrayerTimeService.swift in Sources */,
 				18EB1622CE6B70DE8A104B69 /* SoundService.swift in Sources */,
+				F3B905B62F7416EE00254779 /* MushafViewModel.swift in Sources */,
 				03023CB933AD56BC940030DF /* BackgroundGradientService.swift in Sources */,
+				F3B905952F74087600254779 /* SkyColorPalette.swift in Sources */,
+				F3B905962F74087600254779 /* SkyPhase.swift in Sources */,
+				F3B905972F74087600254779 /* AnimatedStarFieldView.swift in Sources */,
+				F3B905982F74087600254779 /* SkySimulationCard.swift in Sources */,
+				F3B905992F74087600254779 /* SkySimulationPreview.swift in Sources */,
+				F3B9059A2F74087600254779 /* CloudLayerView.swift in Sources */,
+				F30D26B32F757E6D0075FF67 /* StarFieldView.swift in Sources */,
+				F3B905A92F740FA100254779 /* MushafPageView+Preview.swift in Sources */,
+				F3B905AA2F740FA100254779 /* MushafPageView.swift in Sources */,
+				F3B9059B2F74087600254779 /* SkySimulationView.swift in Sources */,
+				F3B9059C2F74087600254779 /* CelestialBodyView.swift in Sources */,
 				D2536C0BD200AA8736D793C7 /* IslamicCalendarService.swift in Sources */,
 				037BEB6EC366DF941C006D8C /* PersistenceService.swift in Sources */,
 				B3D8951D590100979A6F1F24 /* NotificationService.swift in Sources */,
-				F32CDD662F718F35006F2D78 /* MushafPageContent.swift in Sources */,
 				0DB00BDA6E069AD47AAA35E1 /* IslamicCalendarEvents.swift in Sources */,
 				09A4639D59B747F79023D4F1 /* LocationService.swift in Sources */,
 				4BE4C23D24C59C42DC90B9F6 /* HomeViewModel.swift in Sources */,
@@ -656,14 +730,20 @@
 				39A60219DDA35375D1C2416D /* QuranViewModel.swift in Sources */,
 				F68F7DC68DC504FBC9ED7431 /* AlarmViewModel.swift in Sources */,
 				B12C94B30C9FB90F95A16A8C /* OnboardingViewModel.swift in Sources */,
+				F3B905B02F7416DE00254779 /* SurahHeaderView.swift in Sources */,
+				F3B905B12F7416DE00254779 /* AyahTextView.swift in Sources */,
+				F3B905B22F7416DE00254779 /* MushafMainView.swift in Sources */,
+				F3B905B32F7416DE00254779 /* BesmeleView.swift in Sources */,
+				F3B905B42F7416DE00254779 /* MushafPageController.swift in Sources */,
 				CB9E2EDA307ABC6DF3A69EA6 /* MainTabView.swift in Sources */,
 				3A7FB6116697EE24A7DFE5C9 /* SettingsView.swift in Sources */,
 				3D2875DB308B6A50216A3A99 /* HomeView.swift in Sources */,
 				C7CDD35178202299E6F25B7A /* QiblaSheet.swift in Sources */,
+				F30D26B12F757DD20075FF67 /* BirdLayerView.swift in Sources */,
+				F3B905BA2F74277100254779 /* MushafModels.swift in Sources */,
 				7317640C9FC85989757BA484 /* SplashView.swift in Sources */,
 				A830B9903FD0F8C77A13D61A /* DhikrView.swift in Sources */,
 				30D8A07772A80954A6DB6225 /* QuranView.swift in Sources */,
-				F2E58AAFECF717F529FC2E4A /* AyahListView.swift in Sources */,
 				D56CA0876BF88C0967089F13 /* QiblaView.swift in Sources */,
 				F217FE0486CD93A684406994 /* AlarmView.swift in Sources */,
 				769EBFFC34DB2BFBE3F5BA7B /* ContentView.swift in Sources */,
