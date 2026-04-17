@@ -63,14 +63,6 @@ struct MushafMainView: View {
                 Text("Veri bulunamadı.")
             }
         }
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .principal) {
-                Text(vm.pages.first?.surahName ?? "Mushaf-ı Şerif")
-                    .font(.system(size: 18, weight: .bold))
-                    .foregroundColor(Color.nurGoldPremium)
-            }
-        }
     }
 }
 

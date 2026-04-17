@@ -12,11 +12,15 @@ struct DhikrCounterView: View {
     var body: some View {
         VStack(spacing: 30) {
             ZStack {
-                // Outer Glow / Shadow
+                // Outer Glow / Shadow (Enhanced Nur)
                 Circle()
-                    .fill(Color.nurGold.opacity(0.15))
-                    .blur(radius: 20)
-                    .scaleEffect(isAnimating ? 1.1 : 1.0)
+                    .fill(
+                        AngularGradient(colors: [.nurGold.opacity(0.35), .clear, .nurGold.opacity(0.2), .clear, .nurGold.opacity(0.35)], center: .center)
+                    )
+                    .rotationEffect(.degrees(isAnimating ? 360 : 0))
+                    .blur(radius: 25)
+                    .scaleEffect(isAnimating ? 1.2 : 1.0)
+                    .animation(.linear(duration: 8).repeatForever(autoreverses: false), value: isAnimating)
                 
                 // Main Jewel Body (Glassmorphism)
                 Circle()
@@ -52,10 +56,11 @@ struct DhikrCounterView: View {
                             .foregroundColor(.white)
                         
                         Text(String(item.currentCount))
-                            .nurFont(80, weight: .heavy, design: .rounded)
+                            .nurFont(90, weight: .heavy, design: .rounded)
                             .foregroundColor(.nurGold)
                             .contentTransition(.numericText())
-                            .scaleEffect(isAnimating ? 1.15 : 1.0)
+                            .scaleEffect(isAnimating ? 1.25 : 1.0)
+                            .shadow(color: .nurGold.opacity(0.5), radius: isAnimating ? 15 : 5)
                         
                         HStack(spacing: 4) {
                             Text(String(item.targetCount))
@@ -108,13 +113,13 @@ struct DhikrCounterView: View {
             HapticManager.shared.dhikrCount()
         }
 
-        withAnimation(.spring(response: 0.2, dampingFraction: 0.4)) {
+        withAnimation(.spring(response: 0.25, dampingFraction: 0.5, blendDuration: 0)) {
             item.increment()
             isAnimating = true
         }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
-            withAnimation(.easeOut(duration: 0.2)) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            withAnimation(.easeOut(duration: 0.3)) {
                 isAnimating = false
             }
         }

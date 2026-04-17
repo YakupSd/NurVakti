@@ -1,27 +1,48 @@
 import Foundation
 
-struct PrayerTime: Codable, Identifiable {
-    let id: UUID
-    let date: Date
-    let imsak: Date
-    let fajr: Date
-    let sunrise: Date
-    let dhuhr: Date
-    let asr: Date
-    let maghrib: Date
-    let isha: Date
-    let cityName: String
-    let hijriDate: HijriDate
-    let calculationMethod: String
+public struct PrayerTime: Codable, Identifiable {
+    public let id: UUID
+    public let date: Date
+    public let imsak: Date
+    public let fajr: Date
+    public let sunrise: Date
+    public let dhuhr: Date
+    public let asr: Date
+    public let maghrib: Date
+    public let isha: Date
+    public let cityName: String
+    public let hijriDate: HijriDate
+    public let calculationMethod: String
+    
+    public init(id: UUID = UUID(), date: Date, imsak: Date, fajr: Date, sunrise: Date, dhuhr: Date, asr: Date, maghrib: Date, isha: Date, cityName: String, hijriDate: HijriDate, calculationMethod: String) {
+        self.id = id
+        self.date = date
+        self.imsak = imsak
+        self.fajr = fajr
+        self.sunrise = sunrise
+        self.dhuhr = dhuhr
+        self.asr = asr
+        self.maghrib = maghrib
+        self.isha = isha
+        self.cityName = cityName
+        self.hijriDate = hijriDate
+        self.calculationMethod = calculationMethod
+    }
 }
 
-struct HijriDate: Codable {
-    let day: Int
-    let month: Int         // 1-12
-    let year: Int
+public struct HijriDate: Codable {
+    public let day: Int
+    public let month: Int         // 1-12
+    public let year: Int
+    
+    public init(day: Int, month: Int, year: Int) {
+        self.day = day
+        self.month = month
+        self.year = year
+    }
     
     // 5 dilde ay ismi döndüren func
-    func monthName(for language: LanguageCode) -> String {
+    public func monthName(for language: LanguageCode) -> String {
         let monthsAr = ["محرم", "صفر", "ربيع الأول", "ربيع الآخر", "جمادى الأولى", "جمادى الآخرة", "رجب", "شعبان", "رمضان", "شوال", "ذو القعدة", "ذو الحجة"]
         let monthsTr = ["Muharrem", "Safer", "Rebiülevvel", "Rebiülahir", "Cemaziyelevvel", "Cemaziyelahir", "Recep", "Şaban", "Ramazan", "Şevval", "Zilkade", "Zilhicce"]
         let monthsEn = ["Muharram", "Safar", "Rabi' al-awwal", "Rabi' al-thani", "Jumada al-ula", "Jumada al-akhira", "Rajab", "Sha'ban", "Ramadan", "Shawwal", "Dhu al-Qi'dah", "Dhu al-Hijjah"]
@@ -38,8 +59,7 @@ struct HijriDate: Codable {
         }
     }
     
-    // Formatlı string: "15 Ramazan 1446" / "١٥ رمضان ١٤٤٦"
-    func formatted(for language: LanguageCode) -> String {
+    public func formatted(for language: LanguageCode) -> String {
         let mName = monthName(for: language)
         if language == .ar {
             let dayAr = formatArabicNumber(day)

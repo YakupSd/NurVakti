@@ -1,10 +1,8 @@
 import SwiftUI
 
 struct SkySimulationView: View {
-    // Current time (can be injected for testing)
+    var prayerTimes: PrayerTime? = nil
     var currentTime: Date = Date()
-    
-    // Debug/Preview speed (1.0 = real-time, 60.0 = 1 min per sec)
     var debugSpeed: Double = 1.0
     
     // Internal state for animation

@@ -1,21 +1,23 @@
 import Foundation
 
-struct AppSettings: Codable {
-    var language: LanguageCode = .tr
-    var fontSize: FontSize = .large    // Varsayılan büyük (yaşlı kitle)
-    var calculationMethod: String = "Diyanet"
-    var madhab: Madhab = .hanafi
-    var notificationsEnabled: Bool = true
-    var manualCityName: String? = nil
-    var useManualLocation: Bool = false
+public struct AppSettings: Codable {
+    public var language: LanguageCode = .tr
+    public var fontSize: FontSize = .large    // Varsayılan büyük (yaşlı kitle)
+    public var calculationMethod: String = "Diyanet"
+    public var madhab: Madhab = .hanafi
+    public var notificationsEnabled: Bool = true
+    public var manualCityName: String? = nil
+    public var useManualLocation: Bool = false
     // ── Onboarding ──────────────────────────────────────────
-    var hasCompletedOnboarding: Bool = false
+    public var hasCompletedOnboarding: Bool = false
+    
+    public init() {}
 }
 
-enum Madhab: String, Codable, CaseIterable {
+public enum Madhab: String, Codable, CaseIterable {
     case hanafi, shafii
     
-    func displayName(for language: LanguageCode) -> String {
+    public func displayName(for language: LanguageCode) -> String {
         switch (self, language) {
         case (.hanafi, .tr): return "Hanefi"
         case (.shafii, .tr): return "Şafii"

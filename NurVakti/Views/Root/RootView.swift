@@ -9,10 +9,14 @@ struct RootView: View {
             nav: navigationController,
             rootView: ContentView(),
             navigationBarTitle: "",
-            navigationBarHidden: true
+            navigationBarHidden: true,
+            backgroundImage: "",
+            rightImage: "",
+            rightButtonAction: {}
         )
         .onAppear {
             router.nav = navigationController
+            MainViewsRouter.shared.nav = navigationController
             setupAppearance()
         }
         .environmentObject(router)

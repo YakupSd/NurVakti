@@ -20,22 +20,8 @@ struct SettingsView: View {
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 32) {
                     
-                    // ÜSTBAR / BAŞLIK
-                    VStack(alignment: .leading, spacing: 8) {
-                        HStack {
-                            Text(localization.localizedString("settings.title"))
-                                .font(.system(size: 36, weight: .black))
-                                .foregroundColor(.white)
-                            Spacer()
-                            Image(systemName: "gearshape.fill")
-                                .font(.title)
-                                .foregroundColor(.nurGold)
-                        }
-                        Text(localization.localizedString("settings.journeyHint"))
-                            .nurFont(14)
-                            .foregroundColor(.white.opacity(0.5))
-                    }
-                    .padding(.top, 20)
+                    // Dil seçimi ile başla (Başlık artık navbar'da)
+                    Spacer().frame(height: 20)
                     
                     // ── DİL SEÇİMİ ──
                     VStack(alignment: .leading, spacing: 16) {

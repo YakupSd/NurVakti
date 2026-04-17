@@ -308,3 +308,34 @@
 "completed_prayers_count" = "%d orações concluídas hoje";
 "alarm.repeatDays"    = "Dias de Repetição";
 "alarm.everyDay"       = "Todo dia";
+
+// MARK: - FAVOURITE PRAYERS & ROUTINE
+"routine.morning" = "Rotina Matinal";
+"routine.evening" = "Rotina Noturna";
+"routine.complete" = "Concluído";
+"routine.remaining" = "restante";
+"routine.addDuas" = "Adicionar Duas";
+"routine.none" = "Sem Rotina";
+"routine.both" = "Ambos";
+"favourites.title" = "MEUS FAVORITOS";
+"favourites.edit" = "Editar";
+"favourites.empty" = "Nenhum favorito ainda";
+"favourites.addMore" = "Adicionar Mais";
+"library.title" = "Biblioteca de Duas";
+"library.subtitle" = "Todas as duas, suratas e dhikrs";
+"library.pickFavs" = "Escolher Favoritos";
+"library.pickRoutine" = "Adicionar à Rotina";
+"library.searchPlaceholder" = "Pesquisar dua ou surata...";
+"library.all" = "Tudo";
+"library.noResults" = "Nenhum resultado encontrado";
+"audio.pause" = "Pausa";
+"audio.listen" = "Ouvir";
+
+// MARK: - Prayer Times View
+"prayer.completed" = "Concluído";
+"prayer.active" = "Agora";
+"prayer.remaining" = "restante";
+"prayer.upcoming" = "Próximo";
+"vakitler.title" = "Horários de Oração";
+"vakitler.nextPrayer" = "Próxima Oração";
+"vakitler.allDone" = "Todas as orações concluídas hoje";

@@ -19,8 +19,7 @@ final class QuranViewModel: ObservableObject {
     @Published var arabicFontSize: CGFloat = 26
     @Published var viewStyle: QuranViewStyle = .mushaf // Varsayılan geleneksel olsun
     
-    private let persistence = PersistenceService.shared
-    private let baseURL = "https://api.alquran.cloud/v1"
+    private let quranManager = QuranManager()
     private var cancellables = Set<AnyCancellable>()
     
     init() {
@@ -46,37 +45,38 @@ final class QuranViewModel: ObservableObject {
            let cachedList = try? JSONDecoder().decode([SurahInfo].self, from: cachedData) {
             self.surahs = cachedList
             self.filteredSurahs = cachedList
-            // cache olsa bile arka planda güncelleme yapılabilir (isteğe bağlı)
             if !cachedList.isEmpty { return }
         }
         
         isLoading = true
         defer { isLoading = false }
         
-        do {
-            guard let url = URL(string: "\(baseURL)/surah") else { return }
-            let (data, _) = try await URLSession.shared.data(from: url)
-            let response = try JSONDecoder().decode(SurahListResponse.self, from: data)
-            
-            let mappedSurahs = response.data.map { dto in
-                SurahInfo(id: dto.number,
-                          nameArabic: dto.name,
-                          nameLocalized: [.tr: dto.englishName], // Örnek, gerçekte çeviri gerekebilir
-                          englishName: dto.englishName,
-                          ayahCount: dto.numberOfAyahs,
-                          revelationType: RevelationType(rawValue: dto.revelationType) ?? .makkah)
+        await withCheckedContinuation { continuation in
+            quranManager.getSurahs { response in
+                let mappedSurahs = response.data.map { dto in
+                    SurahInfo(id: dto.number,
+                              nameArabic: dto.name,
+                              nameLocalized: [.tr: dto.englishName],
+                              englishName: dto.englishName,
+                              ayahCount: dto.numberOfAyahs,
+                              revelationType: RevelationType(rawValue: dto.revelationType) ?? .makkah)
+                }
+                
+                DispatchQueue.main.async {
+                    self.surahs = mappedSurahs
+                    self.filteredSurahs = mappedSurahs
+                    
+                    if let encoded = try? JSONEncoder().encode(mappedSurahs) {
+                        UserDefaults.standard.set(encoded, forKey: "cached_surah_list")
+                    }
+                    continuation.resume()
+                }
+            } onFailure: { _ in
+                DispatchQueue.main.async {
+                    self.loadError = .quranLoadFailed
+                    continuation.resume()
+                }
             }
-            
-            self.surahs = mappedSurahs
-            self.filteredSurahs = mappedSurahs
-            
-            // Cache'le
-            if let encoded = try? JSONEncoder().encode(mappedSurahs) {
-                UserDefaults.standard.set(encoded, forKey: "cached_surah_list")
-            }
-        } catch {
-            self.loadError = .quranLoadFailed
-            print("Surah list error: \(error)")
         }
     }
     
@@ -85,18 +85,13 @@ final class QuranViewModel: ObservableObject {
         defer { isLoadingAyahs = false }
         
         let edition = getEdition(for: language)
-        let arabicURL = "\(baseURL)/surah/\(surah.id)/quran-uthmani"
-        let translationURL = "\(baseURL)/surah/\(surah.id)/\(edition)"
-        let tajweedURL = "\(baseURL)/surah/\(surah.id)/ar.tajweed"
         
         do {
-            async let (arabicData, _) = URLSession.shared.data(from: URL(string: arabicURL)!)
-            async let (translationData, _) = URLSession.shared.data(from: URL(string: translationURL)!)
-            async let (tajweedData, _) = URLSession.shared.data(from: URL(string: tajweedURL)!)
+            async let arabicResponse: SurahDetailResponse = try await fetchSurahDetail(number: surah.id, edition: "quran-uthmani")
+            async let translationResponse: SurahDetailResponse = try await fetchSurahDetail(number: surah.id, edition: edition)
+            async let tajweedResponse: SurahDetailResponse = try await fetchSurahDetail(number: surah.id, edition: "ar.tajweed")
             
-            let arabicRes = try await JSONDecoder().decode(SurahDetailResponse.self, from: arabicData)
-            let translationRes = try await JSONDecoder().decode(SurahDetailResponse.self, from: translationData)
-            let tajweedRes = try await JSONDecoder().decode(SurahDetailResponse.self, from: tajweedData)
+            let (arabicRes, translationRes, tajweedRes) = try await (arabicResponse, translationResponse, tajweedResponse)
             
             var items: [AyahItem] = []
             for i in 0..<arabicRes.data.ayahs.count {
@@ -116,23 +111,28 @@ final class QuranViewModel: ObservableObject {
         }
     }
     
+    private func fetchSurahDetail(number: Int, edition: String) async throws -> SurahDetailResponse {
+        return try await withCheckedThrowingContinuation { continuation in
+            quranManager.getSurahDetail(number: number, edition: edition, showLoading: false) { response in
+                continuation.resume(returning: response)
+            } onFailure: { error in
+                continuation.resume(throwing: error ?? ApplicationErrorType.noResponse(desc: "Unknown", code: nil))
+            }
+        }
+    }
+    
     func loadHatimPage(page: Int, language: LanguageCode) async {
         isLoadingAyahs = true
         defer { isLoadingAyahs = false }
         
         let edition = getEdition(for: language)
-        let arabicURL = "\(baseURL)/page/\(page)/quran-uthmani"
-        let translationURL = "\(baseURL)/page/\(page)/\(edition)"
-        let tajweedURL = "\(baseURL)/page/\(page)/ar.tajweed"
         
         do {
-            async let (arabicData, _) = URLSession.shared.data(from: URL(string: arabicURL)!)
-            async let (translationData, _) = URLSession.shared.data(from: URL(string: translationURL)!)
-            async let (tajweedData, _) = URLSession.shared.data(from: URL(string: tajweedURL)!)
+            async let arabicResponse: SurahDetailResponse = try await fetchPageDetail(page: page, edition: "quran-uthmani")
+            async let translationResponse: SurahDetailResponse = try await fetchPageDetail(page: page, edition: edition)
+            async let tajweedResponse: SurahDetailResponse = try await fetchPageDetail(page: page, edition: "ar.tajweed")
             
-            let arabicRes = try await JSONDecoder().decode(SurahDetailResponse.self, from: arabicData)
-            let translationRes = try await JSONDecoder().decode(SurahDetailResponse.self, from: translationData)
-            let tajweedRes = try await JSONDecoder().decode(SurahDetailResponse.self, from: tajweedData)
+            let (arabicRes, translationRes, tajweedRes) = try await (arabicResponse, translationResponse, tajweedResponse)
             
             var items: [AyahItem] = []
             for i in 0..<arabicRes.data.ayahs.count {
@@ -150,6 +150,16 @@ final class QuranViewModel: ObservableObject {
             saveHatimProgress(page: page)
         } catch {
             self.ayahLoadError = .quranLoadFailed
+        }
+    }
+    
+    private func fetchPageDetail(page: Int, edition: String) async throws -> SurahDetailResponse {
+        return try await withCheckedThrowingContinuation { continuation in
+            quranManager.getPageDetail(page: page, edition: edition, showLoading: false) { response in
+                continuation.resume(returning: response)
+            } onFailure: { error in
+                continuation.resume(throwing: error ?? ApplicationErrorType.noResponse(desc: "Unknown", code: nil))
+            }
         }
     }
     

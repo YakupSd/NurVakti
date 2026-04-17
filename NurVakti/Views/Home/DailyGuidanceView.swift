@@ -57,7 +57,13 @@ struct DailyGuidanceView: View {
         }
         .clipShape(RoundedRectangle(cornerRadius: 24))
         .sheet(isPresented: $showingShareSheet) {
-            GuidanceShareSheet(item: item)
+            GuidanceShareSheet(content: DailyContent(
+                id: UUID(),
+                arabicText: "",
+                source: item.source ?? "",
+                type: item.type == .ayat ? .ayat : .hadith,
+                translations: [language.rawValue: item.text]
+            ))
         }
     }
     

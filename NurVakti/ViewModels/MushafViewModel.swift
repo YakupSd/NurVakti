@@ -9,7 +9,7 @@ class MushafViewModel: ObservableObject {
     @Published var pageNumber: Int?
     
     let surah: SurahInfo?
-    private let baseURL = "https://api.alquran.cloud/v1"
+    private let quranManager = QuranManager()
     
     init(surah: SurahInfo) {
         self.surah = surah
@@ -25,17 +25,13 @@ class MushafViewModel: ObservableObject {
     
     func loadPageData(_ page: Int) {
         isLoading = true
-        Task {
-            do {
-                let url = URL(string: "\(baseURL)/page/\(page)/quran-uthmani")!
-                let (data, _) = try await URLSession.shared.data(from: url)
-                let response = try JSONDecoder().decode(SurahDetailResponse.self, from: data)
-                
-                // Process as a SINGLE page if loading by page number
+        quranManager.getPageDetail(page: page, edition: "quran-uthmani") { response in
+            DispatchQueue.main.async {
                 self.processAyahs(response.data.ayahs, asSinglePage: true, forcedPageNumber: page)
                 self.isLoading = false
-            } catch {
-                print("Mushaf page load error: \(error)")
+            }
+        } onFailure: { _ in
+            DispatchQueue.main.async {
                 self.isLoading = false
             }
         }
@@ -64,12 +60,11 @@ class MushafViewModel: ObservableObject {
         }
         
         if asSinglePage {
-            // If we're loading a specific Mushaf page, treat it as one PageModel
             self.pages = [MushafPageModel(
                 pageNumber: forcedPageNumber ?? (pageNumber ?? 1),
                 surahNumber: ayahModels.first?.surahNumber ?? 0,
                 surahName: ayahs.first?.surah?.name ?? "Mushaf",
-                isMakki: false, // Could be determined from surah info if needed
+                isMakki: false,
                 ayahs: ayahModels,
                 lineCount: 15
             )]
@@ -77,7 +72,6 @@ class MushafViewModel: ObservableObject {
             return
         }
         
-        // Paging Logic: Split surah ayahs into pages
         let ayahsPerPage = 10
         var newPages: [MushafPageModel] = []
         let totalPagesCount = (ayahModels.count + ayahsPerPage - 1) / ayahsPerPage
@@ -105,13 +99,10 @@ class MushafViewModel: ObservableObject {
             currentPageIndex += 1
             saveHatimProgressIfNeeded()
         } else {
-            // End of current data set
             if let pn = pageNumber, pn < 604 {
-                // Page mode: Load next Mushaf page
                 self.loadPageData(pn + 1)
                 self.updatePageNumber(pn + 1)
             } else if let currentSurahId = surah?.id, currentSurahId < 114 {
-                // Surah mode: Load next Surah
                 loadNextSurah(id: currentSurahId + 1)
             }
         }
@@ -122,13 +113,10 @@ class MushafViewModel: ObservableObject {
             currentPageIndex -= 1
             saveHatimProgressIfNeeded()
         } else {
-            // Beginning of current data set
             if let pn = pageNumber, pn > 1 {
-                // Page mode: Load previous Mushaf page
                 self.loadPageData(pn - 1)
                 self.updatePageNumber(pn - 1)
             } else if let currentSurahId = surah?.id, currentSurahId > 1 {
-                // Surah mode: Load previous Surah
                 loadPreviousSurah(id: currentSurahId - 1)
             }
         }
@@ -136,7 +124,6 @@ class MushafViewModel: ObservableObject {
     
     private func updatePageNumber(_ newPage: Int) {
         self.pageNumber = newPage
-        // Persistence:
         let progress = HatimProgress(currentPage: newPage, completedCount: 0, lastUpdated: Date())
         progress.save()
     }
@@ -145,25 +132,19 @@ class MushafViewModel: ObservableObject {
         if let pn = pageNumber {
             let progress = HatimProgress(currentPage: pn, completedCount: 0, lastUpdated: Date())
             progress.save()
-        } else if !pages.isEmpty {
-            // If in surah mode, we don't necessarily update "Hatim" unless desired.
-            // But if we want Hatim to track ANY reading:
-            // let currentPage = pages[currentPageIndex].pageNumber (Real page number needed here)
         }
     }
     
     private func loadNextSurah(id: Int) {
         isLoading = true
-        Task {
-            do {
-                let url = URL(string: "\(baseURL)/surah/\(id)/quran-uthmani")!
-                let (data, _) = try await URLSession.shared.data(from: url)
-                let response = try JSONDecoder().decode(SurahDetailResponse.self, from: data)
-                
-                processAyahs(response.data.ayahs)
+        quranManager.getSurahDetail(number: id, edition: "quran-uthmani") { response in
+            DispatchQueue.main.async {
+                self.processAyahs(response.data.ayahs)
                 self.currentPageIndex = 0
                 self.isLoading = false
-            } catch {
+            }
+        } onFailure: { _ in
+            DispatchQueue.main.async {
                 self.isLoading = false
             }
         }
@@ -171,15 +152,14 @@ class MushafViewModel: ObservableObject {
     
     private func loadPreviousSurah(id: Int) {
         isLoading = true
-        Task {
-            do {
-                let url = URL(string: "\(baseURL)/surah/\(id)/quran-uthmani")!
-                let (data, _) = try await URLSession.shared.data(from: url)
-                let response = try JSONDecoder().decode(SurahDetailResponse.self, from: data)
-                processAyahs(response.data.ayahs)
-                self.currentPageIndex = pages.count - 1
+        quranManager.getSurahDetail(number: id, edition: "quran-uthmani") { response in
+            DispatchQueue.main.async {
+                self.processAyahs(response.data.ayahs)
+                self.currentPageIndex = self.pages.count - 1
                 self.isLoading = false
-            } catch {
+            }
+        } onFailure: { _ in
+            DispatchQueue.main.async {
                 self.isLoading = false
             }
         }
@@ -188,15 +168,13 @@ class MushafViewModel: ObservableObject {
     func loadSurahData() {
         guard let surah = surah else { return }
         isLoading = true
-        Task {
-            do {
-                let url = URL(string: "\(baseURL)/surah/\(surah.id)/quran-uthmani")!
-                let (data, _) = try await URLSession.shared.data(from: url)
-                let response = try JSONDecoder().decode(SurahDetailResponse.self, from: data)
-                processAyahs(response.data.ayahs)
+        quranManager.getSurahDetail(number: surah.id, edition: "quran-uthmani") { response in
+            DispatchQueue.main.async {
+                self.processAyahs(response.data.ayahs)
                 self.isLoading = false
-            } catch {
-                print("Mushaf load error: \(error)")
+            }
+        } onFailure: { _ in
+            DispatchQueue.main.async {
                 self.isLoading = false
             }
         }
@@ -206,3 +184,4 @@ class MushafViewModel: ObservableObject {
         return (raw, [])
     }
 }
+

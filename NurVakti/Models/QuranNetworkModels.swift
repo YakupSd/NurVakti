@@ -1,94 +1,36 @@
 import Foundation
 
 // MARK: - API Response DTOs
-struct SurahListResponse: Codable {
-    let code: Int
-    let status: String
-    let data: [SurahDTO]
-}
 
-struct SurahDTO: Codable {
-    let number: Int
-    let name: String
-    let englishName: String
-    let numberOfAyahs: Int
-    let revelationType: String
-}
-
-struct SurahDetailResponse: Codable {
-    let code: Int
-    let status: String
-    let data: SurahDetailData
-}
-
-struct SurahDetailData: Codable {
-    let number: Int
-    let ayahs: [AyahDTO]
-}
-
-struct AyahDTO: Codable {
-    let number: Int
-    let text: String
-    let numberInSurah: Int
-    let surah: SurahDTO?
-}
-
-// MARK: - Aladhan Prayer Times API DTOs
-struct AladhanResponse: Codable {
-    let code: Int
-    let status: String
-    let data: [AladhanDayData]
-}
-
-struct AladhanDayData: Codable {
-    let timings: [String: String]
-    let date: AladhanDate
-}
-
-struct AladhanDate: Codable {
-    let readable: String
-    let timestamp: String
-    let hijri: AladhanHijri
-}
-
-struct AladhanHijri: Codable {
-    let date: String
-    let day: String
-    let weekday: AladhanWeekday
-    let month: AladhanMonth
-    let year: String
-}
-
-struct AladhanWeekday: Codable {
-    let en: String
-    let ar: String?
-}
-
-struct AladhanMonth: Codable {
-    let number: Int
-    let en: String
-    let ar: String?
-}
 
 // MARK: - Domain Models for Quran
-struct SurahInfo: Identifiable, Codable {
-    let id: Int
-    let nameArabic: String
-    var nameLocalized: [LanguageCode: String]
-    let englishName: String
-    let ayahCount: Int
-    let revelationType: RevelationType
+public struct SurahInfo: Identifiable, Codable {
+    public let id: Int
+    public let nameArabic: String
+    public var nameLocalized: [LanguageCode: String]
+    public let englishName: String
+    public let ayahCount: Int
+    public let revelationType: RevelationType
     
-    static var fatihaMock: SurahInfo {
+    public init(id: Int, nameArabic: String, nameLocalized: [LanguageCode : String], englishName: String, ayahCount: Int, revelationType: RevelationType) {
+        self.id = id
+        self.nameArabic = nameArabic
+        self.nameLocalized = nameLocalized
+        self.englishName = englishName
+        self.ayahCount = ayahCount
+        self.revelationType = revelationType
+    }
+    
+    public static var fatihaMock: SurahInfo {
         SurahInfo(id: 1, nameArabic: "الفاتحة", nameLocalized: [.tr: "Fatiha"], englishName: "Al-Fatiha", ayahCount: 7, revelationType: .makkah)
     }
 }
 
-enum RevelationType: String, Codable {
+public enum RevelationType: String, Codable {
     case makkah = "Meccan"
     case madinah = "Medinan"
     
-    func localizedName(for language: LanguageCode) -> String {
+    public func localizedName(for language: LanguageCode) -> String {
         switch (self, language) {
         case (.makkah, .tr): return "Mekkî"
         case (.madinah, .tr): return "Medenî"
@@ -100,20 +42,28 @@ enum RevelationType: String, Codable {
     }
 }
 
-struct AyahItem: Identifiable, Codable {
-    let id: Int
-    let arabicText: String
-    let translation: String
-    let surahNumber: Int
-    var tajweedText: String? = nil
+public struct AyahItem: Identifiable, Codable {
+    public let id: Int
+    public let arabicText: String
+    public let translation: String
+    public let surahNumber: Int
+    public var tajweedText: String? = nil
+    
+    public init(id: Int, arabicText: String, translation: String, surahNumber: Int, tajweedText: String? = nil) {
+        self.id = id
+        self.arabicText = arabicText
+        self.translation = translation
+        self.surahNumber = surahNumber
+        self.tajweedText = tajweedText
+    }
 }
 
-enum QuranReadingMode: String, Codable {
+public enum QuranReadingMode: String, Codable {
     case arabicOnly = "arabicOnly"
     case withTranslation = "withTranslation"
 }
 
-enum QuranViewStyle: String, Codable {
+public enum QuranViewStyle: String, Codable {
     case list    // Mevcut kart görünümü
     case mushaf  // Geleneksel sayfa akışı
 }

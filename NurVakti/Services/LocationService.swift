@@ -4,6 +4,8 @@ import CoreLocation
 
 @MainActor
 final class LocationService: NSObject, ObservableObject {
+    static let shared = LocationService()
+    
     @Published var authStatus: CLAuthorizationStatus = .notDetermined
     @Published var currentLocation: CLLocation?
     @Published var cityName: String = ""
@@ -15,8 +17,8 @@ final class LocationService: NSObject, ObservableObject {
     override init() {
         super.init()
         manager.delegate = self
-        manager.desiredAccuracy = kCLLocationAccuracyThreeKilometers
-        manager.distanceFilter = 1000 // 1 km değişimden azını bildirme
+        manager.desiredAccuracy = kCLLocationAccuracyHundredMeters
+        manager.distanceFilter = 500 // 500 metre değişimleri bildir
         self.authStatus = manager.authorizationStatus
     }
     
@@ -70,7 +72,7 @@ extension LocationService: CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let location = locations.first else { return }
+        guard let location = locations.last else { return }
         DispatchQueue.main.async {
             self.currentLocation = location
         }

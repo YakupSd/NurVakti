@@ -4,183 +4,169 @@ struct DuaDetailView: View {
     let dua: DuaItem
     let language: LanguageCode
     @EnvironmentObject var router: AppRouter
-    @StateObject private var audioService = AudioService.shared
+    @EnvironmentObject var loc: LocalizationManager
+    @StateObject private var audioManager = AudioManager.shared
+    @Environment(\.dismiss) var dismiss
+    
+    @State private var showNoteAlert = false
+    @State private var noteText = ""
+    @State private var isFavourited = false
     
     var body: some View {
         ZStack {
-            // Background
-            LinearGradient(colors: [Color(hex: "0D1B2A"), Color(hex: "000000")], startPoint: .top, endPoint: .bottom)
-                .ignoresSafeArea()
+            Color.nurOffWhite.ignoresSafeArea()
             
-            // Decorative Glow
-            Circle()
-                .fill(Color.nurGold.opacity(0.08))
-                .frame(width: 300)
-                .offset(y: -200)
-                .blur(radius: 60)
-            
-            VStack(spacing: 0) {
-                ScrollView(showsIndicators: false) {
-                    VStack(spacing: 30) {
-                        // ── ARABIC BLOCK (Manuscript Style) ──────────
-                        VStack(spacing: 20) {
-                            Text(dua.arabicText)
-                                .font(.custom("Traditional Arabic", size: 36))
-                                .multilineTextAlignment(.center)
-                                .lineSpacing(12)
-                                .foregroundColor(.white)
-                                .padding(30)
-                                .frame(maxWidth: .infinity)
-                                .background(
-                                    ZStack {
-                                        // Manuscript Paper Texture Effect
-                                        RoundedRectangle(cornerRadius: 24)
-                                            .fill(Color(hex: "FDFBF0").opacity(0.1))
-                                        
-                                        RoundedRectangle(cornerRadius: 24)
-                                            .fill(.ultraThinMaterial)
-                                        
-                                        RoundedRectangle(cornerRadius: 24)
-                                            .stroke(
-                                                LinearGradient(colors: [.nurGold.opacity(0.5), .clear, .nurGold.opacity(0.2)], startPoint: .topLeading, endPoint: .bottomTrailing),
-                                                lineWidth: 1
-                                            )
-                                    }
-                                )
-                                .shadow(color: .black.opacity(0.3), radius: 20)
-                            
-                            // Audio Control Bar
-                            HStack(spacing: 20) {
-                                // Arabic Audio
-                                audioButton(
-                                    title: audioService.isBuffering ? LocalizationManager.shared.localizedString("dua.loadingAudio") : LocalizationManager.shared.localizedString("dua.listenArabic"),
-                                    icon: audioService.isPlaying ? "stop.fill" : "play.fill",
-                                    isBuffering: audioService.isBuffering,
-                                    color: .nurGold
-                                ) {
-                                    HapticManager.shared.light()
-                                    if audioService.isPlaying {
-                                        audioService.stop()
-                                    } else {
-                                        if let url = dua.audioArabicURL {
-                                            audioService.playStream(urlStr: url)
-                                        } else {
-                                            audioService.speak(dua.arabicText, language: "ar-SA")
-                                        }
-                                    }
-                                }
-                            }
-                            .padding(.horizontal)
-                        }
-                        .padding(.top, 10)
-                        
-                        // ── TRANSLATION & TRANSCRIPTION ──────────────
-                        VStack(spacing: 24) {
-                            ExpandableSectionBox(title: LocalizationManager.shared.localizedString("dua.transliteration"), 
-                                       content: dua.transliteration[language] ?? "", 
-                                       icon: "text.quote", 
-                                       isItalic: true)
-                            
-                            ExpandableSectionBox(title: LocalizationManager.shared.localizedString("dua.translation"), 
-                                       content: dua.translation[language] ?? "", 
-                                       icon: "doc.text.fill", 
-                                       hasAudio: true) {
-                                HapticManager.shared.light()
-                                audioService.speak(dua.translation[language] ?? "", language: language == .tr ? "tr-TR" : "en-US")
-                            }
-                        }
-                        .padding(.bottom, 40)
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 24) {
+                    
+                    // ── ARABIC MANUSCRIPT SECTION ─────
+                    VStack(spacing: 20) {
+                        Text(dua.arabicText)
+                            .font(.custom("Amiri-Bold", size: 30))
+                            .lineSpacing(12)
+                            .multilineTextAlignment(.center)
+                            .foregroundColor(.black)
+                            .padding(30)
+                            .frame(maxWidth: .infinity)
+                            .background(
+                                RoundedRectangle(cornerRadius: 30)
+                                    .fill(Color.white)
+                                    .shadow(color: .black.opacity(0.04), radius: 15, y: 10)
+                            )
                     }
-                    .padding(.horizontal)
+                    .padding(.top, 10)
+                    
+                    HStack(spacing: 12) {
+                        DuaActionButton(
+                            icon: audioManager.isPlaying ? "stop.fill" : "speaker.wave.2",
+                            title: loc.localizedString("action.listen")
+                        ) {
+                            if dua.hasAudio {
+                                if audioManager.isPlaying {
+                                    audioManager.stop()
+                                } else {
+                                    audioManager.playDua(item: dua)
+                                }
+                            } else {
+                                UINotificationFeedbackGenerator().notificationOccurred(.error)
+                            }
+                        }
+                        .opacity(dua.hasAudio ? 1.0 : 0.4)
+                        .disabled(!dua.hasAudio)
+                        
+                        DuaActionButton(icon: "square.and.arrow.up", title: loc.localizedString("action.share")) {
+                            shareDua()
+                        }
+                        
+                        DuaActionButton(icon: "doc.on.doc", title: loc.localizedString("action.copy")) {
+                            copyDua()
+                        }
+                        
+                        DuaActionButton(icon: "square.and.pencil", title: loc.localizedString("action.addNote")) {
+                            showNoteAlert = true
+                        }
+                    }
+                    
+                    // ── FAZILETI (VIRTUE) ─────────────
+                    DuaContentSection(title: "Fazileti", icon: "sparkles", color: .nurOlive) {
+                        Text(dua.virtue?[language] ?? "Bu duanın fazileti yakında eklenecektir.")
+                            .font(.system(size: 14))
+                            .lineSpacing(6)
+                            .foregroundColor(.black.opacity(0.7))
+                    }
+                    
+                    // ── OKUNUŞU (TRANSLITERATION) ─────
+                    DuaContentSection(title: "Okunuşu", icon: "text.alignleft", color: .nurOlive) {
+                        Text(dua.transliteration[language] ?? "")
+                            .font(.system(size: 15, weight: .medium, design: .serif))
+                            .italic()
+                            .lineSpacing(4)
+                            .foregroundColor(.black.opacity(0.9))
+                    }
+                    
+                    // ── ANLAMI (MEANING) ──────────────
+                    DuaContentSection(title: "Anlamı", icon: "book.fill", color: .nurOlive) {
+                        Text(dua.translation[language] ?? "")
+                            .font(.system(size: 15))
+                            .lineSpacing(6)
+                            .foregroundColor(.black.opacity(0.8))
+                    }
                 }
+                .padding(.horizontal, 20)
+                .padding(.bottom, 40)
             }
-        }
-        .onDisappear {
-            audioService.stop()
-        }
-    }
-    
-    // Helper Components
-    private func audioButton(title: String, icon: String, isBuffering: Bool, color: Color, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            HStack {
-                if isBuffering {
-                    ProgressView().tint(.black)
-                } else {
-                    Image(systemName: icon)
-                }
-                Text(title)
-                    .nurFont(14, weight: .bold)
-            }
-            .foregroundColor(.black)
-            .padding(.vertical, 14)
-            .frame(maxWidth: .infinity)
-            .background(color)
-            .cornerRadius(12)
-            .shadow(color: color.opacity(0.3), radius: 10, y: 5)
+        .alert("Not Ekle", isPresented: $showNoteAlert) {
+            TextField("Notunuz", text: $noteText)
+            Button("Kaydet", action: {})
+            Button("İptal", role: .cancel, action: {})
         }
     }
 }
 
-struct ExpandableSectionBox: View {
-    let title: String
-    let content: String
-    let icon: String
-    var isItalic: Bool = false
-    var hasAudio: Bool = false
-    var audioAction: (() -> Void)? = nil
+// MARK: - Actions
+    private func copyDua() {
+        UIPasteboard.general.string = "\(dua.arabicText)\n\n\(dua.translation[language] ?? "")"
+        HapticManager.shared.success()
+    }
     
-    @State private var isExpanded: Bool = false
+    private func shareDua() {
+        let text = "\(dua.title[language] ?? "")\n\n\(dua.arabicText)\n\n\(dua.translation[language] ?? "")"
+        let vc = UIActivityViewController(activityItems: [text], applicationActivities: nil)
+        if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+            scene.windows.first?.rootViewController?.present(vc, animated: true)
+        }
+    }
+}
+
+// MARK: - Subviews
+struct DuaActionButton: View {
+    let icon: String
+    let title: String
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            VStack(spacing: 8) {
+                Image(systemName: icon)
+                    .font(.system(size: 18))
+                Text(title)
+                    .font(.system(size: 10, weight: .medium))
+            }
+            .foregroundColor(.black.opacity(0.7))
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 16)
+            .background(Color.white)
+            .cornerRadius(16)
+            .shadow(color: .black.opacity(0.03), radius: 5, y: 5)
+        }
+    }
+}
+
+struct DuaContentSection<Content: View>: View {
+    let title: String
+    let icon: String
+    let color: Color
+    let content: () -> Content
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                Label(title, systemImage: icon)
-                    .nurFont(16, weight: .bold)
-                    .foregroundColor(.nurGold)
-                Spacer()
-                if hasAudio {
-                    Button(action: { audioAction?() }) {
-                        Image(systemName: "speaker.wave.2.fill")
-                            .foregroundColor(.nurGold)
-                    }
-                }
+            HStack(spacing: 8) {
+                Image(systemName: icon)
+                    .font(.system(size: 14, weight: .bold))
+                    .foregroundColor(color)
+                Text(title)
+                    .font(.system(size: 12, weight: .bold))
+                    .foregroundColor(color)
+                    .textCase(.uppercase)
+                    .tracking(1)
             }
             
-            Text(content)
-                .nurFont(16)
-                .foregroundColor(.white.opacity(0.9))
-                .italic(isItalic)
-                .lineSpacing(6)
-                .lineLimit(isExpanded ? nil : 4)
-            
-            if content.count > 120 {
-                Button(action: {
-                    withAnimation(.spring(response: 0.3)) {
-                        isExpanded.toggle()
-                    }
-                }) {
-                    Text(isExpanded ? "Daha Az Göster" : "Devamını Gör")
-                        .nurFont(12, weight: .bold)
-                        .foregroundColor(.nurGold)
-                        .padding(.top, 4)
-                }
-            }
+            content()
+                .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .padding(24)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.white.opacity(0.05))
-        .cornerRadius(20)
+        .padding(20)
+        .background(Color.white)
+        .cornerRadius(24)
+        .shadow(color: .black.opacity(0.02), radius: 10, y: 5)
     }
-}
-
-#Preview {
-    DuaDetailView(dua: DuaItem(
-        id: UUID(),
-        title: [.tr: "Ayet-el Kürsi"],
-        arabicText: "اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ...",
-        transliteration: [.tr: "Allâhu lâ ilâhe illâ huvel hayyul kayyûm..."],
-        translation: [.tr: "Allah, O'ndan başka ilah yoktur. Diridir, kaimdir..."],
-        category: .morning
-    ), language: .tr)
 }

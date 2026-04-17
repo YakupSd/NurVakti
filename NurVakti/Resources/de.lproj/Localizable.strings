@@ -323,3 +323,34 @@
 
 "alarm.repeatDays"    = "Wiederholungstage";
 "alarm.everyDay"       = "Jeden Tag";
+
+// MARK: - FAVOURITE PRAYERS & ROUTINE
+"routine.morning" = "Morgenroutine";
+"routine.evening" = "Abendroutine";
+"routine.complete" = "Abgeschlossen";
+"routine.remaining" = "verbleibend";
+"routine.addDuas" = "Duas hinzufügen";
+"routine.none" = "Keine Routine";
+"routine.both" = "Beides";
+"favourites.title" = "MEINE FAVORITEN";
+"favourites.edit" = "Bearbeiten";
+"favourites.empty" = "Noch keine Favoriten";
+"favourites.addMore" = "Mehr hinzufügen";
+"library.title" = "Dua-Bibliothek";
+"library.subtitle" = "Alle Duas, Suren und Dhikr";
+"library.pickFavs" = "Favoriten wählen";
+"library.pickRoutine" = "Zur Routine hinzufügen";
+"library.searchPlaceholder" = "Dua oder Sure suchen...";
+"library.all" = "Alle";
+"library.noResults" = "Keine Ergebnisse gefunden";
+"audio.pause" = "Pause";
+"audio.listen" = "Anhören";
+
+// MARK: - Prayer Times View
+"prayer.completed" = "Erledigt";
+"prayer.active" = "Jetzt";
+"prayer.remaining" = "verbleibend";
+"prayer.upcoming" = "Bevorstehend";
+"vakitler.title" = "Gebetszeiten";
+"vakitler.nextPrayer" = "Nächstes Gebet";
+"vakitler.allDone" = "Alle Gebete heute erledigt";

@@ -8,23 +8,28 @@ struct DhikrView: View {
     
     var body: some View {
         ZStack {
-            // Arka plan (Premium Gradient)
             LinearGradient(
                 colors: [
-                    Color(hex: "0D1B2A"), // Gece mavisi
-                    Color(hex: "1B263B"),
-                    Color(hex: "000000") // Siyah alt
+                    Color(hex: "0B132B"), // Deep Navy
+                    Color(hex: "1C2541"), // Prayer Blue
+                    Color(hex: "000000")  // Deep Black
                 ],
                 startPoint: .top,
                 endPoint: .bottom
             )
             .ignoresSafeArea()
             
-            // Süsleme (Subtle Glows)
+            // Premium Light Orbs
             Circle()
-                .fill(Color.nurGold.opacity(0.05))
+                .fill(Color.nurGold.opacity(0.12))
                 .frame(width: 400, height: 400)
                 .offset(x: -150, y: -200)
+                .blur(radius: 100)
+            
+            Circle()
+                .fill(Color.blue.opacity(0.1))
+                .frame(width: 300, height: 300)
+                .offset(x: 150, y: 300)
                 .blur(radius: 80)
             
             VStack(spacing: 0) {
@@ -52,14 +57,18 @@ struct DhikrView: View {
                     .padding(.horizontal)
                     .padding(.top, 10)
                     
-                    // Custom Tab Switcher
+                    // Custom Tab Switcher (Premium Glass)
                     HStack(spacing: 0) {
                         tabButton(title: localization.localizedString("tab.dhikr"), index: 0)
                         tabButton(title: localization.localizedString("dhikr.prayers"), index: 1)
                     }
-                    .padding(4)
-                    .background(Color.white.opacity(0.07))
-                    .cornerRadius(16)
+                    .padding(5)
+                    .background(.ultraThinMaterial.opacity(0.15))
+                    .cornerRadius(20)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 20)
+                            .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                    )
                     .padding(.horizontal)
                 }
                 .padding(.bottom, 25)
@@ -145,7 +154,7 @@ struct DhikrView: View {
                     let totalDaily = vm.dhikrItems.reduce(0) { $0 + $1.dailyCompletions }
                     let totalAllTime = vm.dhikrItems.reduce(0) { $0 + $1.totalCompletions }
                     
-                    HStack(spacing: 16) {
+                    HStack(spacing: 20) {
                         SummaryBox(title: localization.localizedString("dhikr.dailyTotal"), value: "\(totalDaily)", icon: "checkmark.seal.fill", color: .green)
                         SummaryBox(title: localization.localizedString("dhikr.grandTotal"), value: "\(totalAllTime)", icon: "sum", color: .nurGold)
                     }
@@ -301,7 +310,10 @@ struct PrayerDuaList: View {
                 
                 ForEach(currentDuas) { dua in
                     Button(action: { 
-                        router.push(to: .duaDetail(dua: dua))
+                        router.pushTo(view: MainNavigationView.builder.makeView(
+                            DuaDetailView(dua: dua, language: language),
+                            withNavigationTitle: dua.title[language] ?? ""
+                        ))
                     }) {
                         VStack(alignment: .trailing, spacing: 12) {
                             HStack {
