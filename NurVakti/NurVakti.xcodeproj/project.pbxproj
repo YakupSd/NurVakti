@@ -15,12 +15,10 @@
 		0BB7B2B0B6496FFB5BDF5182 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3C2F791107E0E0D830848608 /* Assets.xcassets */; };
 		0DB00BDA6E069AD47AAA35E1 /* IslamicCalendarEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8094C29571C9699E350A2CA /* IslamicCalendarEvents.swift */; };
 		114E9A2A5642093BB1C65D49 /* QuranBookmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D7921310B5F3900EC87B0E /* QuranBookmark.swift */; };
-		1314961182F687F93EC941ED /* MainNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2BF089E4BD2A3F80BBFFD45 /* MainNavigationView.swift */; };
 		18EB1622CE6B70DE8A104B69 /* SoundService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDF110FC8B01595AC57479D6 /* SoundService.swift */; };
 		1BC5AFB3DEF3B8E46F6B9916 /* AlarmModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6FE220698F77D67E1D1BC00 /* AlarmModel.swift */; };
 		1BDF037A091A3810C68FA952 /* PrayerTimeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C402A95CA9729FA94C9C4EA /* PrayerTimeService.swift */; };
 		1EEE2A8D12D2DC618D5D9BA5 /* DailyGuidanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D243BC81FF696C3426EE2A1 /* DailyGuidanceView.swift */; };
-		2A83826B2B6D71DE087CB42A /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF001F401DB19DD358686F9F /* AppRouter.swift */; };
 		30D8A07772A80954A6DB6225 /* QuranView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0B37EE67D154FD95F8678FD /* QuranView.swift */; };
 		31859AA5FAF7782B7C91AD5C /* QuranNetworkModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D425669BB92C83BCB65A8B /* QuranNetworkModels.swift */; };
 		38E2393B537F5BCEEE33C2DC /* NurVakti.xcdatamodeld in Resources */ = {isa = PBXBuildFile; fileRef = 0FCFBAC226D0E7ABE3D46E85 /* NurVakti.xcdatamodeld */; };
@@ -37,11 +35,10 @@
 		583A81AEBB0704B2B42BF7CD /* GuidanceShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B7122E74035DE2E836F886 /* GuidanceShareSheet.swift */; };
 		584BA7B4A71C544735D9F798 /* QiblaViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86D14C07F5A717DBFFBC601F /* QiblaViewModel.swift */; };
 		58AB88C22147A317444238C0 /* BackgroundRefreshService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE910DA401DC61A213B26C91 /* BackgroundRefreshService.swift */; };
-		5A4D1FD321B2C148A35720D5 /* RootNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDB7502A792AFA416CEC04D3 /* RootNavigationController.swift */; };
 		5AFE427D16A2CA9B3BF0F540 /* DeepLinkHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5489F1AE9B631B321944B1E /* DeepLinkHandler.swift */; };
-		5B9EAB95AEB1C51BE269238E /* CustomHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66179756EB7B6EF368C32765 /* CustomHostingController.swift */; };
 		60088BDBDBC7BFD96CD6377A /* LanguagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1E5E3741603A06B036641A /* LanguagePicker.swift */; };
 		60167FB0AABE61C05BF4CA6F /* IslamicEventBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 521B0ABAF3FEB85A6174505C /* IslamicEventBanner.swift */; };
+		676B0F122D717349A5BAA2AD /* Pods_NurVakti.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC0079F18477EAC1A0B718E2 /* Pods_NurVakti.framework */; };
 		69CAA192A585072F6FB5517B /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 8B3A60DC4FCB841615C3B427 /* PrivacyInfo.xcprivacy */; };
 		6DC38AA14C6421047A6570DC /* DynamicHomeBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01B0E4D94D9B6B6C3C5D29EA /* DynamicHomeBackground.swift */; };
 		707283B1722B1103DAE7F5E1 /* Bundle+Language.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2FE4F5DD93BB385085827F4 /* Bundle+Language.swift */; };
@@ -81,12 +78,44 @@
 		F2862AC625C77F4CDA490677 /* DhikrViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B927DB9EF951829D0E82EEE /* DhikrViewModel.swift */; };
 		F30D26B12F757DD20075FF67 /* BirdLayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30D26B02F757DD20075FF67 /* BirdLayerView.swift */; };
 		F30D26B32F757E6D0075FF67 /* StarFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30D26B22F757E6D0075FF67 /* StarFieldView.swift */; };
+		F30D26D02F76AFEC0075FF67 /* AladhanResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30D26C82F76AFEC0075FF67 /* AladhanResponse.swift */; };
+		F30D26D12F76AFEC0075FF67 /* ErrorTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30D26C92F76AFEC0075FF67 /* ErrorTypes.swift */; };
+		F30D26D22F76AFEC0075FF67 /* AudioAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30D26C42F76AFEC0075FF67 /* AudioAPI.swift */; };
+		F30D26D32F76AFEC0075FF67 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30D26CD2F76AFEC0075FF67 /* Configuration.swift */; };
+		F30D26D42F76AFEC0075FF67 /* JSONEncodingHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30D26CE2F76AFEC0075FF67 /* JSONEncodingHelper.swift */; };
+		F30D26D52F76AFEC0075FF67 /* AlamofireImplementations.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30D26CC2F76AFEC0075FF67 /* AlamofireImplementations.swift */; };
+		F30D26D62F76AFEC0075FF67 /* QuranResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30D26CA2F76AFEC0075FF67 /* QuranResponse.swift */; };
+		F30D26D72F76AFEC0075FF67 /* PrayerAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30D26C52F76AFEC0075FF67 /* PrayerAPI.swift */; };
+		F30D26D82F76AFEC0075FF67 /* QuranAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30D26C62F76AFEC0075FF67 /* QuranAPI.swift */; };
+		F30D26DB2F76AFFF0075FF67 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30D26D92F76AFFF0075FF67 /* LoadingView.swift */; };
+		F30D26DC2F76AFFF0075FF67 /* ServerErrorPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30D26DA2F76AFFF0075FF67 /* ServerErrorPopup.swift */; };
+		F30D26DE2F76B00C0075FF67 /* LocalizableUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30D26DD2F76B00C0075FF67 /* LocalizableUtils.swift */; };
+		F30D26E32F76B02F0075FF67 /* PrayerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30D26E02F76B02F0075FF67 /* PrayerManager.swift */; };
+		F30D26E42F76B02F0075FF67 /* AudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30D26DF2F76B02F0075FF67 /* AudioManager.swift */; };
+		F30D26E52F76B02F0075FF67 /* QuranManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30D26E12F76B02F0075FF67 /* QuranManager.swift */; };
+		F30D26F42F76B0380075FF67 /* PrayerDuasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30D26EE2F76B0380075FF67 /* PrayerDuasView.swift */; };
+		F30D26F52F76B0380075FF67 /* HowToPrayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30D26EC2F76B0380075FF67 /* HowToPrayView.swift */; };
+		F30D26F62F76B0380075FF67 /* PrayerStepCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30D26E72F76B0380075FF67 /* PrayerStepCard.swift */; };
+		F30D26F72F76B0380075FF67 /* TesbihatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30D26F02F76B0380075FF67 /* TesbihatView.swift */; };
+		F30D26F82F76B0380075FF67 /* PrayerGuideModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30D26EA2F76B0380075FF67 /* PrayerGuideModels.swift */; };
+		F30D26F92F76B0380075FF67 /* DuaCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30D26E62F76B0380075FF67 /* DuaCard.swift */; };
+		F30D26FA2F76B0380075FF67 /* PrayerGuideMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30D26EF2F76B0380075FF67 /* PrayerGuideMainView.swift */; };
+		F30D26FA2F76B03D0075FF67 /* MonthlyDuaAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30D26FA2F76B03C0075FF67 /* MonthlyDuaAPI.swift */; };
+		F30D26FB2F76B0380075FF67 /* PrayerGuideData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30D26E92F76B0380075FF67 /* PrayerGuideData.swift */; };
+		F30D26FB2F76B03D0075FF67 /* MonthlyDuaService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30D26FB2F76B03C0075FF67 /* MonthlyDuaService.swift */; };
+		F30D26FC2F76B0380075FF67 /* PostPrayerDuasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30D26ED2F76B0380075FF67 /* PostPrayerDuasView.swift */; };
+		F30D26FC2F76B03D0075FF67 /* MonthlyAyahPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30D26FC2F76B03C0075FF67 /* MonthlyAyahPlan.swift */; };
 		F32CDD642F718F1C006F2D78 /* DuaDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F32CDD632F718F1C006F2D78 /* DuaDetailView.swift */; };
 		F32CDD712F719000006F2D78 /* NurFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = F32CDD702F719000006F2D78 /* NurFont.swift */; };
 		F32CDD732F719000006F2D78 /* SectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F32CDD722F719000006F2D78 /* SectionHeader.swift */; };
 		F32CDD752F719000006F2D78 /* DuaItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F32CDD742F719000006F2D78 /* DuaItem.swift */; };
 		F32CDD772F719000006F2D78 /* AudioService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F32CDD762F719000006F2D78 /* AudioService.swift */; };
 		F32CDD792F719000006F2D78 /* AddDhikrView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F32CDD782F719000006F2D78 /* AddDhikrView.swift */; };
+		F352061A2F76C84B00E2B12F /* SpecialPrayersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F35206192F76C84B00E2B12F /* SpecialPrayersView.swift */; };
+		F352061C2F76CCDF00E2B12F /* DailyContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = F352061B2F76CCDF00E2B12F /* DailyContent.swift */; };
+		F352061F2F76CCF200E2B12F /* HomeViewStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = F352061D2F76CCF200E2B12F /* HomeViewStyles.swift */; };
+		F35206232F76CCFD00E2B12F /* QuickAccessCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F35206202F76CCFD00E2B12F /* QuickAccessCard.swift */; };
+		F35206242F76CCFD00E2B12F /* ShareButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F35206212F76CCFD00E2B12F /* ShareButton.swift */; };
 		F37685BB2F72B37900179634 /* PrayerCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F37685BA2F72B37900179634 /* PrayerCalculator.swift */; };
 		F3B9058A2F7405F500254779 /* fajr.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F3B905892F7405F500254779 /* fajr.mp3 */; };
 		F3B9058B2F7405F500254779 /* ezan.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F3B905882F7405F500254779 /* ezan.mp3 */; };
@@ -108,6 +137,53 @@
 		F3B905B62F7416EE00254779 /* MushafViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3B905B52F7416EE00254779 /* MushafViewModel.swift */; };
 		F3B905B82F7419CB00254779 /* MushafPageCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3B905B72F7419CB00254779 /* MushafPageCard.swift */; };
 		F3B905BA2F74277100254779 /* MushafModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3B905B92F74277100254779 /* MushafModels.swift */; };
+		F3CE6E992F8929BD00D43FDF /* FloatingTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3CE6E982F8929BD00D43FDF /* FloatingTabBar.swift */; };
+		F3CE6E9B2F892FB500D43FDF /* PrayerStepInteractiveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3CE6E9A2F892FB500D43FDF /* PrayerStepInteractiveView.swift */; };
+		F3CE6E9D2F89433400D43FDF /* NurAnimations.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3CE6E9C2F89433400D43FDF /* NurAnimations.swift */; };
+		F3DAD0F02F7BF32B00F36371 /* DuaLibraryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7066D3E4C0E14554ACB87079 /* DuaLibraryService.swift */; };
+		F3DAD0F12F7BF33100F36371 /* DuaLibraryModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA361A2D45E242639969FB11 /* DuaLibraryModels.swift */; };
+		F3DAD1162F7D2D9700F36371 /* FavouritesStrip.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6687D25B13D420492578526 /* FavouritesStrip.swift */; };
+		F3DAD1172F7D2D9E00F36371 /* DailyRoutineCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1705BE671A14321939EE7A2 /* DailyRoutineCard.swift */; };
+		F3DAD1182F7D2DA700F36371 /* DuaLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C02BA42DD4491496FF1744 /* DuaLibraryView.swift */; };
+		F3DAD11B2F7D2F7A00F36371 /* QuickDuaSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3DAD1192F7D2F7A00F36371 /* QuickDuaSheet.swift */; };
+		F3DAD11C2F7D2F8D00F36371 /* DuaRoutineRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6005239BA954490F9C97E635 /* DuaRoutineRow.swift */; };
+		F3DAD11D2F7D2F9E00F36371 /* FavouritePill.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C4A2F8789D645EDADD70017 /* FavouritePill.swift */; };
+		F3DAD1332F7E7EA100F36371 /* EsmaulHusna.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3DAD1322F7E7EA000F36371 /* EsmaulHusna.swift */; };
+		F3DAD1362F7E7EC700F36371 /* EsmaData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3DAD1342F7E7EC100F36371 /* EsmaData.swift */; };
+		F3DAD1382F7E7EDF00F36371 /* EsmaulHusnaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3DAD1372F7E7EDF00F36371 /* EsmaulHusnaView.swift */; };
+		F3DAD13A2F7E8ABE00F36371 /* APIConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3DAD1392F7E8ABE00F36371 /* APIConfig.swift */; };
+		F3DAD13C2F7E8AD100F36371 /* AsmaService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3DAD13B2F7E8AD100F36371 /* AsmaService.swift */; };
+		F3DAD13E2F7E8ADF00F36371 /* AsmaViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3DAD13D2F7E8ADF00F36371 /* AsmaViewModel.swift */; };
+		F3DAD1742F7F218100F36371 /* SubhanekeDuasi.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F3DAD1722F7F218100F36371 /* SubhanekeDuasi.mp3 */; };
+		F3DAD1752F7F218100F36371 /* Barik_Duası.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F3DAD16E2F7F218100F36371 /* Barik_Duası.mp3 */; };
+		F3DAD1762F7F218100F36371 /* Salli_Duası.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F3DAD16B2F7F218100F36371 /* Salli_Duası.mp3 */; };
+		F3DAD1772F7F218100F36371 /* esma_ul_husna.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F3DAD16A2F7F218100F36371 /* esma_ul_husna.mp3 */; };
+		F3DAD17B2F7F218100F36371 /* Ettehiyyatü_Duası.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F3DAD16D2F7F218100F36371 /* Ettehiyyatü_Duası.mp3 */; };
+		F3DAD17E2F7F22A500F36371 /* salati_munciye.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F3DAD17D2F7F22A500F36371 /* salati_munciye.mp3 */; };
+		F3DAD17F2F7F22A500F36371 /* Namaz_tesbihatı.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F3DAD17C2F7F22A500F36371 /* Namaz_tesbihatı.mp3 */; };
+		F3DAD1832F7F273D00F36371 /* elhamdulillah.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F3DAD1812F7F273D00F36371 /* elhamdulillah.mp3 */; };
+		F3DAD1842F7F273D00F36371 /* allahu_ekber.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F3DAD1802F7F273D00F36371 /* allahu_ekber.mp3 */; };
+		F3DAD1852F7F273D00F36371 /* subhanallah.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F3DAD1822F7F273D00F36371 /* subhanallah.mp3 */; };
+		F3DD4D9B2F8D16CA0030B46A /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3DD4D9A2F8D16CA0030B46A /* DashboardView.swift */; };
+		F3DD4D9D2F8D16D40030B46A /* DashboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3DD4D9C2F8D16D40030B46A /* DashboardViewModel.swift */; };
+		F3DD4DE82F8D1B590030B46A /* NavigationControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3DD4DE12F8D1B590030B46A /* NavigationControllers.swift */; };
+		F3DD4DE92F8D1B590030B46A /* MainNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3DD4DDE2F8D1B590030B46A /* MainNavigationView.swift */; };
+		F3DD4DEA2F8D1B590030B46A /* ViewBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3DD4DE52F8D1B590030B46A /* ViewBuilder.swift */; };
+		F3DD4DEB2F8D1B590030B46A /* RootNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3DD4DE22F8D1B590030B46A /* RootNavigationController.swift */; };
+		F3DD4DEC2F8D1B590030B46A /* CustomHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3DD4DE02F8D1B590030B46A /* CustomHostingController.swift */; };
+		F3DD4DED2F8D1B590030B46A /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3DD4DE42F8D1B590030B46A /* Router.swift */; };
+		F3DD4DEF2F8D1C750030B46A /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3DD4DEE2F8D1C750030B46A /* AppRouter.swift */; };
+		F3DD4DF42F8D1EF70030B46A /* UIApplication+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3DD4DF22F8D1EF70030B46A /* UIApplication+Extension.swift */; };
+		F3DD4DFF2F8D22E40030B46A /* CustomCardShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3DD4DFE2F8D22E40030B46A /* CustomCardShape.swift */; };
+		F3DE241A2F8D2F25001BEBAD /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3DE24152F8D2F25001BEBAD /* LoginView.swift */; };
+		F3DE241B2F8D2F25001BEBAD /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3DE24162F8D2F25001BEBAD /* LoginViewModel.swift */; };
+		F3DE241C2F8D2F25001BEBAD /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3DE24182F8D2F25001BEBAD /* ProfileViewModel.swift */; };
+		F3DE241D2F8D2F25001BEBAD /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3DE24172F8D2F25001BEBAD /* ProfileView.swift */; };
+		F3DE241F2F8D2F37001BEBAD /* UserSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3DE241E2F8D2F37001BEBAD /* UserSession.swift */; };
+		F3DE24212F8D31AF001BEBAD /* NurCardWithHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3DE24202F8D31AF001BEBAD /* NurCardWithHeader.swift */; };
+		F3DE24232F8D3472001BEBAD /* FeatureCircleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3DE24222F8D3472001BEBAD /* FeatureCircleButton.swift */; };
+		F3E2AADB2F851B3E00496DFF /* NurLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3E2AADA2F851B3E00496DFF /* NurLoadingView.swift */; };
+		F3E2AAE32F8524FF00496DFF /* PrayerTimesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3E2AAE22F8524FF00496DFF /* PrayerTimesView.swift */; };
 		F68F7DC68DC504FBC9ED7431 /* AlarmViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7211D5C2BAF5D8D48B8BD669 /* AlarmViewModel.swift */; };
 		F7A8EA8B9D39EF775242E9CA /* NurWidgetData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A3E7E1A1FD313450DB56244 /* NurWidgetData.swift */; };
 		FF2540A1BFB5E6D6D04F02CF /* ZakatModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966A08345BE3C4F432483005 /* ZakatModel.swift */; };
@@ -120,8 +196,10 @@
 		0644DEDF590A0B98207C5F37 /* HapticManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
 		06F31199A649AD7EAA971CFA /* ShareImageRenderer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ShareImageRenderer.swift; path = Utils/ShareImageRenderer.swift; sourceTree = "<group>"; };
 		08B4194E88D65FCC3DAE1EAB /* AlarmView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AlarmView.swift; sourceTree = "<group>"; };
+		0C4A2F8789D645EDADD70017 /* FavouritePill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouritePill.swift; sourceTree = "<group>"; };
 		0D453E21561AB3568D361773 /* NurCard.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NurCard.swift; sourceTree = "<group>"; };
-		17AA66712A20A21AECAA17B4 /* RootView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RootView.swift; path = Views/Root/RootView.swift; sourceTree = "<group>"; };
+		16C02BA42DD4491496FF1744 /* DuaLibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuaLibraryView.swift; sourceTree = "<group>"; };
+		17AA66712A20A21AECAA17B4 /* RootView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RootView.swift; path = ../Views/Root/RootView.swift; sourceTree = "<group>"; };
 		185EDEFF687CD6B0B4AF83D6 /* NotificationService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		1B99AACAF33936924578E5B4 /* ar */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
 		213E2E528DC3DA3C920CC9C0 /* BackgroundTheme.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BackgroundTheme.swift; sourceTree = "<group>"; };
@@ -144,16 +222,19 @@
 		5A3E7E1A1FD313450DB56244 /* NurWidgetData.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NurWidgetData.swift; sourceTree = "<group>"; };
 		5B927DB9EF951829D0E82EEE /* DhikrViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DhikrViewModel.swift; sourceTree = "<group>"; };
 		5C402A95CA9729FA94C9C4EA /* PrayerTimeService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PrayerTimeService.swift; sourceTree = "<group>"; };
-		5E3A1CC59A0C1ADAC37F4483 /* UIColor+Theme.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "UIColor+Theme.swift"; path = "Core/Extensions/UIColor+Theme.swift"; sourceTree = "<group>"; };
+		5E3A1CC59A0C1ADAC37F4483 /* UIColor+Theme.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "UIColor+Theme.swift"; path = "Extensions/UIColor+Theme.swift"; sourceTree = "<group>"; };
+		6005239BA954490F9C97E635 /* DuaRoutineRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuaRoutineRow.swift; sourceTree = "<group>"; };
 		63B09366530777508718794B /* pt */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/Localizable.strings; sourceTree = "<group>"; };
 		653C7F8131969FB515645E97 /* NurVakti.xcdatamodel */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = wrapper.xcdatamodel; path = NurVakti.xcdatamodel; sourceTree = "<group>"; };
-		66179756EB7B6EF368C32765 /* CustomHostingController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CustomHostingController.swift; path = Core/Navigation/CustomHostingController.swift; sourceTree = "<group>"; };
+		7066D3E4C0E14554ACB87079 /* DuaLibraryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuaLibraryService.swift; sourceTree = "<group>"; };
 		7211D5C2BAF5D8D48B8BD669 /* AlarmViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AlarmViewModel.swift; sourceTree = "<group>"; };
 		725BD9D00568EE2EBAC5C87A /* GuidanceService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = GuidanceService.swift; sourceTree = "<group>"; };
+		79811037CADDB18CF2370DC9 /* Pods-NurVakti.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NurVakti.debug.xcconfig"; path = "Target Support Files/Pods-NurVakti/Pods-NurVakti.debug.xcconfig"; sourceTree = "<group>"; };
 		7C99CED12E29C52651309A7C /* SplashView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		80E2A2F8177E0D3844821CC8 /* AppTheme.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
 		84FB327D09ED40094E0B97A1 /* DhikrView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DhikrView.swift; sourceTree = "<group>"; };
 		86D14C07F5A717DBFFBC601F /* QiblaViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = QiblaViewModel.swift; sourceTree = "<group>"; };
+		87A8C72881BF3689A7E8BB54 /* Pods-NurVakti.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NurVakti.release.xcconfig"; path = "Target Support Files/Pods-NurVakti/Pods-NurVakti.release.xcconfig"; sourceTree = "<group>"; };
 		8B3A60DC4FCB841615C3B427 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		8C979C7333AB220E87EF966B /* SettingsViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		928CC1DA071D9CD14DBD9FFB /* SettingsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -166,12 +247,14 @@
 		A538DC2438A4D9CA486700C8 /* IslamicCalendarView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = IslamicCalendarView.swift; path = Calendar/IslamicCalendarView.swift; sourceTree = "<group>"; };
 		A7D7921310B5F3900EC87B0E /* QuranBookmark.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = QuranBookmark.swift; sourceTree = "<group>"; };
 		A8094C29571C9699E350A2CA /* IslamicCalendarEvents.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = IslamicCalendarEvents.swift; sourceTree = "<group>"; };
+		AA361A2D45E242639969FB11 /* DuaLibraryModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuaLibraryModels.swift; sourceTree = "<group>"; };
+		AC0079F18477EAC1A0B718E2 /* Pods_NurVakti.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NurVakti.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AE88924E93119DB1C734EB70 /* tr */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
-		AF001F401DB19DD358686F9F /* AppRouter.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AppRouter.swift; path = Core/Navigation/AppRouter.swift; sourceTree = "<group>"; };
 		B537F3EE376CC5AE1FC208A6 /* HomeView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		BD0ED24ABB905A16A4897A61 /* ZakatCalculatorView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ZakatCalculatorView.swift; path = Tools/ZakatCalculatorView.swift; sourceTree = "<group>"; };
 		C0B37EE67D154FD95F8678FD /* QuranView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = QuranView.swift; sourceTree = "<group>"; };
 		C5A04668D9007A7B0D8B8CB3 /* ContentView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		C6687D25B13D420492578526 /* FavouritesStrip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouritesStrip.swift; sourceTree = "<group>"; };
 		C6FE220698F77D67E1D1BC00 /* AlarmModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AlarmModel.swift; sourceTree = "<group>"; };
 		CB38C3833432656998DE8739 /* BackgroundGradientService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BackgroundGradientService.swift; sourceTree = "<group>"; };
 		CDF110FC8B01595AC57479D6 /* SoundService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SoundService.swift; sourceTree = "<group>"; };
@@ -183,21 +266,52 @@
 		D6B7122E74035DE2E836F886 /* GuidanceShareSheet.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = GuidanceShareSheet.swift; sourceTree = "<group>"; };
 		D6E5CD0092081BB09C27C0C9 /* IslamicCalendarService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = IslamicCalendarService.swift; sourceTree = "<group>"; };
 		E154CC0391FF469728EA9CEA /* OnboardingViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = OnboardingViewModel.swift; sourceTree = "<group>"; };
+		E1705BE671A14321939EE7A2 /* DailyRoutineCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyRoutineCard.swift; sourceTree = "<group>"; };
 		E1E7FB3F7613475BAE805AB3 /* CountdownRing.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CountdownRing.swift; sourceTree = "<group>"; };
-		E2BF089E4BD2A3F80BBFFD45 /* MainNavigationView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MainNavigationView.swift; path = Core/Navigation/MainNavigationView.swift; sourceTree = "<group>"; };
 		E2FE4F5DD93BB385085827F4 /* Bundle+Language.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "Bundle+Language.swift"; sourceTree = "<group>"; };
 		E5489F1AE9B631B321944B1E /* DeepLinkHandler.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DeepLinkHandler.swift; sourceTree = "<group>"; };
 		E61287AF7C1DC13D8C13A888 /* PrayerSettings.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PrayerSettings.swift; sourceTree = "<group>"; };
 		EE910DA401DC61A213B26C91 /* BackgroundRefreshService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BackgroundRefreshService.swift; sourceTree = "<group>"; };
 		F30D26B02F757DD20075FF67 /* BirdLayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirdLayerView.swift; sourceTree = "<group>"; };
 		F30D26B22F757E6D0075FF67 /* StarFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarFieldView.swift; sourceTree = "<group>"; };
-		F32CDD332F717CB2006F2D78 /* NurVakti.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NurVakti.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F30D26C42F76AFEC0075FF67 /* AudioAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioAPI.swift; sourceTree = "<group>"; };
+		F30D26C52F76AFEC0075FF67 /* PrayerAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerAPI.swift; sourceTree = "<group>"; };
+		F30D26C62F76AFEC0075FF67 /* QuranAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranAPI.swift; sourceTree = "<group>"; };
+		F30D26C82F76AFEC0075FF67 /* AladhanResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AladhanResponse.swift; sourceTree = "<group>"; };
+		F30D26C92F76AFEC0075FF67 /* ErrorTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorTypes.swift; sourceTree = "<group>"; };
+		F30D26CA2F76AFEC0075FF67 /* QuranResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranResponse.swift; sourceTree = "<group>"; };
+		F30D26CC2F76AFEC0075FF67 /* AlamofireImplementations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlamofireImplementations.swift; sourceTree = "<group>"; };
+		F30D26CD2F76AFEC0075FF67 /* Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
+		F30D26CE2F76AFEC0075FF67 /* JSONEncodingHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONEncodingHelper.swift; sourceTree = "<group>"; };
+		F30D26D92F76AFFF0075FF67 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
+		F30D26DA2F76AFFF0075FF67 /* ServerErrorPopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerErrorPopup.swift; sourceTree = "<group>"; };
+		F30D26DD2F76B00C0075FF67 /* LocalizableUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizableUtils.swift; sourceTree = "<group>"; };
+		F30D26DF2F76B02F0075FF67 /* AudioManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioManager.swift; sourceTree = "<group>"; };
+		F30D26E02F76B02F0075FF67 /* PrayerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerManager.swift; sourceTree = "<group>"; };
+		F30D26E12F76B02F0075FF67 /* QuranManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranManager.swift; sourceTree = "<group>"; };
+		F30D26E62F76B0380075FF67 /* DuaCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuaCard.swift; sourceTree = "<group>"; };
+		F30D26E72F76B0380075FF67 /* PrayerStepCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerStepCard.swift; sourceTree = "<group>"; };
+		F30D26E92F76B0380075FF67 /* PrayerGuideData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerGuideData.swift; sourceTree = "<group>"; };
+		F30D26EA2F76B0380075FF67 /* PrayerGuideModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerGuideModels.swift; sourceTree = "<group>"; };
+		F30D26EC2F76B0380075FF67 /* HowToPrayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HowToPrayView.swift; sourceTree = "<group>"; };
+		F30D26ED2F76B0380075FF67 /* PostPrayerDuasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostPrayerDuasView.swift; sourceTree = "<group>"; };
+		F30D26EE2F76B0380075FF67 /* PrayerDuasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerDuasView.swift; sourceTree = "<group>"; };
+		F30D26EF2F76B0380075FF67 /* PrayerGuideMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerGuideMainView.swift; sourceTree = "<group>"; };
+		F30D26F02F76B0380075FF67 /* TesbihatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TesbihatView.swift; sourceTree = "<group>"; };
+		F30D26FA2F76B03C0075FF67 /* MonthlyDuaAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthlyDuaAPI.swift; sourceTree = "<group>"; };
+		F30D26FB2F76B03C0075FF67 /* MonthlyDuaService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthlyDuaService.swift; sourceTree = "<group>"; };
+		F30D26FC2F76B03C0075FF67 /* MonthlyAyahPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthlyAyahPlan.swift; sourceTree = "<group>"; };
 		F32CDD632F718F1C006F2D78 /* DuaDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuaDetailView.swift; sourceTree = "<group>"; };
 		F32CDD702F719000006F2D78 /* NurFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NurFont.swift; sourceTree = "<group>"; };
 		F32CDD722F719000006F2D78 /* SectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeader.swift; sourceTree = "<group>"; };
 		F32CDD742F719000006F2D78 /* DuaItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuaItem.swift; sourceTree = "<group>"; };
 		F32CDD762F719000006F2D78 /* AudioService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioService.swift; sourceTree = "<group>"; };
 		F32CDD782F719000006F2D78 /* AddDhikrView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDhikrView.swift; sourceTree = "<group>"; };
+		F35206192F76C84B00E2B12F /* SpecialPrayersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpecialPrayersView.swift; sourceTree = "<group>"; };
+		F352061B2F76CCDF00E2B12F /* DailyContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyContent.swift; sourceTree = "<group>"; };
+		F352061D2F76CCF200E2B12F /* HomeViewStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewStyles.swift; sourceTree = "<group>"; };
+		F35206202F76CCFD00E2B12F /* QuickAccessCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickAccessCard.swift; sourceTree = "<group>"; };
+		F35206212F76CCFD00E2B12F /* ShareButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareButton.swift; sourceTree = "<group>"; };
 		F37685BA2F72B37900179634 /* PrayerCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerCalculator.swift; sourceTree = "<group>"; };
 		F3B905882F7405F500254779 /* ezan.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ezan.mp3; sourceTree = "<group>"; };
 		F3B905892F7405F500254779 /* fajr.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = fajr.mp3; sourceTree = "<group>"; };
@@ -219,9 +333,50 @@
 		F3B905B52F7416EE00254779 /* MushafViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MushafViewModel.swift; sourceTree = "<group>"; };
 		F3B905B72F7419CB00254779 /* MushafPageCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MushafPageCard.swift; sourceTree = "<group>"; };
 		F3B905B92F74277100254779 /* MushafModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MushafModels.swift; sourceTree = "<group>"; };
+		F3CE6E982F8929BD00D43FDF /* FloatingTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingTabBar.swift; sourceTree = "<group>"; };
+		F3CE6E9A2F892FB500D43FDF /* PrayerStepInteractiveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerStepInteractiveView.swift; sourceTree = "<group>"; };
+		F3CE6E9C2F89433400D43FDF /* NurAnimations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NurAnimations.swift; sourceTree = "<group>"; };
+		F3DAD1192F7D2F7A00F36371 /* QuickDuaSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickDuaSheet.swift; sourceTree = "<group>"; };
+		F3DAD1322F7E7EA000F36371 /* EsmaulHusna.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EsmaulHusna.swift; sourceTree = "<group>"; };
+		F3DAD1342F7E7EC100F36371 /* EsmaData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EsmaData.swift; sourceTree = "<group>"; };
+		F3DAD1372F7E7EDF00F36371 /* EsmaulHusnaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EsmaulHusnaView.swift; sourceTree = "<group>"; };
+		F3DAD1392F7E8ABE00F36371 /* APIConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIConfig.swift; sourceTree = "<group>"; };
+		F3DAD13B2F7E8AD100F36371 /* AsmaService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsmaService.swift; sourceTree = "<group>"; };
+		F3DAD13D2F7E8ADF00F36371 /* AsmaViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsmaViewModel.swift; sourceTree = "<group>"; };
+		F3DAD1652F7F17B300F36371 /* NurVakti.app */ = {isa = PBXFileReference; lastKnownFileType = wrapper.application; path = NurVakti.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F3DAD16A2F7F218100F36371 /* esma_ul_husna.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = esma_ul_husna.mp3; sourceTree = "<group>"; };
+		F3DAD16B2F7F218100F36371 /* Salli_Duası.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Salli_Duası.mp3"; sourceTree = "<group>"; };
+		F3DAD16D2F7F218100F36371 /* Ettehiyyatü_Duası.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Ettehiyyatü_Duası.mp3"; sourceTree = "<group>"; };
+		F3DAD16E2F7F218100F36371 /* Barik_Duası.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Barik_Duası.mp3"; sourceTree = "<group>"; };
+		F3DAD1722F7F218100F36371 /* SubhanekeDuasi.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = SubhanekeDuasi.mp3; sourceTree = "<group>"; };
+		F3DAD17C2F7F22A500F36371 /* Namaz_tesbihatı.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Namaz_tesbihatı.mp3"; sourceTree = "<group>"; };
+		F3DAD17D2F7F22A500F36371 /* salati_munciye.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = salati_munciye.mp3; sourceTree = "<group>"; };
+		F3DAD1802F7F273D00F36371 /* allahu_ekber.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = allahu_ekber.mp3; sourceTree = "<group>"; };
+		F3DAD1812F7F273D00F36371 /* elhamdulillah.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = elhamdulillah.mp3; sourceTree = "<group>"; };
+		F3DAD1822F7F273D00F36371 /* subhanallah.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = subhanallah.mp3; sourceTree = "<group>"; };
+		F3DD4D9A2F8D16CA0030B46A /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		F3DD4D9C2F8D16D40030B46A /* DashboardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewModel.swift; sourceTree = "<group>"; };
+		F3DD4DDE2F8D1B590030B46A /* MainNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNavigationView.swift; sourceTree = "<group>"; };
+		F3DD4DE02F8D1B590030B46A /* CustomHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomHostingController.swift; sourceTree = "<group>"; };
+		F3DD4DE12F8D1B590030B46A /* NavigationControllers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationControllers.swift; sourceTree = "<group>"; };
+		F3DD4DE22F8D1B590030B46A /* RootNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootNavigationController.swift; sourceTree = "<group>"; };
+		F3DD4DE42F8D1B590030B46A /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
+		F3DD4DE52F8D1B590030B46A /* ViewBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewBuilder.swift; sourceTree = "<group>"; };
+		F3DD4DEE2F8D1C750030B46A /* AppRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouter.swift; sourceTree = "<group>"; };
+		F3DD4DF22F8D1EF70030B46A /* UIApplication+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Extension.swift"; sourceTree = "<group>"; };
+		F3DD4DFE2F8D22E40030B46A /* CustomCardShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCardShape.swift; sourceTree = "<group>"; };
+		F3DE24152F8D2F25001BEBAD /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		F3DE24162F8D2F25001BEBAD /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
+		F3DE24172F8D2F25001BEBAD /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		F3DE24182F8D2F25001BEBAD /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
+		F3DE241E2F8D2F37001BEBAD /* UserSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSession.swift; sourceTree = "<group>"; };
+		F3DE24202F8D31AF001BEBAD /* NurCardWithHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NurCardWithHeader.swift; sourceTree = "<group>"; };
+		F3DE24222F8D3472001BEBAD /* FeatureCircleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureCircleButton.swift; sourceTree = "<group>"; };
+		F3E2AAD92F851B0900496DFF /* NurVakti.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NurVakti.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F3E2AADA2F851B3E00496DFF /* NurLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NurLoadingView.swift; sourceTree = "<group>"; };
+		F3E2AAE22F8524FF00496DFF /* PrayerTimesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerTimesView.swift; sourceTree = "<group>"; };
 		F5E729BBBBAA5955ED82FF9B /* QiblaSheet.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = QiblaSheet.swift; sourceTree = "<group>"; };
 		F960B8629AFDDC8AB7A1FD64 /* QuranViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = QuranViewModel.swift; sourceTree = "<group>"; };
-		FDB7502A792AFA416CEC04D3 /* RootNavigationController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RootNavigationController.swift; path = Core/Navigation/RootNavigationController.swift; sourceTree = "<group>"; };
 		FE757E5945C166600FE99B64 /* PersistenceService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PersistenceService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -230,6 +385,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				676B0F122D717349A5BAA2AD /* Pods_NurVakti.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -239,6 +395,9 @@
 		007C4DB929BC91E9954E1DBE /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				F3E2AAE22F8524FF00496DFF /* PrayerTimesView.swift */,
+				F35206222F76CCFD00E2B12F /* Components */,
+				F352061E2F76CCF200E2B12F /* Styles */,
 				F3B905942F74087600254779 /* SkySimulation */,
 				B537F3EE376CC5AE1FC208A6 /* HomeView.swift */,
 				F5E729BBBBAA5955ED82FF9B /* QiblaSheet.swift */,
@@ -257,18 +416,30 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		13A45F44F6D3178F9E5F6881 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				79811037CADDB18CF2370DC9 /* Pods-NurVakti.debug.xcconfig */,
+				87A8C72881BF3689A7E8BB54 /* Pods-NurVakti.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		1590842286BE717A2781082C /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				9790E592FA2EF0C7389B3C25 /* MainTabView.swift */,
+				F3DAD1692F7F186900F36371 /* PrayerDuas */,
+				F3DAD1682F7F185A00F36371 /* ContentView */,
+				F3DAD1672F7F185200F36371 /* TesbihatView */,
+				F3DAD11A2F7D2F7A00F36371 /* Components */,
 				53C7E61912BF2685272034DA /* Settings */,
 				007C4DB929BC91E9954E1DBE /* Home */,
+				B5D7094B0B5F4A748325A4EF /* DuaLibrary */,
 				C0CDB669D59B2FCBB4A47CCD /* Splash */,
 				74F60DDFF45B27EB6E24A03A /* Dhikr */,
 				48EDF9031220757C0F01BE02 /* Quran */,
 				A7F1B016A9976DB63FCE23EC /* Qibla */,
 				E4AF17AB4F242E1AA14FF903 /* Alarm */,
-				C5A04668D9007A7B0D8B8CB3 /* ContentView.swift */,
 				DDEB59B2338351DE5C12A9BA /* Onboarding */,
 				69430D2CC91901B519574D97 /* Calendar */,
 				C7B2D85ACFB9EB99C504C4E2 /* Tools */,
@@ -279,6 +450,7 @@
 		19902586EC950B32AC01E865 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				F3DAD13D2F7E8ADF00F36371 /* AsmaViewModel.swift */,
 				F3B905B52F7416EE00254779 /* MushafViewModel.swift */,
 				9F5A1044997628B6869DAE39 /* HomeViewModel.swift */,
 				8C979C7333AB220E87EF966B /* SettingsViewModel.swift */,
@@ -301,19 +473,11 @@
 				0FCFBAC226D0E7ABE3D46E85 /* NurVakti.xcdatamodeld */,
 				8B3A60DC4FCB841615C3B427 /* PrivacyInfo.xcprivacy */,
 				55098DB5DD683B8FE1EE4380 /* Localizable.strings */,
+				F3DAD16A2F7F218100F36371 /* esma_ul_husna.mp3 */,
+				F3DAD16F2F7F218100F36371 /* prayers */,
+				F3DAD1732F7F218100F36371 /* Zikir */,
 			);
 			path = Resources;
-			sourceTree = "<group>";
-		};
-		2F684AD3D25F360D16349DD7 /* Navigation */ = {
-			isa = PBXGroup;
-			children = (
-				AF001F401DB19DD358686F9F /* AppRouter.swift */,
-				66179756EB7B6EF368C32765 /* CustomHostingController.swift */,
-				FDB7502A792AFA416CEC04D3 /* RootNavigationController.swift */,
-				E2BF089E4BD2A3F80BBFFD45 /* MainNavigationView.swift */,
-			);
-			name = Navigation;
 			sourceTree = "<group>";
 		};
 		33FEC39C9787BE381510EAA3 /* Root */ = {
@@ -324,9 +488,18 @@
 			name = Root;
 			sourceTree = "<group>";
 		};
+		380E4517F3D89570655ED4FD /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				AC0079F18477EAC1A0B718E2 /* Pods_NurVakti.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		411705165C38C732A9B71EEE /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				F3DD4DF22F8D1EF70030B46A /* UIApplication+Extension.swift */,
 				5E3A1CC59A0C1ADAC37F4483 /* UIColor+Theme.swift */,
 			);
 			name = Extensions;
@@ -335,6 +508,11 @@
 		429E0E146200BA55B28E1A3B /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				F3DE24222F8D3472001BEBAD /* FeatureCircleButton.swift */,
+				F3DE24202F8D31AF001BEBAD /* NurCardWithHeader.swift */,
+				F3E2AADA2F851B3E00496DFF /* NurLoadingView.swift */,
+				F30D26D92F76AFFF0075FF67 /* LoadingView.swift */,
+				F30D26DA2F76AFFF0075FF67 /* ServerErrorPopup.swift */,
 				F30D26B22F757E6D0075FF67 /* StarFieldView.swift */,
 				F3B905B72F7419CB00254779 /* MushafPageCard.swift */,
 				31D2AB2691619B2FE5CB381C /* HijriDateBadge.swift */,
@@ -350,6 +528,7 @@
 				411A71D40092ED80D62F116B /* DhikrCounterView.swift */,
 				F32CDD722F719000006F2D78 /* SectionHeader.swift */,
 				01B0E4D94D9B6B6C3C5D29EA /* DynamicHomeBackground.swift */,
+				F3DD4DFE2F8D22E40030B46A /* CustomCardShape.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -367,15 +546,6 @@
 				C0B37EE67D154FD95F8678FD /* QuranView.swift */,
 			);
 			path = Quran;
-			sourceTree = "<group>";
-		};
-		4CF83214D72028482678D11D /* NurVakti */ = {
-			isa = PBXGroup;
-			children = (
-				C6AE0A455E15AB96039A3333 /* Core */,
-				B3DDD0621E54E8542FB15B64 /* Views */,
-			);
-			name = NurVakti;
 			sourceTree = "<group>";
 		};
 		53C7E61912BF2685272034DA /* Settings */ = {
@@ -417,6 +587,10 @@
 		7D25D04B0E68A228200DAF16 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				F3DD4DE72F8D1B590030B46A /* Navigation */,
+				33FEC39C9787BE381510EAA3 /* Root */,
+				411705165C38C732A9B71EEE /* Extensions */,
+				F3DAD1392F7E8ABE00F36371 /* APIConfig.swift */,
 				0644DEDF590A0B98207C5F37 /* HapticManager.swift */,
 				E5489F1AE9B631B321944B1E /* DeepLinkHandler.swift */,
 				0BE4F41A6AFB5081215A1AEF /* Extensions */,
@@ -448,17 +622,19 @@
 		B0641DD8C2754A83CD63CF92 /* Localization */ = {
 			isa = PBXGroup;
 			children = (
+				F30D26DD2F76B00C0075FF67 /* LocalizableUtils.swift */,
 				D2CB1DD38BACA7F27420482B /* LocalizationManager.swift */,
 			);
 			path = Localization;
 			sourceTree = "<group>";
 		};
-		B3DDD0621E54E8542FB15B64 /* Views */ = {
+		B5D7094B0B5F4A748325A4EF /* DuaLibrary */ = {
 			isa = PBXGroup;
 			children = (
-				33FEC39C9787BE381510EAA3 /* Root */,
+				F3DAD1372F7E7EDF00F36371 /* EsmaulHusnaView.swift */,
+				16C02BA42DD4491496FF1744 /* DuaLibraryView.swift */,
 			);
-			name = Views;
+			path = DuaLibrary;
 			sourceTree = "<group>";
 		};
 		C0CDB669D59B2FCBB4A47CCD /* Splash */ = {
@@ -472,6 +648,8 @@
 		C556CFB9E4D758A36EAF708C /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				F3DAD1322F7E7EA000F36371 /* EsmaulHusna.swift */,
+				F352061B2F76CCDF00E2B12F /* DailyContent.swift */,
 				F3B905B92F74277100254779 /* MushafModels.swift */,
 				290E799F80FDE42A27FC7E59 /* AppSettings.swift */,
 				C6FE220698F77D67E1D1BC00 /* AlarmModel.swift */,
@@ -484,17 +662,12 @@
 				47C4CB5D1B6CAE3C7294755D /* DhikrItem.swift */,
 				F32CDD742F719000006F2D78 /* DuaItem.swift */,
 				966A08345BE3C4F432483005 /* ZakatModel.swift */,
+				F30D26E92F76B0380075FF67 /* PrayerGuideData.swift */,
+				F30D26EA2F76B0380075FF67 /* PrayerGuideModels.swift */,
+				AA361A2D45E242639969FB11 /* DuaLibraryModels.swift */,
+				F30D26FC2F76B03C0075FF67 /* MonthlyAyahPlan.swift */,
 			);
 			path = Models;
-			sourceTree = "<group>";
-		};
-		C6AE0A455E15AB96039A3333 /* Core */ = {
-			isa = PBXGroup;
-			children = (
-				2F684AD3D25F360D16349DD7 /* Navigation */,
-				411705165C38C732A9B71EEE /* Extensions */,
-			);
-			name = Core;
 			sourceTree = "<group>";
 		};
 		C7B2D85ACFB9EB99C504C4E2 /* Tools */ = {
@@ -508,6 +681,7 @@
 		D3F7DAD44D0FA1F376423F97 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				F3DE241E2F8D2F37001BEBAD /* UserSession.swift */,
 				F37685BA2F72B37900179634 /* PrayerCalculator.swift */,
 				EE910DA401DC61A213B26C91 /* BackgroundRefreshService.swift */,
 				5C402A95CA9729FA94C9C4EA /* PrayerTimeService.swift */,
@@ -520,6 +694,8 @@
 				D19CAF52BB86DD84A491117F /* LocationService.swift */,
 				F32CDD762F719000006F2D78 /* AudioService.swift */,
 				725BD9D00568EE2EBAC5C87A /* GuidanceService.swift */,
+				F30D26FB2F76B03C0075FF67 /* MonthlyDuaService.swift */,
+				7066D3E4C0E14554ACB87079 /* DuaLibraryService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -527,6 +703,7 @@
 		DA074303DB1B0BAF9B586592 /* Theme */ = {
 			isa = PBXGroup;
 			children = (
+				F3CE6E9C2F89433400D43FDF /* NurAnimations.swift */,
 				80E2A2F8177E0D3844821CC8 /* AppTheme.swift */,
 			);
 			path = Theme;
@@ -548,27 +725,90 @@
 			path = Alarm;
 			sourceTree = "<group>";
 		};
+		F30D26C72F76AFEC0075FF67 /* APIs */ = {
+			isa = PBXGroup;
+			children = (
+				F30D26C42F76AFEC0075FF67 /* AudioAPI.swift */,
+				F30D26C52F76AFEC0075FF67 /* PrayerAPI.swift */,
+				F30D26C62F76AFEC0075FF67 /* QuranAPI.swift */,
+				F30D26FA2F76B03C0075FF67 /* MonthlyDuaAPI.swift */,
+			);
+			path = APIs;
+			sourceTree = "<group>";
+		};
+		F30D26CB2F76AFEC0075FF67 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				F30D26C82F76AFEC0075FF67 /* AladhanResponse.swift */,
+				F30D26C92F76AFEC0075FF67 /* ErrorTypes.swift */,
+				F30D26CA2F76AFEC0075FF67 /* QuranResponse.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		F30D26CF2F76AFEC0075FF67 /* Api */ = {
+			isa = PBXGroup;
+			children = (
+				F30D26E22F76B02F0075FF67 /* Managers */,
+				F30D26C72F76AFEC0075FF67 /* APIs */,
+				F30D26CB2F76AFEC0075FF67 /* Models */,
+				F30D26CC2F76AFEC0075FF67 /* AlamofireImplementations.swift */,
+				F30D26CD2F76AFEC0075FF67 /* Configuration.swift */,
+				F30D26CE2F76AFEC0075FF67 /* JSONEncodingHelper.swift */,
+			);
+			path = Api;
+			sourceTree = "<group>";
+		};
+		F30D26E22F76B02F0075FF67 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				F3DAD13B2F7E8AD100F36371 /* AsmaService.swift */,
+				F30D26DF2F76B02F0075FF67 /* AudioManager.swift */,
+				F30D26E02F76B02F0075FF67 /* PrayerManager.swift */,
+				F30D26E12F76B02F0075FF67 /* QuranManager.swift */,
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
 		F32CDD2A2F717CB2006F2D78 = {
 			isa = PBXGroup;
 			children = (
-				F32CDD342F717CB2006F2D78 /* Products */,
+				F3DAD1352F7E7EC100F36371 /* Data */,
+				F30D26CF2F76AFEC0075FF67 /* Api */,
 				7A4A1E7C67496ED221F26FBE /* App */,
 				7D25D04B0E68A228200DAF16 /* Core */,
 				C556CFB9E4D758A36EAF708C /* Models */,
 				D3F7DAD44D0FA1F376423F97 /* Services */,
 				19902586EC950B32AC01E865 /* ViewModels */,
 				1590842286BE717A2781082C /* Views */,
+				F3DD4D982F8D16960030B46A /* Modules */,
 				1C348435D488FD4898F69CB3 /* Resources */,
-				4CF83214D72028482678D11D /* NurVakti */,
+				13A45F44F6D3178F9E5F6881 /* Pods */,
+				F3DAD1662F7F17B300F36371 /* Products */,
+				380E4517F3D89570655ED4FD /* Frameworks */,
+				F3E2AAD92F851B0900496DFF /* NurVakti.app */,
 			);
 			sourceTree = "<group>";
 		};
-		F32CDD342F717CB2006F2D78 /* Products */ = {
+		F352061E2F76CCF200E2B12F /* Styles */ = {
 			isa = PBXGroup;
 			children = (
-				F32CDD332F717CB2006F2D78 /* NurVakti.app */,
+				F352061D2F76CCF200E2B12F /* HomeViewStyles.swift */,
 			);
-			name = Products;
+			path = Styles;
+			sourceTree = "<group>";
+		};
+		F35206222F76CCFD00E2B12F /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				F35206202F76CCFD00E2B12F /* QuickAccessCard.swift */,
+				F35206212F76CCFD00E2B12F /* ShareButton.swift */,
+				E1705BE671A14321939EE7A2 /* DailyRoutineCard.swift */,
+				6005239BA954490F9C97E635 /* DuaRoutineRow.swift */,
+				C6687D25B13D420492578526 /* FavouritesStrip.swift */,
+				0C4A2F8789D645EDADD70017 /* FavouritePill.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 		F3B905942F74087600254779 /* SkySimulation */ = {
@@ -587,6 +827,153 @@
 			path = SkySimulation;
 			sourceTree = "<group>";
 		};
+		F3DAD11A2F7D2F7A00F36371 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				F3CE6E9A2F892FB500D43FDF /* PrayerStepInteractiveView.swift */,
+				F3CE6E982F8929BD00D43FDF /* FloatingTabBar.swift */,
+				F30D26E62F76B0380075FF67 /* DuaCard.swift */,
+				F30D26E72F76B0380075FF67 /* PrayerStepCard.swift */,
+				F3DAD1192F7D2F7A00F36371 /* QuickDuaSheet.swift */,
+				9790E592FA2EF0C7389B3C25 /* MainTabView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		F3DAD1352F7E7EC100F36371 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				F3DAD1342F7E7EC100F36371 /* EsmaData.swift */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		F3DAD1662F7F17B300F36371 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F3DAD1652F7F17B300F36371 /* NurVakti.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F3DAD1672F7F185200F36371 /* TesbihatView */ = {
+			isa = PBXGroup;
+			children = (
+				F30D26F02F76B0380075FF67 /* TesbihatView.swift */,
+			);
+			path = TesbihatView;
+			sourceTree = "<group>";
+		};
+		F3DAD1682F7F185A00F36371 /* ContentView */ = {
+			isa = PBXGroup;
+			children = (
+				C5A04668D9007A7B0D8B8CB3 /* ContentView.swift */,
+			);
+			path = ContentView;
+			sourceTree = "<group>";
+		};
+		F3DAD1692F7F186900F36371 /* PrayerDuas */ = {
+			isa = PBXGroup;
+			children = (
+				F35206192F76C84B00E2B12F /* SpecialPrayersView.swift */,
+				F30D26EC2F76B0380075FF67 /* HowToPrayView.swift */,
+				F30D26ED2F76B0380075FF67 /* PostPrayerDuasView.swift */,
+				F30D26EE2F76B0380075FF67 /* PrayerDuasView.swift */,
+				F30D26EF2F76B0380075FF67 /* PrayerGuideMainView.swift */,
+			);
+			path = PrayerDuas;
+			sourceTree = "<group>";
+		};
+		F3DAD16F2F7F218100F36371 /* prayers */ = {
+			isa = PBXGroup;
+			children = (
+				F3DAD1722F7F218100F36371 /* SubhanekeDuasi.mp3 */,
+				F3DAD17C2F7F22A500F36371 /* Namaz_tesbihatı.mp3 */,
+				F3DAD17D2F7F22A500F36371 /* salati_munciye.mp3 */,
+				F3DAD16B2F7F218100F36371 /* Salli_Duası.mp3 */,
+				F3DAD16D2F7F218100F36371 /* Ettehiyyatü_Duası.mp3 */,
+				F3DAD16E2F7F218100F36371 /* Barik_Duası.mp3 */,
+			);
+			path = prayers;
+			sourceTree = "<group>";
+		};
+		F3DAD1732F7F218100F36371 /* Zikir */ = {
+			isa = PBXGroup;
+			children = (
+				F3DAD1802F7F273D00F36371 /* allahu_ekber.mp3 */,
+				F3DAD1812F7F273D00F36371 /* elhamdulillah.mp3 */,
+				F3DAD1822F7F273D00F36371 /* subhanallah.mp3 */,
+			);
+			path = Zikir;
+			sourceTree = "<group>";
+		};
+		F3DD4D982F8D16960030B46A /* Modules */ = {
+			isa = PBXGroup;
+			children = (
+				F3DE24192F8D2F25001BEBAD /* Account */,
+				F3DD4D992F8D16AE0030B46A /* Dashboard */,
+			);
+			path = Modules;
+			sourceTree = "<group>";
+		};
+		F3DD4D992F8D16AE0030B46A /* Dashboard */ = {
+			isa = PBXGroup;
+			children = (
+				F3DD4D9A2F8D16CA0030B46A /* DashboardView.swift */,
+				F3DD4D9C2F8D16D40030B46A /* DashboardViewModel.swift */,
+			);
+			path = Dashboard;
+			sourceTree = "<group>";
+		};
+		F3DD4DDF2F8D1B590030B46A /* MainNavigation */ = {
+			isa = PBXGroup;
+			children = (
+				F3DD4DDE2F8D1B590030B46A /* MainNavigationView.swift */,
+			);
+			path = MainNavigation;
+			sourceTree = "<group>";
+		};
+		F3DD4DE32F8D1B590030B46A /* NavigationController */ = {
+			isa = PBXGroup;
+			children = (
+				F3DD4DE02F8D1B590030B46A /* CustomHostingController.swift */,
+				F3DD4DE12F8D1B590030B46A /* NavigationControllers.swift */,
+				F3DD4DE22F8D1B590030B46A /* RootNavigationController.swift */,
+			);
+			path = NavigationController;
+			sourceTree = "<group>";
+		};
+		F3DD4DE62F8D1B590030B46A /* Router */ = {
+			isa = PBXGroup;
+			children = (
+				F3DD4DEE2F8D1C750030B46A /* AppRouter.swift */,
+				F3DD4DE42F8D1B590030B46A /* Router.swift */,
+				F3DD4DE52F8D1B590030B46A /* ViewBuilder.swift */,
+			);
+			path = Router;
+			sourceTree = "<group>";
+		};
+		F3DD4DE72F8D1B590030B46A /* Navigation */ = {
+			isa = PBXGroup;
+			children = (
+				F3DD4DDF2F8D1B590030B46A /* MainNavigation */,
+				F3DD4DE32F8D1B590030B46A /* NavigationController */,
+				F3DD4DE62F8D1B590030B46A /* Router */,
+			);
+			path = Navigation;
+			sourceTree = "<group>";
+		};
+		F3DE24192F8D2F25001BEBAD /* Account */ = {
+			isa = PBXGroup;
+			children = (
+				F3DE24152F8D2F25001BEBAD /* LoginView.swift */,
+				F3DE24162F8D2F25001BEBAD /* LoginViewModel.swift */,
+				F3DE24172F8D2F25001BEBAD /* ProfileView.swift */,
+				F3DE24182F8D2F25001BEBAD /* ProfileViewModel.swift */,
+			);
+			path = Account;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -594,9 +981,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F32CDD432F717CB3006F2D78 /* Build configuration list for PBXNativeTarget "NurVakti" */;
 			buildPhases = (
+				5BB1E185DF53C6C3626605C8 /* [CP] Check Pods Manifest.lock */,
 				F32CDD2F2F717CB2006F2D78 /* Sources */,
 				F32CDD302F717CB2006F2D78 /* Frameworks */,
 				F32CDD312F717CB2006F2D78 /* Resources */,
+				ABD7756AEA77660B5F27516F /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -604,7 +993,7 @@
 			);
 			name = NurVakti;
 			productName = NurVakti;
-			productReference = F32CDD332F717CB2006F2D78 /* NurVakti.app */;
+			productReference = F3E2AAD92F851B0900496DFF /* NurVakti.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -636,7 +1025,7 @@
 			mainGroup = F32CDD2A2F717CB2006F2D78;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = F32CDD342F717CB2006F2D78 /* Products */;
+			productRefGroup = F32CDD2A2F717CB2006F2D78;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -654,6 +1043,16 @@
 				F3B9058A2F7405F500254779 /* fajr.mp3 in Resources */,
 				F3B9058B2F7405F500254779 /* ezan.mp3 in Resources */,
 				536B6482AAB6F23592714A00 /* Info_Plist_Strings.txt in Resources */,
+				F3DAD17E2F7F22A500F36371 /* salati_munciye.mp3 in Resources */,
+				F3DAD1832F7F273D00F36371 /* elhamdulillah.mp3 in Resources */,
+				F3DAD1842F7F273D00F36371 /* allahu_ekber.mp3 in Resources */,
+				F3DAD1852F7F273D00F36371 /* subhanallah.mp3 in Resources */,
+				F3DAD17F2F7F22A500F36371 /* Namaz_tesbihatı.mp3 in Resources */,
+				F3DAD1742F7F218100F36371 /* SubhanekeDuasi.mp3 in Resources */,
+				F3DAD1752F7F218100F36371 /* Barik_Duası.mp3 in Resources */,
+				F3DAD1762F7F218100F36371 /* Salli_Duası.mp3 in Resources */,
+				F3DAD1772F7F218100F36371 /* esma_ul_husna.mp3 in Resources */,
+				F3DAD17B2F7F218100F36371 /* Ettehiyyatü_Duası.mp3 in Resources */,
 				38E2393B537F5BCEEE33C2DC /* NurVakti.xcdatamodeld in Resources */,
 				69CAA192A585072F6FB5517B /* PrivacyInfo.xcprivacy in Resources */,
 				510DF81BCE813F3BA35253D3 /* Localizable.strings in Resources */,
@@ -662,13 +1061,61 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		5BB1E185DF53C6C3626605C8 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-NurVakti-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		ABD7756AEA77660B5F27516F /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-NurVakti/Pods-NurVakti-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-NurVakti/Pods-NurVakti-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-NurVakti/Pods-NurVakti-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		F32CDD2F2F717CB2006F2D78 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				CEB851C44620C96ABBBDE925 /* NurVaktiApp.swift in Sources */,
+				F3DAD11D2F7D2F9E00F36371 /* FavouritePill.swift in Sources */,
 				998F551404148CA9FE23AED5 /* AppDelegate.swift in Sources */,
+				F3DAD1362F7E7EC700F36371 /* EsmaData.swift in Sources */,
 				9E2D654B660A8F7E1D02E484 /* HapticManager.swift in Sources */,
 				5AFE427D16A2CA9B3BF0F540 /* DeepLinkHandler.swift in Sources */,
 				F32CDD752F719000006F2D78 /* DuaItem.swift in Sources */,
@@ -697,6 +1144,7 @@
 				1BC5AFB3DEF3B8E46F6B9916 /* AlarmModel.swift in Sources */,
 				0A5ED375FC159D50BA640B55 /* BackgroundTheme.swift in Sources */,
 				4006E3608538DFFB37951356 /* PrayerSettings.swift in Sources */,
+				F3DD4DEF2F8D1C750030B46A /* AppRouter.swift in Sources */,
 				9577886C9807A093DB8DDAD0 /* PrayerTime.swift in Sources */,
 				31859AA5FAF7782B7C91AD5C /* QuranNetworkModels.swift in Sources */,
 				F7A8EA8B9D39EF775242E9CA /* NurWidgetData.swift in Sources */,
@@ -711,20 +1159,37 @@
 				F3B905962F74087600254779 /* SkyPhase.swift in Sources */,
 				F3B905972F74087600254779 /* AnimatedStarFieldView.swift in Sources */,
 				F3B905982F74087600254779 /* SkySimulationCard.swift in Sources */,
+				F3DAD0F12F7BF33100F36371 /* DuaLibraryModels.swift in Sources */,
+				F3E2AAE32F8524FF00496DFF /* PrayerTimesView.swift in Sources */,
 				F3B905992F74087600254779 /* SkySimulationPreview.swift in Sources */,
 				F3B9059A2F74087600254779 /* CloudLayerView.swift in Sources */,
 				F30D26B32F757E6D0075FF67 /* StarFieldView.swift in Sources */,
+				F3DD4D9D2F8D16D40030B46A /* DashboardViewModel.swift in Sources */,
 				F3B905A92F740FA100254779 /* MushafPageView+Preview.swift in Sources */,
+				F3CE6E9B2F892FB500D43FDF /* PrayerStepInteractiveView.swift in Sources */,
+				F3DAD0F02F7BF32B00F36371 /* DuaLibraryService.swift in Sources */,
+				F3DD4DE82F8D1B590030B46A /* NavigationControllers.swift in Sources */,
+				F3DD4DE92F8D1B590030B46A /* MainNavigationView.swift in Sources */,
+				F3DD4DEA2F8D1B590030B46A /* ViewBuilder.swift in Sources */,
+				F3DD4DEB2F8D1B590030B46A /* RootNavigationController.swift in Sources */,
+				F3DD4DEC2F8D1B590030B46A /* CustomHostingController.swift in Sources */,
+				F3DD4DED2F8D1B590030B46A /* Router.swift in Sources */,
 				F3B905AA2F740FA100254779 /* MushafPageView.swift in Sources */,
 				F3B9059B2F74087600254779 /* SkySimulationView.swift in Sources */,
 				F3B9059C2F74087600254779 /* CelestialBodyView.swift in Sources */,
 				D2536C0BD200AA8736D793C7 /* IslamicCalendarService.swift in Sources */,
+				F3DAD1162F7D2D9700F36371 /* FavouritesStrip.swift in Sources */,
 				037BEB6EC366DF941C006D8C /* PersistenceService.swift in Sources */,
+				F352061C2F76CCDF00E2B12F /* DailyContent.swift in Sources */,
 				B3D8951D590100979A6F1F24 /* NotificationService.swift in Sources */,
 				0DB00BDA6E069AD47AAA35E1 /* IslamicCalendarEvents.swift in Sources */,
 				09A4639D59B747F79023D4F1 /* LocationService.swift in Sources */,
+				F3DE24232F8D3472001BEBAD /* FeatureCircleButton.swift in Sources */,
+				F3DAD1172F7D2D9E00F36371 /* DailyRoutineCard.swift in Sources */,
+				F3DE24212F8D31AF001BEBAD /* NurCardWithHeader.swift in Sources */,
 				4BE4C23D24C59C42DC90B9F6 /* HomeViewModel.swift in Sources */,
 				C844E3D83D48164D08F2D28C /* SettingsViewModel.swift in Sources */,
+				F3DD4DFF2F8D22E40030B46A /* CustomCardShape.swift in Sources */,
 				F2862AC625C77F4CDA490677 /* DhikrViewModel.swift in Sources */,
 				584BA7B4A71C544735D9F798 /* QiblaViewModel.swift in Sources */,
 				39A60219DDA35375D1C2416D /* QuranViewModel.swift in Sources */,
@@ -733,6 +1198,7 @@
 				F3B905B02F7416DE00254779 /* SurahHeaderView.swift in Sources */,
 				F3B905B12F7416DE00254779 /* AyahTextView.swift in Sources */,
 				F3B905B22F7416DE00254779 /* MushafMainView.swift in Sources */,
+				F352061F2F76CCF200E2B12F /* HomeViewStyles.swift in Sources */,
 				F3B905B32F7416DE00254779 /* BesmeleView.swift in Sources */,
 				F3B905B42F7416DE00254779 /* MushafPageController.swift in Sources */,
 				CB9E2EDA307ABC6DF3A69EA6 /* MainTabView.swift in Sources */,
@@ -742,28 +1208,72 @@
 				F30D26B12F757DD20075FF67 /* BirdLayerView.swift in Sources */,
 				F3B905BA2F74277100254779 /* MushafModels.swift in Sources */,
 				7317640C9FC85989757BA484 /* SplashView.swift in Sources */,
+				F3DD4D9B2F8D16CA0030B46A /* DashboardView.swift in Sources */,
 				A830B9903FD0F8C77A13D61A /* DhikrView.swift in Sources */,
 				30D8A07772A80954A6DB6225 /* QuranView.swift in Sources */,
 				D56CA0876BF88C0967089F13 /* QiblaView.swift in Sources */,
 				F217FE0486CD93A684406994 /* AlarmView.swift in Sources */,
+				F3DAD13C2F7E8AD100F36371 /* AsmaService.swift in Sources */,
 				769EBFFC34DB2BFBE3F5BA7B /* ContentView.swift in Sources */,
 				918763802C1FDA417A13C20F /* OnboardingView.swift in Sources */,
 				F32CDD792F719000006F2D78 /* AddDhikrView.swift in Sources */,
+				F3DAD11B2F7D2F7A00F36371 /* QuickDuaSheet.swift in Sources */,
+				F3DE241A2F8D2F25001BEBAD /* LoginView.swift in Sources */,
+				F3DE241B2F8D2F25001BEBAD /* LoginViewModel.swift in Sources */,
+				F3DE241C2F8D2F25001BEBAD /* ProfileViewModel.swift in Sources */,
+				F3DE241D2F8D2F25001BEBAD /* ProfileView.swift in Sources */,
 				51E1B7B4DE2FE392D362C3D2 /* GuidanceService.swift in Sources */,
 				1EEE2A8D12D2DC618D5D9BA5 /* DailyGuidanceView.swift in Sources */,
 				C1ACF8C0ED69698B4A06F5AF /* IslamicCalendarView.swift in Sources */,
+				F3DE241F2F8D2F37001BEBAD /* UserSession.swift in Sources */,
 				9F1A000F02A40723F15BB67B /* TasbihModeView.swift in Sources */,
+				F3DAD13A2F7E8ABE00F36371 /* APIConfig.swift in Sources */,
 				4DDE931751274908A9E2DF3E /* ShareImageRenderer.swift in Sources */,
 				583A81AEBB0704B2B42BF7CD /* GuidanceShareSheet.swift in Sources */,
+				F30D26D02F76AFEC0075FF67 /* AladhanResponse.swift in Sources */,
+				F30D26F42F76B0380075FF67 /* PrayerDuasView.swift in Sources */,
+				F30D26F52F76B0380075FF67 /* HowToPrayView.swift in Sources */,
+				F3CE6E992F8929BD00D43FDF /* FloatingTabBar.swift in Sources */,
+				F30D26F62F76B0380075FF67 /* PrayerStepCard.swift in Sources */,
+				F30D26F72F76B0380075FF67 /* TesbihatView.swift in Sources */,
+				F30D26F82F76B0380075FF67 /* PrayerGuideModels.swift in Sources */,
+				F30D26F92F76B0380075FF67 /* DuaCard.swift in Sources */,
+				F3DAD13E2F7E8ADF00F36371 /* AsmaViewModel.swift in Sources */,
+				F352061A2F76C84B00E2B12F /* SpecialPrayersView.swift in Sources */,
+				F30D26FA2F76B0380075FF67 /* PrayerGuideMainView.swift in Sources */,
+				F30D26FB2F76B0380075FF67 /* PrayerGuideData.swift in Sources */,
+				F30D26FC2F76B0380075FF67 /* PostPrayerDuasView.swift in Sources */,
+				F30D26E32F76B02F0075FF67 /* PrayerManager.swift in Sources */,
+				F30D26E42F76B02F0075FF67 /* AudioManager.swift in Sources */,
+				F30D26E52F76B02F0075FF67 /* QuranManager.swift in Sources */,
+				F35206232F76CCFD00E2B12F /* QuickAccessCard.swift in Sources */,
+				F35206242F76CCFD00E2B12F /* ShareButton.swift in Sources */,
+				F3DAD1382F7E7EDF00F36371 /* EsmaulHusnaView.swift in Sources */,
+				F30D26D12F76AFEC0075FF67 /* ErrorTypes.swift in Sources */,
+				F30D26D22F76AFEC0075FF67 /* AudioAPI.swift in Sources */,
+				F30D26D32F76AFEC0075FF67 /* Configuration.swift in Sources */,
+				F30D26D42F76AFEC0075FF67 /* JSONEncodingHelper.swift in Sources */,
+				F3DD4DF42F8D1EF70030B46A /* UIApplication+Extension.swift in Sources */,
+				F30D26D52F76AFEC0075FF67 /* AlamofireImplementations.swift in Sources */,
+				F30D26D62F76AFEC0075FF67 /* QuranResponse.swift in Sources */,
+				F30D26D72F76AFEC0075FF67 /* PrayerAPI.swift in Sources */,
+				F30D26D82F76AFEC0075FF67 /* QuranAPI.swift in Sources */,
 				FF2540A1BFB5E6D6D04F02CF /* ZakatModel.swift in Sources */,
 				EC2BA06E7A6AD464EB5F1FD4 /* ZakatCalculatorView.swift in Sources */,
+				F30D26DB2F76AFFF0075FF67 /* LoadingView.swift in Sources */,
+				F3DAD1182F7D2DA700F36371 /* DuaLibraryView.swift in Sources */,
+				F30D26DC2F76AFFF0075FF67 /* ServerErrorPopup.swift in Sources */,
 				6DC38AA14C6421047A6570DC /* DynamicHomeBackground.swift in Sources */,
-				2A83826B2B6D71DE087CB42A /* AppRouter.swift in Sources */,
-				5B9EAB95AEB1C51BE269238E /* CustomHostingController.swift in Sources */,
-				5A4D1FD321B2C148A35720D5 /* RootNavigationController.swift in Sources */,
+				F3DAD11C2F7D2F8D00F36371 /* DuaRoutineRow.swift in Sources */,
 				8351A78DF7E2F0AAD7E0846B /* RootView.swift in Sources */,
 				C342A7B89265D7F8A18A1EC5 /* UIColor+Theme.swift in Sources */,
-				1314961182F687F93EC941ED /* MainNavigationView.swift in Sources */,
+				F3DAD1332F7E7EA100F36371 /* EsmaulHusna.swift in Sources */,
+				F30D26DE2F76B00C0075FF67 /* LocalizableUtils.swift in Sources */,
+				F30D26FA2F76B03D0075FF67 /* MonthlyDuaAPI.swift in Sources */,
+				F3E2AADB2F851B3E00496DFF /* NurLoadingView.swift in Sources */,
+				F30D26FB2F76B03D0075FF67 /* MonthlyDuaService.swift in Sources */,
+				F3CE6E9D2F89433400D43FDF /* NurAnimations.swift in Sources */,
+				F30D26FC2F76B03D0075FF67 /* MonthlyAyahPlan.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -823,7 +1333,7 @@
 				DEVELOPMENT_TEAM = 4WQF4N3C7F;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -887,7 +1397,7 @@
 				DEVELOPMENT_TEAM = 4WQF4N3C7F;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -908,6 +1418,7 @@
 		};
 		F32CDD442F717CB3006F2D78 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 79811037CADDB18CF2370DC9 /* Pods-NurVakti.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -916,7 +1427,7 @@
 				DEVELOPMENT_TEAM = 4WQF4N3C7F;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_BGTaskSchedulerPermittedIdentifiers = com.nurvakti.prayerRefresh;
+				INFOPLIST_KEY_BGTaskSchedulerPermittedIdentifiers = "com.nurvakti.prayerRefresh com.nurvakti.monthly.refresh";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Vakit bildirimleri ve güncellemeleri için konumunuz gereklidir.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Vakit hesaplamaları için konumunuz gereklidir.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -944,6 +1455,7 @@
 		};
 		F32CDD452F717CB3006F2D78 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 87A8C72881BF3689A7E8BB54 /* Pods-NurVakti.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -952,7 +1464,7 @@
 				DEVELOPMENT_TEAM = 4WQF4N3C7F;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_BGTaskSchedulerPermittedIdentifiers = com.nurvakti.prayerRefresh;
+				INFOPLIST_KEY_BGTaskSchedulerPermittedIdentifiers = "com.nurvakti.prayerRefresh com.nurvakti.monthly.refresh";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Vakit bildirimleri ve güncellemeleri için konumunuz gereklidir.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Vakit hesaplamaları için konumunuz gereklidir.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

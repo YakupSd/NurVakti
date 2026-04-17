@@ -1,22 +1,31 @@
 import Foundation
 
-struct AlarmModel: Codable, Identifiable, Hashable {
-    let id: UUID
-    var prayerName: PrayerName
-    var minutesBefore: Int        // 0, 5, 10, 15, 20, 30
-    var isActive: Bool
-    var soundType: AlarmSound
-    var repeatDays: Set<Weekday>  // boş = her gün
+public struct AlarmModel: Codable, Identifiable, Hashable {
+    public let id: UUID
+    public var prayerName: PrayerName
+    public var minutesBefore: Int        // 0, 5, 10, 15, 20, 30
+    public var isActive: Bool
+    public var soundType: AlarmSound
+    public var repeatDays: Set<Weekday>  // boş = her gün
+    
+    public init(id: UUID = UUID(), prayerName: PrayerName, minutesBefore: Int, isActive: Bool, soundType: AlarmSound, repeatDays: Set<Weekday>) {
+        self.id = id
+        self.prayerName = prayerName
+        self.minutesBefore = minutesBefore
+        self.isActive = isActive
+        self.soundType = soundType
+        self.repeatDays = repeatDays
+    }
 }
 
-enum AlarmSound: String, Codable, CaseIterable {
+public enum AlarmSound: String, Codable, CaseIterable {
     case ezan
     case fajr
     case system
     case silent
 
     // Localizable kullanılarak, name kopyalaması önlendi (SoundService extension'ı da bunu kullanacak)
-    func localizedName(for language: LanguageCode) -> String {
+    public func localizedName(for language: LanguageCode) -> String {
         switch self {
         case .ezan:   return NSLocalizedString("alarm.sound.ezan", comment: "")
         case .fajr:   return NSLocalizedString("alarm.sound.fajr", comment: "")
@@ -26,10 +35,10 @@ enum AlarmSound: String, Codable, CaseIterable {
     }
 }
 
-enum Weekday: Int, Codable, CaseIterable {
+public enum Weekday: Int, Codable, CaseIterable {
     case sunday=1, monday, tuesday, wednesday, thursday, friday, saturday
     
-    func shortName(for language: LanguageCode) -> String {
+    public func shortName(for language: LanguageCode) -> String {
         switch (self, language) {
         case (.monday, .tr): return "Pzt"
         case (.tuesday, .tr): return "Sal"
@@ -44,7 +53,7 @@ enum Weekday: Int, Codable, CaseIterable {
         }
     }
     
-    var isFriday: Bool { self == .friday }
+    public var isFriday: Bool { self == .friday }
 }
 
 extension AlarmModel {

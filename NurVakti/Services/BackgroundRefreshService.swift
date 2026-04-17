@@ -18,7 +18,7 @@ final class BackgroundRefreshService {
     static let taskIdentifier = "com.nurvakti.prayerRefresh"
 
     // Konum değişim eşiği (km) — bu kadar hareket etmeden güncelleme yapma
-    private let locationThresholdKm: Double = 25.0
+    private let locationThresholdKm: Double = 10.0
 
     // MARK: - Kayıt (AppDelegate'te çağrılır)
     func register() {
@@ -95,20 +95,26 @@ final class BackgroundRefreshService {
         let prayerService = PrayerTimeService()
         let method = settings.calculationMethod
         let madhab = settings.madhab
-        prayerService.calculate(for: currentLocation, method: method, madhab: madhab)
-
-        return true
+        
+        do {
+            _ = try await prayerService.calculateMonthly(for: currentLocation, method: method, madhab: madhab)
+            return true
+        } catch {
+            print("BackgroundRefresh: API Error — \(error)")
+            return false
+        }
     }
 
+    private var activeFetcher: OneTimeLocationFetcher?
+
     private func fetchCurrentLocation() async -> CLLocation? {
-        // Basit one-shot konum talebi
         return await withCheckedContinuation { continuation in
-            let helper = OneTimeLocationFetcher {
-                continuation.resume(returning: $0)
+            let helper = OneTimeLocationFetcher { [weak self] location in
+                continuation.resume(returning: location)
+                self?.activeFetcher = nil
             }
+            self.activeFetcher = helper
             helper.start()
-            // Weak reference sorununu önlemek için retain ediyoruz
-            _ = helper
         }
     }
 }

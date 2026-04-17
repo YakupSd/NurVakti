@@ -7,104 +7,134 @@ struct QuranView: View {
     
     var body: some View {
         ZStack {
-            // Arka plan (Home ile uyumlu)
-            LinearGradient(colors: [Color(hex: "0F2027"), Color(hex: "203A43")], startPoint: .top, endPoint: .bottom)
-                .ignoresSafeArea()
+            // Background
+            LinearGradient(
+                colors: [
+                    Color(hex: "0B132B"),
+                    Color(hex: "1C2541"),
+                    Color(hex: "000000")
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .ignoresSafeArea()
+            
+            // Premium Light Orbs
+            Circle()
+                .fill(Color.nurGold.opacity(0.12))
+                .frame(width: 400, height: 400)
+                .offset(x: -150, y: -200)
+                .blur(radius: 100)
+            
+            Circle()
+                .fill(Color.blue.opacity(0.1))
+                .frame(width: 300, height: 300)
+                .offset(x: 150, y: 300)
+                .blur(radius: 80)
             
             VStack(spacing: 0) {
-                // ÜSTBAR
+                // ÜSTBAR (Header)
                 VStack(spacing: 16) {
                     HStack {
                         Text(localization.localizedString("menu_quran"))
-                            .font(.system(size: 32, weight: .bold))
+                            .nurFont(32, weight: .bold)
                             .foregroundColor(.white)
                         Spacer()
                     }
                     .padding(.horizontal)
                     
-                    // Arama Çubuğu
+                    // Arama Çubuğu (Premium Glass)
                     HStack {
                         Image(systemName: "magnifyingglass")
-                            .foregroundColor(.white.opacity(0.6))
+                            .foregroundColor(.white.opacity(0.4))
                         TextField(localization.localizedString("quran.searchPlaceholder"), text: $vm.searchText)
                             .textFieldStyle(.plain)
                             .foregroundColor(.white)
                     }
-                    .padding(12)
-                    .background(.ultraThinMaterial)
-                    .cornerRadius(16)
+                    .padding(14)
+                    .background(.ultraThinMaterial.opacity(0.15))
+                    .cornerRadius(20)
                     .overlay(
-                        RoundedRectangle(cornerRadius: 16)
+                        RoundedRectangle(cornerRadius: 20)
                             .stroke(Color.white.opacity(0.1), lineWidth: 1)
                     )
                     .padding(.horizontal)
                 }
-                .padding(.bottom)
+                .padding(.bottom, 10)
                 
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 16) {
-                        
                         // Hatim Banner
                         SectionHeader(title: localization.localizedString("quran.hatimJourney"))
                         
-                        Button(action: { 
+                        Button {
+                            HapticManager.shared.tap()
                             let page = vm.hatimProgress?.currentPage ?? 1
-                            router.push(to: .mushaf(page: page))
-                        }) {
-                            NurCard(title: localization.localizedString("quran.hatimJourney"), icon: "sparkles") {
+                            router.pushTo(view: MainNavigationView.builder.makeView(
+                                MushafMainView(page: page),
+                                withNavigationTitle: "Mushaf"
+                            ))
+                        } label: {
+                            VStack(spacing: 20) {
                                 let page = vm.hatimProgress?.currentPage ?? 1
                                 HStack(spacing: 20) {
-                                    VStack(alignment: .leading, spacing: 10) {
-                                        HStack(alignment: .lastTextBaseline, spacing: 4) {
+                                    ZStack {
+                                        Circle()
+                                            .fill(Color.nurGold.opacity(0.1))
+                                            .frame(width: 80, height: 80)
+                                            .blur(radius: 10)
+                                        
+                                        VStack(spacing: 0) {
                                             Text("\(page)")
-                                                .nurFont(32, weight: .bold)
+                                                .nurFont(28, weight: .bold)
                                                 .foregroundColor(.nurGold)
-                                            Text("/ 604")
-                                                .nurFont(16, weight: .medium)
-                                                .foregroundColor(.white.opacity(0.4))
-                                                                            
                                             Text(localization.localizedString("quran.pageLabel"))
-                                                .nurFont(14)
-                                                .foregroundColor(.white.opacity(0.6))
-                                                .padding(.leading, 8)
+                                                .nurFont(10)
+                                                .foregroundColor(.white.opacity(0.4))
                                         }
+                                    }
+                                    
+                                    VStack(alignment: .leading, spacing: 10) {
+                                        Text(localization.localizedString("quran.hatimJourney"))
+                                            .nurFont(18, weight: .bold)
+                                            .foregroundColor(.white)
                                         
                                         ProgressView(value: Double(page), total: 604)
                                             .tint(.nurGold)
                                             .scaleEffect(x: 1, y: 1.5, anchor: .center)
                                         
                                         Text(page == 1 ? localization.localizedString("quran.startFromFirst") : localization.localizedString("quran.continueWhereLeft"))
-                                            .nurFont(13, weight: .medium)
-                                            .foregroundColor(.white.opacity(0.7))
+                                            .nurFont(12, weight: .medium)
+                                            .foregroundColor(.white.opacity(0.6))
                                     }
                                     
                                     Spacer()
                                     
-                                    ZStack {
-                                        Circle()
-                                            .fill(Color.nurGold.opacity(0.1))
-                                            .frame(width: 50, height: 50)
-                                        Image(systemName: page == 1 ? "arrow.right" : "play.fill")
-                                            .font(.title3)
-                                            .foregroundColor(.nurGold)
-                                    }
+                                    Image(systemName: "chevron.right")
+                                        .font(.title3)
+                                        .foregroundColor(.nurGold.opacity(0.5))
                                 }
-                                .padding(.vertical, 8)
                             }
+                            .padding(24)
+                            .background(.ultraThinMaterial.opacity(0.15))
+                            .cornerRadius(24)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 24)
+                                    .stroke(Color.white.opacity(0.12), lineWidth: 1)
+                            )
                         }
+                        .buttonStyle(.plain)
                         
-                        // Devam Et Banner
-                        if let progress = vm.readingProgress {
+                        if let progress = vm.readingProgress,
+                           let surah = vm.surahs.first(where: { $0.id == progress.lastSurah }) {
                             SectionHeader(title: localization.localizedString("quran.lastRead"))
                             
-                            // Not: Burada surenin SurahInfo nesnesine ihtiyacı var. 
-                            // Basitleştirmek için veya progress içinde surahInfo tutulabilir.
-                            // Şimdilik sadece Hatim'e yönelelim veya progress'i butona bağlayalım.
-                            Button(action: {
-                                if let surah = vm.surahs.first(where: { $0.id == progress.lastSurah }) {
-                                    router.push(to: .mushaf(surah: surah))
-                                }
-                            }) {
+                            Button {
+                                router.pushTo(view: MainNavigationView.builder.makeView(
+                                    MushafMainView(surah: surah),
+                                    withNavigationTitle: surah.englishName
+                                ))
+                            } label: {
                                 NurCard(title: "\(localization.localizedString("quran.surahLabel")) \(progress.lastSurah), \(localization.localizedString("quran.ayahLabel")) \(progress.lastAyah)", icon: "book.fill") {
                                     HStack {
                                         Text(localization.localizedString("quran.goToLastAyah"))
@@ -137,9 +167,12 @@ struct QuranView: View {
                                     .padding(.top, 40)
                             } else {
                                 ForEach(vm.filteredSurahs) { surah in
-                                    Button(action: { 
-                                        router.push(to: .mushaf(surah: surah))
-                                    }) {
+                                    Button {
+                                        router.pushTo(view: MainNavigationView.builder.makeView(
+                                            MushafMainView(surah: surah),
+                                            withNavigationTitle: surah.englishName
+                                        ))
+                                    } label: {
                                         SurahRowView(surah: surah, language: localization.currentLanguage, fontSize: .medium)
                                     }
                                     .buttonStyle(.plain)
@@ -165,7 +198,6 @@ struct SurahRowView: View {
     
     var body: some View {
         HStack(spacing: 16) {
-            // Numara
             ZStack {
                 Circle()
                     .stroke(Color.nurGold.opacity(0.5), lineWidth: 1)
@@ -175,9 +207,8 @@ struct SurahRowView: View {
                     .foregroundColor(.nurGold)
             }
             
-            // İsim ve Detay
             VStack(alignment: .leading, spacing: 4) {
-                Text(surah.englishName) // Yerel isim gerekebilir
+                Text(surah.englishName)
                     .nurFont(18, weight: .bold)
                     .foregroundColor(.white)
                 
@@ -192,17 +223,16 @@ struct SurahRowView: View {
             
             Spacer()
             
-            // Arapça İsim
             Text(surah.nameArabic)
                 .nurFont(20)
                 .foregroundColor(.white)
         }
-        .padding()
-        .background(surah.id == 18 ? Color.green.opacity(0.1) : Color.white.opacity(0.05)) // Kehf suresi vurgusu örneği
-        .cornerRadius(16)
+        .padding(18)
+        .background(.ultraThinMaterial.opacity(0.1))
+        .cornerRadius(20)
         .overlay(
-            RoundedRectangle(cornerRadius: 16)
-                .stroke(surah.id == 18 ? Color.green.opacity(0.3) : Color.clear, lineWidth: 1)
+            RoundedRectangle(cornerRadius: 20)
+                .stroke(surah.id == 18 ? Color.green.opacity(0.4) : Color.white.opacity(0.1), lineWidth: 1)
         )
     }
 }

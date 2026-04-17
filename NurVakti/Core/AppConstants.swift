@@ -1,9 +1,9 @@
 import SwiftUI
 
-enum LanguageCode: String, CaseIterable, Codable {
+public enum LanguageCode: String, CaseIterable, Codable {
     case tr, ar, en, de, pt
     
-    var displayName: String {
+    public var displayName: String {
         switch self {
         case .tr: return "Türkçe"
         case .ar: return "العربية"
@@ -13,7 +13,7 @@ enum LanguageCode: String, CaseIterable, Codable {
         }
     }
     
-    var flag: String {
+    public var flag: String {
         switch self {
         case .tr: return "🇹🇷"
         case .ar: return "🇸🇦"
@@ -23,29 +23,19 @@ enum LanguageCode: String, CaseIterable, Codable {
         }
     }
     
-    var isRTL: Bool {
+    public var isRTL: Bool {
         return self == .ar
     }
     
-    var locale: Locale {
+    public var locale: Locale {
         return Locale(identifier: self.rawValue)
-    }
-    
-    var languageName_pt: String {
-        switch self {
-        case .tr: return "Turco"
-        case .ar: return "Árabe"
-        case .en: return "Inglês"
-        case .de: return "Alemão"
-        case .pt: return "Português"
-        }
     }
 }
 
-enum PrayerName: String, CaseIterable, Codable {
+public enum PrayerName: String, CaseIterable, Codable {
     case imsak, fajr, sunrise, dhuhr, asr, maghrib, isha
     
-    func localizedName(for language: LanguageCode) -> String {
+    public func localizedName(for language: LanguageCode) -> String {
         switch self {
         case .imsak:   return NSLocalizedString("prayer.imsak", comment: "")
         case .fajr:    return NSLocalizedString("prayer.fajr", comment: "")
@@ -57,7 +47,19 @@ enum PrayerName: String, CaseIterable, Codable {
         }
     }
     
-    var startColor: Color {
+    public var arabicName: String {
+        switch self {
+        case .imsak:   return "إمساak"
+        case .fajr:    return "الفجر"
+        case .sunrise: return "الشروق"
+        case .dhuhr:   return "الظهر"
+        case .asr:     return "العصر"
+        case .maghrib: return "المغرب"
+        case .isha:    return "العشاء"
+        }
+    }
+    
+    public var startColor: Color {
         switch self {
         case .imsak: return Color(hex: "0F2027")
         case .fajr: return Color(hex: "2C3E50")
@@ -69,7 +71,7 @@ enum PrayerName: String, CaseIterable, Codable {
         }
     }
     
-    var symbol: String {
+    public var symbol: String {
         switch self {
         case .imsak: return "moon.stars.fill"
         case .fajr: return "sunrise.fill"
@@ -82,10 +84,10 @@ enum PrayerName: String, CaseIterable, Codable {
     }
 }
 
-enum FontSize: String, CaseIterable, Codable {
+public enum FontSize: String, CaseIterable, Codable {
     case small, medium, large, xlarge
     
-    var title: CGFloat {
+    public var title: CGFloat {
         switch self {
         case .small: return 24
         case .medium: return 28
@@ -94,7 +96,7 @@ enum FontSize: String, CaseIterable, Codable {
         }
     }
     
-    var body: CGFloat {
+    public var body: CGFloat {
         switch self {
         case .small: return 14
         case .medium: return 16
@@ -103,7 +105,7 @@ enum FontSize: String, CaseIterable, Codable {
         }
     }
     
-    var caption: CGFloat {
+    public var caption: CGFloat {
         switch self {
         case .small: return 10
         case .medium: return 12
@@ -111,7 +113,7 @@ enum FontSize: String, CaseIterable, Codable {
         case .xlarge: return 16
         }
     }
-    var scaleFactor: CGFloat {
+    public var scaleFactor: CGFloat {
         switch self {
         case .small: return 0.85
         case .medium: return 1.0
@@ -121,10 +123,10 @@ enum FontSize: String, CaseIterable, Codable {
     }
 }
 
-enum ZikirType: String, CaseIterable, Codable {
+public enum ZikirType: String, CaseIterable, Codable {
     case subhanallah, elhamdulillah, allahuekber, lailaheillallah, salavat, custom
     
-    var arabicText: String {
+    public var arabicText: String {
         switch self {
         case .subhanallah: return "سبحان الله"
         case .elhamdulillah: return "الحمد لله"
@@ -135,7 +137,7 @@ enum ZikirType: String, CaseIterable, Codable {
         }
     }
     
-    func meaning(for language: LanguageCode) -> String {
+    public func meaning(for language: LanguageCode) -> String {
         switch (self, language) {
         case (.subhanallah, .tr): return "Allah noksan sıfatlardan uzaktır"
         case (.subhanallah, .en): return "Glory be to Allah"
@@ -152,7 +154,7 @@ enum ZikirType: String, CaseIterable, Codable {
         }
     }
     
-    var defaultTarget: Int {
+    public var defaultTarget: Int {
         switch self {
         case .custom: return 100
         default: return 33
@@ -160,7 +162,7 @@ enum ZikirType: String, CaseIterable, Codable {
     }
 }
 
-struct AppConstants {
+public struct AppConstants {
     static let defaultPrayerMethod = "Diyanet"
     static let supportedCalcMethods = [
         "Diyanet", "Muslim World League", 

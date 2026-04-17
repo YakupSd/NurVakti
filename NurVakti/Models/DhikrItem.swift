@@ -1,17 +1,31 @@
 import Foundation
 
-struct DhikrItem: Codable, Identifiable, Hashable {
-    let id: UUID
-    var type: ZikirType
-    var arabicText: String          // Arapça metin
-    var transliterationTR: String   // Türkçe okunuş
-    var meanings: [LanguageCode: String]  // 5 dilde anlam
-    var targetCount: Int
-    var currentCount: Int
-    var isCustom: Bool
-    var vibrateOnCount: Bool
-    var dailyCompletions: Int
-    var totalCompletions: Int
+public struct DhikrItem: Codable, Identifiable, Hashable {
+    public let id: UUID
+    public var type: ZikirType
+    public var arabicText: String          // Arapça metin
+    public var transliterationTR: String   // Türkçe okunuş
+    public var meanings: [LanguageCode: String]  // 5 dilde anlam
+    public var targetCount: Int
+    public var currentCount: Int
+    public var isCustom: Bool
+    public var vibrateOnCount: Bool
+    public var dailyCompletions: Int
+    public var totalCompletions: Int
+    
+    public init(id: UUID = UUID(), type: ZikirType, arabicText: String, transliterationTR: String, meanings: [LanguageCode : String], targetCount: Int, currentCount: Int, isCustom: Bool, vibrateOnCount: Bool, dailyCompletions: Int, totalCompletions: Int) {
+        self.id = id
+        self.type = type
+        self.arabicText = arabicText
+        self.transliterationTR = transliterationTR
+        self.meanings = meanings
+        self.targetCount = targetCount
+        self.currentCount = currentCount
+        self.isCustom = isCustom
+        self.vibrateOnCount = vibrateOnCount
+        self.dailyCompletions = dailyCompletions
+        self.totalCompletions = totalCompletions
+    }
     
     var progress: Double {
         guard targetCount > 0 else { return 0 }

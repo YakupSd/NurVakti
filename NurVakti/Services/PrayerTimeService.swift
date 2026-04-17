@@ -6,6 +6,8 @@ import WidgetKit
 
 @MainActor
 final class PrayerTimeService: ObservableObject {
+    static let shared = PrayerTimeService()
+    
     @Published var todayPrayers: PrayerTime?
     @Published var monthlyPrayers: [PrayerTime] = []
     @Published var nextPrayer: (name: PrayerName, time: Date)?
@@ -65,6 +67,8 @@ final class PrayerTimeService: ObservableObject {
         }
     }
     
+    private let prayerManager = PrayerManager()
+    
     // API'den 30 günlük (veya takvim ayı bazlı) çek
     func calculateMonthly(for location: CLLocation,
                           method: String,
@@ -74,83 +78,78 @@ final class PrayerTimeService: ObservableObject {
         let lng = location.coordinate.longitude
         
         // Aladhan API Calendar RPC (Diyanet=13, default=method)
-        let methodParam: String
+        let methodInt: Int
         switch method.lowercased() {
-        case "diyanet": methodParam = "13"
-        case "muslim world league": methodParam = "3"
-        case "isna": methodParam = "2"
-        case "egypt": methodParam = "5"
-        case "karachi": methodParam = "1"
-        case "tehran": methodParam = "7"
-        default: methodParam = "13"
+        case "diyanet": methodInt = 13
+        case "muslim world league": methodInt = 3
+        case "isna": methodInt = 2
+        case "egypt": methodInt = 5
+        case "karachi": methodInt = 1
+        case "tehran": methodInt = 7
+        default: methodInt = 13
         }
         
-        let urlString = "https://api.aladhan.com/v1/calendar?latitude=\(lat)&longitude=\(lng)&method=\(methodParam)"
-        guard let url = URL(string: urlString) else {
-            throw URLError(.badURL)
-        }
-        
-        let (data, _) = try await URLSession.shared.data(from: url)
-        let response = try JSONDecoder().decode(AladhanResponse.self, from: data)
-        
-        let results = response.data.compactMap { day -> PrayerTime? in
-            let timings = day.timings
-            let dateStr = day.date.readable // "24 Mar 2026"
-            
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "dd MMM yyyy"
-            dateFormatter.locale = Locale(identifier: "en_US")
-            guard let date = dateFormatter.date(from: dateStr) else { return nil }
-            
-            func parseTime(_ timeStr: String) -> Date {
-                // "13:10 (EET)" -> "13:10"
-                let cleanTime = (timeStr.components(separatedBy: " ").first ?? timeStr).replacingOccurrences(of: "(EET)", with: "").replacingOccurrences(of: "(EEST)", with: "").trimmingCharacters(in: .whitespaces)
+        return try await withCheckedThrowingContinuation { continuation in
+            prayerManager.getPrayerTimes(latitude: lat, longitude: lng, method: methodInt) { response in
+                let results = response.data.compactMap { day -> PrayerTime? in
+                    let timings = day.timings
+                    let dateStr = day.date.readable // "24 Mar 2026"
+                    
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "dd MMM yyyy"
+                    dateFormatter.locale = Locale(identifier: "en_US")
+                    guard let date = dateFormatter.date(from: dateStr) else { return nil }
+                    
+                    func parseTime(_ timeStr: String) -> Date {
+                        let cleanTime = (timeStr.components(separatedBy: " ").first ?? timeStr).replacingOccurrences(of: "(EET)", with: "").replacingOccurrences(of: "(EEST)", with: "").trimmingCharacters(in: .whitespaces)
+                        
+                        let timeFormatter = DateFormatter()
+                        timeFormatter.dateFormat = "yyyy-MM-dd HH:mm"
+                        timeFormatter.timeZone = TimeZone.current
+                        
+                        let dayFormatter = DateFormatter()
+                        dayFormatter.dateFormat = "yyyy-MM-dd"
+                        let dayStr = dayFormatter.string(from: date)
+                        
+                        return timeFormatter.date(from: "\(dayStr) \(cleanTime)") ?? date
+                    }
+                    
+                    let hijri = HijriDate(
+                        day: Int(day.date.hijri.day) ?? 1,
+                        month: day.date.hijri.month.number,
+                        year: Int(day.date.hijri.year) ?? 1447
+                    )
+                    
+                    return PrayerTime(
+                        id: UUID(),
+                        date: date,
+                        imsak:   parseTime(timings["Imsak"] ?? ""),
+                        fajr:    parseTime(timings["Fajr"] ?? ""),
+                        sunrise: parseTime(timings["Sunrise"] ?? ""),
+                        dhuhr:   parseTime(timings["Dhuhr"] ?? ""),
+                        asr:     parseTime(timings["Asr"] ?? ""),
+                        maghrib: parseTime(timings["Maghrib"] ?? ""),
+                        isha:    parseTime(timings["Isha"] ?? ""),
+                        cityName: "",
+                        hijriDate: hijri,
+                        calculationMethod: "Diyanet (API)"
+                    )
+                }
                 
-                let timeFormatter = DateFormatter()
-                timeFormatter.dateFormat = "yyyy-MM-dd HH:mm"
-                timeFormatter.timeZone = TimeZone.current
-                
-                let dayFormatter = DateFormatter()
-                dayFormatter.dateFormat = "yyyy-MM-dd"
-                let dayStr = dayFormatter.string(from: date)
-                
-                return timeFormatter.date(from: "\(dayStr) \(cleanTime)") ?? date
+                DispatchQueue.main.async {
+                    self.monthlyPrayers = results
+                    if let firstToday = results.first(where: { Calendar.current.isDateInToday($0.date) }) {
+                        self.todayPrayers = firstToday
+                        self.nextPrayer = self.findNextPrayer(from: firstToday)
+                        self.writeWidgetData(prayer: firstToday)
+                    }
+                    self.saveToCache(results)
+                    continuation.resume(returning: results)
+                }
+            } onFailure: { error in
+                continuation.resume(throwing: error ?? ApplicationErrorType.noResponse(desc: "Unknown error", code: nil))
             }
-            
-            let hijri = HijriDate(
-                day: Int(day.date.hijri.day) ?? 1,
-                month: day.date.hijri.month.number,
-                year: Int(day.date.hijri.year) ?? 1447
-            )
-            
-            return PrayerTime(
-                id: UUID(),
-                date: date,
-                imsak:   parseTime(timings["Imsak"] ?? ""),
-                fajr:    parseTime(timings["Fajr"] ?? ""),
-                sunrise: parseTime(timings["Sunrise"] ?? ""),
-                dhuhr:   parseTime(timings["Dhuhr"] ?? ""),
-                asr:     parseTime(timings["Asr"] ?? ""),
-                maghrib: parseTime(timings["Maghrib"] ?? ""),
-                isha:    parseTime(timings["Isha"] ?? ""),
-                cityName: "", 
-                hijriDate: hijri,
-                calculationMethod: "Diyanet (API)"
-            )
         }
-        
-        DispatchQueue.main.async {
-            self.monthlyPrayers = results
-            if let firstToday = results.first(where: { Calendar.current.isDateInToday($0.date) }) {
-                self.todayPrayers = firstToday
-                self.nextPrayer = self.findNextPrayer(from: firstToday)
-                // Widget verisini yaz
-                self.writeWidgetData(prayer: firstToday)
-            }
-            self.saveToCache(results)
-        }
-        
-        return results
     }
     
     // MARK: - Deprecated Calculation (Astronomical)

@@ -3,6 +3,8 @@ import Combine
 
 @MainActor
 final class BackgroundGradientService: ObservableObject {
+    static let shared = BackgroundGradientService()
+    
     @Published var currentTheme: PrayerTheme = .dhuhrTheme
     @Published var gradient: LinearGradient = LinearGradient(colors: [.blue, .white], startPoint: .top, endPoint: .bottom)
     

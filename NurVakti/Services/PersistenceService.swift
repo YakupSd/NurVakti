@@ -2,21 +2,21 @@ import Foundation
 import Combine
 import CoreLocation
 
-final class PersistenceService: ObservableObject {
-    static let shared = PersistenceService()
+public final class PersistenceService: ObservableObject {
+    public static let shared = PersistenceService()
     
-    @Published var settings: AppSettings {
+    @Published public var settings: AppSettings {
         didSet {
             objectWillChange.send()
         }
     }
-    @Published var dhikrItems: [DhikrItem]
-    @Published var alarms: [AlarmModel]
-    @Published var bookmarks: [QuranBookmark]
-    @Published var readingProgress: ReadingProgress
+    @Published public var dhikrItems: [DhikrItem]
+    @Published public var alarms: [AlarmModel]
+    @Published public var bookmarks: [QuranBookmark]
+    @Published public var readingProgress: ReadingProgress
     // Background refresh distance check
-    @Published var lastKnownLocation: CLLocation?
-    @Published var lastKnownCityName: String = ""
+    @Published public var lastKnownLocation: CLLocation?
+    @Published public var lastKnownCityName: String = ""
     
     private let defaults = UserDefaults.standard
     
@@ -70,25 +70,25 @@ final class PersistenceService: ObservableObject {
         self.lastKnownCityName = defaults.string(forKey: cityNameKey) ?? ""
     }
     
-    func saveLastKnownLocation(_ location: CLLocation) {
+    public func saveLastKnownLocation(_ location: CLLocation) {
         self.lastKnownLocation = location
         defaults.set(location.coordinate.latitude, forKey: locationLatKey)
         defaults.set(location.coordinate.longitude, forKey: locationLonKey)
     }
     
-    func saveLastKnownCityName(_ name: String) {
+    public func saveLastKnownCityName(_ name: String) {
         guard !name.isEmpty else { return }
         self.lastKnownCityName = name
         defaults.set(name, forKey: cityNameKey)
     }
     
-    func save<T: Encodable>(_ object: T, key: String) {
+    public func save<T: Encodable>(_ object: T, key: String) {
         if let encoded = try? JSONEncoder().encode(object) {
             defaults.set(encoded, forKey: key)
         }
     }
     
-    func load<T: Decodable>(key: String, as type: T.Type) -> T? {
+    public func load<T: Decodable>(key: String, as type: T.Type) -> T? {
         if let data = defaults.data(forKey: key) {
             return try? JSONDecoder().decode(type, from: data)
         }
@@ -97,21 +97,21 @@ final class PersistenceService: ObservableObject {
     
     // MARK: - Specialized Save/Load
     
-    func saveSettings(_ settings: AppSettings) {
+    public func saveSettings(_ settings: AppSettings) {
         self.settings = settings
         save(settings, key: Keys.settings.rawValue)
     }
     
-    func loadSettings() -> AppSettings {
+    public func loadSettings() -> AppSettings {
         load(key: Keys.settings.rawValue, as: AppSettings.self) ?? AppSettings()
     }
     
-    func saveDhikr(_ items: [DhikrItem]) {
+    public func saveDhikr(_ items: [DhikrItem]) {
         self.dhikrItems = items
         save(items, key: Keys.dhikr.rawValue)
     }
     
-    func loadDhikr() -> [DhikrItem] {
+    public func loadDhikr() -> [DhikrItem] {
         load(key: Keys.dhikr.rawValue, as: [DhikrItem].self) ?? []
     }
     
@@ -134,36 +134,36 @@ final class PersistenceService: ObservableObject {
         }
     }
     
-    func saveAlarms(_ alarms: [AlarmModel]) {
+    public func saveAlarms(_ alarms: [AlarmModel]) {
         self.alarms = alarms
         save(alarms, key: Keys.alarms.rawValue)
     }
     
-    func loadAlarms() -> [AlarmModel] {
+    public func loadAlarms() -> [AlarmModel] {
         load(key: Keys.alarms.rawValue, as: [AlarmModel].self) ?? []
     }
     
-    func saveBookmark(_ bookmark: QuranBookmark) {
+    public func saveBookmark(_ bookmark: QuranBookmark) {
         self.bookmarks.append(bookmark)
         save(self.bookmarks, key: Keys.bookmarks.rawValue)
     }
     
-    func removeBookmark(id: UUID) {
+    public func removeBookmark(id: UUID) {
         self.bookmarks.removeAll { $0.id == id }
         save(self.bookmarks, key: Keys.bookmarks.rawValue)
     }
     
-    func saveReadingProgress(_ progress: ReadingProgress) {
+    public func saveReadingProgress(_ progress: ReadingProgress) {
         self.readingProgress = progress
         save(progress, key: Keys.readingProgress.rawValue)
     }
     
     // Cache
-    func savePrayerCache(_ prayers: [PrayerTime]) {
+    public func savePrayerCache(_ prayers: [PrayerTime]) {
         save(prayers, key: Keys.prayerCache.rawValue)
     }
     
-    func loadPrayerCache() -> [PrayerTime] {
+    public func loadPrayerCache() -> [PrayerTime] {
         load(key: Keys.prayerCache.rawValue, as: [PrayerTime].self) ?? []
     }
     

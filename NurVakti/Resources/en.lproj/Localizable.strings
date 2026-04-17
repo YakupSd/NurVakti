@@ -275,7 +275,25 @@
 "hijri.month.11" = "Dhu al-Qa'dah";
 "hijri.month.12" = "Dhu al-Hijjah";
 
-// MARK: - GENERAL
+"alarm.everyDay"       = "Every day";
+
+// MARK: - PRAYER GUIDE
+"prayerGuide.title" = "My Prayer Guide";
+"prayerGuide.howToPray" = "How to Pray?";
+"prayerGuide.howToPray.desc" = "Step-by-step illustrated guide";
+"prayerGuide.duas" = "Prayer Supplications";
+"prayerGuide.duas.desc" = "All duas recited during prayer";
+"prayerGuide.tasbih" = "Tasbihat";
+"prayerGuide.tasbih.desc" = "Post-prayer tasbih and counter";
+"prayerGuide.postPrayer" = "Post-Prayer Duas";
+"prayerGuide.postPrayer.desc" = "Ayat al-Kursi, Falaq, Nas and others";
+"prayerGuide.monthlySpecial" = "Monthly Special";
+"prayerGuide.monthlySpecial.desc" = "Seasonal content based on Hijri month.";
+"prayerGuide.specialForMonth" = "Special for This Month";
+"prayerGuide.specialDuas" = "Special Duas of the Day";
+"prayerGuide.howToEidPrayer" = "How to Perform Eid Prayer?";
+"general.more" = "See More";
+"general.less" = "See Less";
 "general.ok"     = "OK";
 "general.loading" = "Loading...";
 "general.minutesShort" = "min";
@@ -286,6 +304,7 @@
 "general.share"  = "Share";
 "guidance.dailyAyat" = "Ayat of the Day";
 "guidance.dailyHadith" = "Hadith of the Day";
+"guidance.specialDays" = "Ramadan, Kandil & Eid Prayers";
 "calendar_title" = "Religious Calendar";
 "tasbih_title" = "Post-Prayer Tasbihat";
 "tasbih_start" = "Start Tasbihat";
@@ -324,3 +343,12 @@
 "completed_prayers_count" = "%d prayers passed today";
 "alarm.repeatDays"    = "Repeat Days";
 "alarm.everyDay"       = "Every day";
+
+// MARK: - Prayer Times View
+"prayer.completed" = "Completed";
+"prayer.active" = "Now";
+"prayer.remaining" = "remaining";
+"prayer.upcoming" = "Upcoming";
+"vakitler.title" = "Prayer Times";
+"vakitler.nextPrayer" = "Next Prayer";
+"vakitler.allDone" = "All prayers completed today";

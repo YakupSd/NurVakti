@@ -1,20 +1,20 @@
 import SwiftUI
 import Combine
 
-final class LocalizationManager: ObservableObject {
-    @Published var currentLanguage: LanguageCode = .tr
-    @Published var isRTL: Bool = false
-    @Published var locale: Locale = Locale(identifier: "tr_TR")
+public final class LocalizationManager: ObservableObject {
+    @Published public var currentLanguage: LanguageCode = .tr
+    @Published public var isRTL: Bool = false
+    @Published public var locale: Locale = Locale(identifier: "tr_TR")
     
-    static let shared = LocalizationManager()
+    public static let shared = LocalizationManager()
     
-    private init() {
+    public init() {
         let savedLang = UserDefaults.standard.string(forKey: "AppLanguage") ?? "tr"
         let code = LanguageCode(rawValue: savedLang) ?? .tr
         setLanguage(code)
     }
     
-    func setLanguage(_ code: LanguageCode) {
+    public func setLanguage(_ code: LanguageCode) {
         // 1. Bundle Override
         Bundle.overriddenLanguage = code.rawValue
         
@@ -37,7 +37,7 @@ final class LocalizationManager: ObservableObject {
         }
     }
     
-    func localizedString(_ key: String) -> String {
+    public func localizedString(_ key: String) -> String {
         return NSLocalizedString(key, comment: "")
     }
 }

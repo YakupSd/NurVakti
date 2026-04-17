@@ -308,3 +308,34 @@
 "completed_prayers_count" = "تمت %d صلوات اليوم";
 "alarm.repeatDays"    = "أيام التكرار";
 "alarm.everyDay"       = "كل يوم";
+
+// MARK: - FAVOURITE PRAYERS & ROUTINE
+"routine.morning" = "أذكار الصباح";
+"routine.evening" = "أذكار المساء";
+"routine.complete" = "تم الإكمال";
+"routine.remaining" = "متبقي";
+"routine.addDuas" = "إضافة أدعية";
+"routine.none" = "بدون روتين";
+"routine.both" = "كلاهما";
+"favourites.title" = "أدعية مفضلة";
+"favourites.edit" = "تعديل";
+"favourites.empty" = "لا توجد مفضلات بعد";
+"favourites.addMore" = "إضافة المزيد";
+"library.title" = "مكتبة الأذكار";
+"library.subtitle" = "جميع الأدعية والسور والأذكار";
+"library.pickFavs" = "اختر المفضلات";
+"library.pickRoutine" = "أضف إلى الروتين";
+"library.searchPlaceholder" = "بحث عن دعاء أو سورة...";
+"library.all" = "الكل";
+"library.noResults" = "لم يتم العثور على نتائج";
+"audio.pause" = "إيقاف";
+"audio.listen" = "استماع";
+
+// MARK: - Prayer Times View
+"prayer.completed" = "مكتمل";
+"prayer.active" = "الآن";
+"prayer.remaining" = "متبقي";
+"prayer.upcoming" = "قادم";
+"vakitler.title" = "أوقات الصلاة";
+"vakitler.nextPrayer" = "الصلاة التالية";
+"vakitler.allDone" = "اكتملت جميع صلوات اليوم";

@@ -1,5 +1,6 @@
 import UIKit
 import UserNotifications
+import BackgroundTasks
 
 class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate {
 
@@ -9,6 +10,18 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         checkNotificationStatus()
         // ── Background Refresh ─────────────────────────────────────
         BackgroundRefreshService.shared.register()
+        
+        BGTaskScheduler.shared.register(
+            forTaskWithIdentifier: "com.nurvakti.monthly.refresh",
+            using: nil
+        ) { task in
+            Task {
+                await MonthlyDuaService.shared.refreshIfNeeded()
+                task.setTaskCompleted(success: true)
+                self.scheduleMonthlyRefresh()
+            }
+        }
+        scheduleMonthlyRefresh()
         return true
     }
 
@@ -47,7 +60,27 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         completionHandler()
     }
 
+    func scheduleMonthlyRefresh() {
+        let request = BGAppRefreshTaskRequest(identifier: "com.nurvakti.monthly.refresh")
+        request.earliestBeginDate = Calendar.current.nextFirstOfMonth()
+        try? BGTaskScheduler.shared.submit(request)
+    }
+
     private func checkNotificationStatus() {
         UNUserNotificationCenter.current().getNotificationSettings { _ in }
+    }
+}
+
+// ── Calendar Extension for Monthly Refresh ────────────────────────
+extension Calendar {
+    func nextFirstOfMonth() -> Date {
+        var components = dateComponents([.year, .month], from: Date())
+        if let month = components.month {
+            components.month = month + 1
+        }
+        components.day = 1
+        components.hour = 3
+        components.minute = 0
+        return date(from: components) ?? Date().addingTimeInterval(86400 * 28)
     }
 }

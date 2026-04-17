@@ -1,43 +1,67 @@
 import Foundation
 
-struct QuranBookmark: Codable, Identifiable {
-    let id: UUID
-    let surahNumber: Int
-    let ayahNumber: Int
-    let surahNameArabic: String
-    let surahNameLocalized: [LanguageCode: String]
-    let createdAt: Date
-    var note: String?
+public struct QuranBookmark: Codable, Identifiable {
+    public let id: UUID
+    public let surahNumber: Int
+    public let ayahNumber: Int
+    public let surahNameArabic: String
+    public let surahNameLocalized: [LanguageCode: String]
+    public let createdAt: Date
+    public var note: String?
+    
+    public init(id: UUID = UUID(), surahNumber: Int, ayahNumber: Int, surahNameArabic: String, surahNameLocalized: [LanguageCode : String], createdAt: Date = Date(), note: String? = nil) {
+        self.id = id
+        self.surahNumber = surahNumber
+        self.ayahNumber = ayahNumber
+        self.surahNameArabic = surahNameArabic
+        self.surahNameLocalized = surahNameLocalized
+        self.createdAt = createdAt
+        self.note = note
+    }
 }
 
-struct ReadingProgress: Codable {
-    var lastSurah: Int
-    var lastAyah: Int
-    var lastReadDate: Date
-    var totalAyahsRead: Int
-    var readingMode: QuranReadingMode = .withTranslation
+public struct ReadingProgress: Codable {
+    public var lastSurah: Int
+    public var lastAyah: Int
+    public var lastReadDate: Date
+    public var totalAyahsRead: Int
+    public var readingMode: QuranReadingMode = .withTranslation
     
-    static func load() -> ReadingProgress {
+    public init(lastSurah: Int, lastAyah: Int, lastReadDate: Date, totalAyahsRead: Int, readingMode: QuranReadingMode = .withTranslation) {
+        self.lastSurah = lastSurah
+        self.lastAyah = lastAyah
+        self.lastReadDate = lastReadDate
+        self.totalAyahsRead = totalAyahsRead
+        self.readingMode = readingMode
+    }
+    
+    public static func load() -> ReadingProgress {
         PersistenceService.shared.load(key: "reading_progress", as: ReadingProgress.self) ?? 
         ReadingProgress(lastSurah: 1, lastAyah: 1, lastReadDate: Date(), totalAyahsRead: 0, readingMode: .withTranslation)
     }
     
-    func save() {
+    public func save() {
         PersistenceService.shared.save(self, key: "reading_progress")
     }
 }
 
-struct HatimProgress: Codable {
-    var currentPage: Int // 1-604
-    var completedCount: Int
-    var lastUpdated: Date
+public struct HatimProgress: Codable {
+    public var currentPage: Int // 1-604
+    public var completedCount: Int
+    public var lastUpdated: Date
     
-    static func load() -> HatimProgress {
+    public init(currentPage: Int, completedCount: Int, lastUpdated: Date) {
+        self.currentPage = currentPage
+        self.completedCount = completedCount
+        self.lastUpdated = lastUpdated
+    }
+    
+    public static func load() -> HatimProgress {
         PersistenceService.shared.load(key: "hatim_progress", as: HatimProgress.self) ??
         HatimProgress(currentPage: 1, completedCount: 0, lastUpdated: Date())
     }
     
-    func save() {
+    public func save() {
         PersistenceService.shared.save(self, key: "hatim_progress")
     }
 }

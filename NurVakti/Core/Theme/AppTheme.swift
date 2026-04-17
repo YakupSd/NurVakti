@@ -2,22 +2,43 @@ import SwiftUI
 
 // MARK: - App Colors
 extension Color {
-    static let nurGold       = Color(hex: "#C9A84C")
-    static let nurGoldLight  = Color(hex: "#FFD700")
-    static let nurNight      = Color(hex: "#0D1B2A")
-    static let nurDawnTop    = Color(hex: "#FF6B6B")
-    static let nurDawnBot    = Color(hex: "#FFE66D")
-    static let nurDayTop     = Color(hex: "#74B9FF")
-    static let nurDayBot     = Color(hex: "#0984E3")
-    static let nurSunsetTop  = Color(hex: "#FD79A8")
-    static let nurSunsetBot  = Color(hex: "#6C5CE7")
-    static let nurMidTop     = Color(hex: "#2C3E50")
-    static let nurMidBot     = Color(hex: "#000000")
+    public static let nurGold       = Color(hex: "#C9A84C")
+    public static let nurGoldLight  = Color(hex: "#FFD700")
+    public static let nurNight      = Color(hex: "#0D1B2A")
+    public static let nurDawnTop    = Color(hex: "#FF6B6B")
+    public static let nurDawnBot    = Color(hex: "#FFE66D")
+    public static let nurDayTop     = Color(hex: "#74B9FF")
+    public static let nurDayBot     = Color(hex: "#0984E3")
+    public static let nurSunsetTop  = Color(hex: "#FD79A8")
+    public static let nurSunsetBot  = Color(hex: "#6C5CE7")
+    public static let nurMidTop     = Color(hex: "#2C3E50")
+    public static let nurMidBot     = Color(hex: "#000000")
+    public static let nurDarkBlue   = Color(hex: "#0A0E17")
+    public static let nurOlive      = Color(hex: "#4A5D23")
+    public static let nurOffWhite   = Color(hex: "#F8F9FA")
+    
+    // MARK: - Light Green Theme Palette
+    public static let nurLightGreenBg      = Color(hex: "#F4F9F4")
+    public static let nurLightGreenSurface = Color(hex: "#FFFFFF")
+    public static let nurLightGreenPrimary = Color(hex: "#1B5E20")
+    public static let nurLightGreenSecondary = Color(hex: "#4CAF50")
+    public static let nurLightGreenBorder   = Color(hex: "#E0E8E0")
+    
+    // MARK: - Prayer Guide Redesign Colors
+    public static let prayerBgTop      = Color(hex: "#1A1F3A")
+    public static let prayerBgBot      = Color(hex: "#2D3561")
+    public static let prayerCard       = Color(hex: "#2C3555")
+    public static let prayerGold       = Color(hex: "#FFD700")
+    public static let prayerSkyBlue    = Color(hex: "#4A90E2")
+    public static let prayerLightGray  = Color(hex: "#B8C5D6")
+    public static let prayerOrange     = Color(hex: "#FFA500")
+    public static let prayerDarkText   = Color(hex: "#1A1F3A")
+    public static let prayerBarPending = Color(hex: "#4A5568")
 }
 
 // MARK: - Hex Initializer
 extension Color {
-    init(hex: String) {
+    public init(hex: String) {
         let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
         var int: UInt64 = 0
         Scanner(string: hex).scanHexInt64(&int)
@@ -70,22 +91,22 @@ struct NurBodyModifier: ViewModifier {
 }
 
 extension View {
-    func nurCardStyle() -> some View {
+    public func nurCardStyle() -> some View {
         self.modifier(NurCardModifier())
     }
     
-    func nurTitleStyle(size: FontSize) -> some View {
+    public func nurTitleStyle(size: FontSize) -> some View {
         self.modifier(NurTitleModifier(size: size))
     }
     
-    func nurBodyStyle(size: FontSize) -> some View {
+    public func nurBodyStyle(size: FontSize) -> some View {
         self.modifier(NurBodyModifier(size: size))
     }
 }
 
 // MARK: - Font Helpers
 extension FontSize {
-    var titleFont: Font {
+    public var titleFont: Font {
         switch self {
         case .small: return .system(size: 20, weight: .bold)
         case .medium: return .system(size: 24, weight: .bold)
@@ -94,7 +115,7 @@ extension FontSize {
         }
     }
     
-    var bodyFont: Font {
+    public var bodyFont: Font {
         switch self {
         case .small: return .system(size: 14)
         case .medium: return .system(size: 16)
@@ -103,7 +124,7 @@ extension FontSize {
         }
     }
     
-    var captionFont: Font {
+    public var captionFont: Font {
         switch self {
         case .small: return .system(size: 12)
         case .medium: return .system(size: 13)

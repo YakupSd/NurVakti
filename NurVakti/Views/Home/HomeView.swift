@@ -1,222 +1,531 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var vm: HomeViewModel
+    @ObservedObject var vm: HomeViewModel
     @EnvironmentObject var localization: LocalizationManager
     @EnvironmentObject var router: AppRouter
-    @State private var todayEvent: IslamicEvent? = IslamicCalendarService.shared.todayEvent()
-    @State private var showEventBanner = true
-
+    @EnvironmentObject var library: DuaLibraryService
+    
+    @State private var selectedShareContent: DailyContent?
+    @State private var activeRoutineSlot: RoutineSlot = .none
+    @State private var showLibrary = false
+    
+    let skyView: AnyView
+    
+    init(skyView: AnyView, vm: HomeViewModel) {
+        self.skyView = skyView
+        self._vm = ObservedObject(wrappedValue: vm)
+    }
+    
     var body: some View {
-        ZStack {
-            // New Dynamic Premium Background
-            DynamicHomeBackground(theme: vm.currentTheme)
+        ZStack(alignment: .top) {
+            // Layer 1: Sky simulation (existing, passed in)
+            skyView
                 .ignoresSafeArea()
             
-            // KATMAN 3: Güneş/Ay Yayı (Overlay)
-            VStack {
-                SunMoonArcView(sunPosition: vm.currentTheme.sunPosition, 
-                               isMoon: vm.currentTheme.starOpacity > 0.5, 
-                               theme: vm.currentTheme)
-                    .offset(y: 50)
-                Spacer()
-            }
-            .ignoresSafeArea()
+            // Top shadow gradient for visibility
+            LinearGradient(colors: [.black.opacity(0.35), .clear], startPoint: .top, endPoint: .bottom)
+                .frame(height: 120)
+                .ignoresSafeArea()
             
-            // KATMAN 4: İçerik
-            if vm.isLoading {
-                VStack {
-                    ProgressView()
-                        .scaleEffect(1.5)
-                        .tint(.white)
-                    Text(localization.localizedString("general.loading"))
-                        .foregroundColor(.white)
-                        .padding(.top)
-                }
-            } else {
-                ScrollView(showsIndicators: false) {
-                    VStack(spacing: 24) {
+            // Layer 2: Scrollable content
+            ScrollView(.vertical, showsIndicators: false) {
+                VStack(spacing: 0) {
+                    SkyHeroSection()
+                    PrayerMiniStrip()
+                    
+                    VStack(spacing: 20) {
+                        FavouritesStrip()
+                            .padding(.horizontal, 14)
                         
-                        // ── İSLAMİ ÖZEL GÜN BANNER ──
-                        if let event = todayEvent, showEventBanner {
-                            IslamicEventBanner(
-                                event: event,
-                                language: localization.currentLanguage
-                            ) {
-                                withAnimation { showEventBanner = false }
-                            }
-                        }
-
-                        // ── GÖNÜL REHBERİ (Ayet/Hadis) ──
-                        if let guidance = vm.dailyGuidance {
-                            DailyGuidanceView(item: guidance, 
-                                              language: localization.currentLanguage)
-                        }
-
-                        // ── ÜSTBAR ──
-                        HStack {
-                            VStack(alignment: .leading, spacing: 4) {
-                                HStack(spacing: 8) {
-                                    Image(systemName: "location.fill")
-                                        .font(.system(size: 14))
-                                    Text(vm.cityName)
-                                        .nurFont(24, weight: .bold)
-                                }
-                                .foregroundColor(.white)
-                                .shadow(color: .black.opacity(0.3), radius: 4, x: 0, y: 2)
-                                
-                                Text(vm.currentTheme.ambientLabel)
-                                    .nurFont(14, weight: .medium)
-                                    .italic()
-                                    .foregroundColor(.white.opacity(0.7))
-                                    .shadow(color: .black.opacity(0.3), radius: 2, x: 0, y: 1)
-                            }
-                            
-                            Spacer()
-                            
-                            if let prayers = vm.todayPrayers {
-                                HijriDateBadge(hijriDate: prayers.hijriDate, 
-                                               miladi: Date(), 
-                                               language: localization.currentLanguage, 
-                                               fontSize: .medium)
-                            }
-                            
-                            Button(action: { 
-                                router.push(to: .settings)
-                            }) {
-                                Image(systemName: "gearshape.fill")
-                                    .font(.title3)
-                                    .foregroundColor(.white.opacity(0.8))
-                                    .padding(8)
-                                    .background(.ultraThinMaterial)
-                                    .clipShape(Circle())
-                            }
-                        }
-                        .padding(.top, 20)
-                        
-                        // ── SKY SIMULATION & COUNTDOWN ──
-                        if let next = vm.nextPrayer {
-                            SkySimulationCard(
-                                nextPrayerName: next.name,
-                                timeRemaining: vm.todayPrayers != nil ? next.time.timeIntervalSince(Date()) : 0,
-                                totalInterval: 14400, // TODO: Optimize based on actual interval
-                                language: localization.currentLanguage
+                        if vm.currentRoutineSlot != .none {
+                            DailyRoutineCard(
+                                slot: vm.currentRoutineSlot,
+                                items: vm.currentRoutineSlot == .morning ? library.morningRoutine : library.eveningRoutine,
+                                completedCount: vm.currentRoutineSlot == .morning ? library.morningCompletedCount : library.eveningCompletedCount
                             )
-                            .padding(.vertical, 10)
                         }
                         
-                        // ── VAKİTLER LİSTESİ ──
-                        NurCard(title: localization.localizedString("home.prayerTimesTitle"), icon: "timer", padding: 8) {
-                            VStack(spacing: 4) {
-                                if let prayers = vm.todayPrayers {
-                                    ForEach(PrayerName.allCases, id: \.self) { name in
-                                        PrayerTimeRow(prayer: name, 
-                                                       time: prayerDate(for: name, in: prayers), 
-                                                       isActive: vm.nextPrayer?.name == name, 
-                                                       isPast: isPast(prayer: name, in: prayers),
-                                                       progress: vm.prayerProgress[name],
-                                                       remainingTime: vm.remTimeStrings[name],
-                                                       notificationEnabled: vm.isNotificationEnabled(for: name), 
-                                                       fontSize: .medium, 
-                                                       language: localization.currentLanguage) {
-                                            vm.toggleNotification(for: name)
-                                        }
-                                        
-                                        // Divider removed as we now use Card spacing
-
-                                    }
-                                }
-                            }
-                        }
-                        
-                        // ── QUICK ACCESS ──
-                        VStack(spacing: 12) {
-                            HStack(spacing: 12) {
-                                quickAccessButton(title: localization.localizedString("menu_quran"), icon: "book.fill") {
-                                    NotificationCenter.default.post(name: Notification.Name("NavigateToTab"), object: 1)
-                                }
-                                quickAccessButton(title: localization.localizedString("menu_calendar"), icon: "calendar") {
-                                    router.push(to: .calendar)
-                                }
-                            }
-                            HStack(spacing: 12) {
-                                quickAccessButton(title: localization.localizedString("menu_dhikr"), icon: "sparkles") {
-                                    NotificationCenter.default.post(name: Notification.Name("NavigateToTab"), object: 2)
-                                }
-                                quickAccessButton(title: localization.localizedString("menu_qibla"), icon: "safari.fill") {
-                                    router.push(to: .qibla)
-                                }
-                            }
-                            HStack(spacing: 12) {
-                                quickAccessButton(title: localization.localizedString("menu_zakat"), icon: "dollarsign.circle.fill") {
-                                    router.push(to: .zakat)
-                                }
-                                quickAccessButton(title: localization.localizedString("quran.tajweedFatiha"), icon: "book.closed.fill") {
-                                    router.push(to: .mushaf())
-                                }
-                            }
-                        }
-                        
-                        // ── TESBİHAT BUTONU ──
-                        Button(action: { 
-                            router.push(to: .tasbih)
-                        }) {
-                            HStack {
-                                Image(systemName: "hand.tap.fill")
-                                Text(localization.localizedString("tasbih_start"))
-                                    .nurFont(16, weight: .bold)
-                            }
-                            .foregroundColor(.black)
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 16)
-                            .background(
-                                LinearGradient(colors: [.nurGold, .nurGold.opacity(0.8)], startPoint: .top, endPoint: .bottom)
-                            )
-                            .cornerRadius(16)
-                            .shadow(color: .nurGold.opacity(0.3), radius: 10, y: 5)
-                        }
-                        .padding(.top, 8)
-                        
-                        // ── ALT BİLGİ BANDI ──
-                        Text(String(format: localization.localizedString("completed_prayers_count"), vm.completedPrayers))
-                            .nurFont(12)
-                            .foregroundColor(.white.opacity(0.5))
-                            .padding(.bottom, 30)
+                        ContentCardsSection()
                     }
-                    .padding(.horizontal, 16)
+                    .padding(.top, 10)
                 }
+            }
+            
+            // Layer 3: Custom Loading Overlay
+            if vm.isLoading {
+                NurLoadingView()
+                    .transition(.opacity.animation(.easeInOut(duration: 0.5)))
+                    .zIndex(100) // Ensure it stays on top
             }
         }
         .task { await vm.onAppear() }
-        .task {
-            await IslamicCalendarService.shared.scheduleEventNotifications(
-                language: localization.currentLanguage
-            )
+        .sheet(isPresented: $showLibrary) {
+            DuaLibraryView(initialMode: activeRoutineSlot == .none ? .browse : .pickRoutine(activeRoutineSlot))
         }
-        .onChange(of: localization.currentLanguage) { lang in
-            vm.languageDidChange(lang)
+        .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("OpenDuaLibrary"))) { note in
+            if let slot = note.object as? RoutineSlot {
+                activeRoutineSlot = slot
+                showLibrary = true
+            }
+        }
+        .sheet(item: $selectedShareContent) { content in
+            GuidanceShareSheet(content: content)
         }
     }
     
-    private func quickAccessButton(title: String, icon: String, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            VStack(spacing: 8) {
-                Image(systemName: icon)
-                    .font(.system(size: 24))
-                Text(title)
-                    .nurFont(14, weight: .bold)
-                    .lineLimit(2)
-                    .minimumScaleFactor(0.7)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, 4)
+    // MARK: - SECTION 1: SkyHeroSection
+    @ViewBuilder
+    private func SkyHeroSection() -> some View {
+        VStack(spacing: 20) {
+            // Top Bar
+            HStack {
+                HStack(spacing: 6) {
+                    Image(systemName: "mappin.and.ellipse")
+                        .font(.system(size: 14))
+                    Text(vm.cityName)
+                        .font(.system(size: 15, weight: .semibold))
+                }
+                .foregroundColor(.white)
+                .shadow(color: .black.opacity(0.4), radius: 3)
+                
+                Spacer()
+                
+                if let prayers = vm.todayPrayers {
+                    HijriDateBadge(hijriDate: prayers.hijriDate, 
+                                   miladi: Date(), 
+                                   language: localization.currentLanguage, 
+                                   fontSize: .medium)
+                        .shadow(color: .black.opacity(0.3), radius: 2)
+                }
             }
-            .frame(maxWidth: .infinity)
-            .frame(height: 100)
-            .background(.ultraThinMaterial)
-            .cornerRadius(20)
-            .foregroundColor(.white)
-            .shadow(color: .black.opacity(0.1), radius: 10)
+            .padding(.horizontal, 20)
+            .padding(.top, 10)
+            
+            // Center Hero
+            VStack(spacing: 4) {
+                Text(localization.localizedString("home.nextPrayer").uppercased())
+                    .font(.system(size: 12, weight: .bold))
+                    .kerning(3)
+                    .foregroundColor(.white.opacity(0.9))
+                    .shadow(color: .black.opacity(0.5), radius: 2)
+                
+                if let next = vm.nextPrayer {
+                    HStack(spacing: 10) {
+                        Text(localization.localizedString("prayer.\(next.name.rawValue)"))
+                        Text("·")
+                        Text(next.name.arabicName)
+                    }
+                    .font(.system(size: 34, weight: .bold))
+                    .foregroundColor(.white)
+                    .shadow(color: .black.opacity(0.4), radius: 4)
+                }
+                
+                Text(vm.countdown)
+                    .font(.system(size: 20, design: .monospaced).monospacedDigit())
+                    .fontWeight(.bold)
+                    .foregroundColor(.nurGold)
+                    .shadow(color: .nurGold.opacity(0.3), radius: 6)
+                    .padding(.top, 4)
+            }
+            .shadow(color: .black.opacity(0.5), radius: 4)
+            .padding(.top, 10)
         }
+        .frame(height: 200)
+    }
+    
+    // MARK: - SECTION 2: PrayerMiniStrip
+    @ViewBuilder
+    private func PrayerMiniStrip() -> some View {
+        VStack(spacing: 12) {
+            ScrollView(.horizontal, showsIndicators: false) {
+                LazyHStack(spacing: 12) {
+                    if let prayers = vm.todayPrayers {
+                        ForEach(PrayerName.allCases, id: \.self) { name in
+                            PrayerPillView(
+                                name: name,
+                                time: vm.formattedTime(prayerDate(for: name, in: prayers), language: localization.currentLanguage),
+                                isActive: vm.nextPrayer?.name == name
+                            )
+                        }
+                    }
+                }
+                .padding(.horizontal, 16)
+            }
+            .frame(height: 60)
+            .background(.ultraThinMaterial.opacity(0.8))
+            
+            HStack(spacing: 8) {
+                Text(String(format: localization.localizedString("home.completedToday"), vm.completedPrayers))
+                Text("·")
+                Text(localization.localizedString("home.allCompleted") + " →")
+            }
+            .font(.system(size: 12, weight: .bold))
+            .foregroundColor(.white)
+            .shadow(color: .black.opacity(0.5), radius: 4)
+            .padding(.vertical, 8)
+            .padding(.horizontal, 20)
+            .background(.white.opacity(0.1))
+            .cornerRadius(20)
+            .onTapGesture {
+                HapticManager.shared.tap()
+                NotificationCenter.default.post(name: Notification.Name("NavigateToTab"), object: 1)
+            }
+        }
+    }
+    
+    // MARK: - SECTION 3: ContentCardsSection
+    @ViewBuilder
+    private func ContentCardsSection() -> some View {
+        VStack(spacing: 12) {
+            // Card A: Günün Ayeti
+            NurCardWithHeader(
+                title: localization.localizedString("guidance.dailyAyat"),
+                icon: "sparkles",
+                content: vm.dailyAyah
+            )
+            
+            // Card B: Günün Duası
+            NurCardWithHeader(
+                title: localization.localizedString("guidance.dailyHadith"),
+                icon: "hands.sparkles.fill",
+                content: vm.dailyDua
+            )
+            
+            // Tesbihat Button
+            Button(action: { 
+                HapticManager.shared.tap()
+                router.pushTo(view: MainNavigationView.builder.makeView(
+                    TesbihatView(),
+                    withNavigationTitle: "Tesbihat"
+                ))
+            }) {
+                HStack(spacing: 10) {
+                    Image(systemName: "circle.grid.3x3.fill")
+                        .font(.system(size: 16))
+                    Text(localization.localizedString("tasbih_start"))
+                        .font(.system(size: 15, weight: .semibold))
+                }
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 16)
+                .background(
+                    LinearGradient(
+                        colors: [Color(hex: "#C9A84C"), Color(hex: "#8B6914")],
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    )
+                )
+                .cornerRadius(16)
+            }
+            .buttonStyle(ScaleButtonStyle())
+            .padding(.horizontal, 14)
+            
+            // Zikir Progress Row
+            VStack(spacing: 12) {
+                HStack {
+                    Label(localization.localizedString("dhikr.dailyTotal"), systemImage: "bolt.heart.fill")
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundColor(.white.opacity(0.6))
+                    
+                    Spacer()
+                    
+                    Text("\(vm.dhikrCount) / \(vm.dhikrTarget)")
+                        .font(.system(size: 12, design: .monospaced))
+                        .fontWeight(.bold)
+                        .foregroundColor(.nurGold)
+                }
+                
+                GeometryReader { geo in
+                    ZStack(alignment: .leading) {
+                        RoundedRectangle(cornerRadius: 4)
+                            .fill(Color.white.opacity(0.1))
+                        
+                        RoundedRectangle(cornerRadius: 4)
+                            .fill(
+                                LinearGradient(
+                                    colors: [.nurGold, .nurGold.opacity(0.6)],
+                                    startPoint: .leading,
+                                    endPoint: .trailing
+                                )
+                            )
+                            .frame(width: geo.size.width * CGFloat(vm.dhikrProgress))
+                            .shadow(color: .nurGold.opacity(0.3), radius: 4)
+                    }
+                }
+                .frame(height: 6)
+            }
+            .padding(16)
+            .background(.ultraThinMaterial)
+            .cornerRadius(16)
+            .overlay(
+                RoundedRectangle(cornerRadius: 16)
+                    .stroke(Color.white.opacity(0.05), lineWidth: 1)
+            )
+            .padding(.horizontal, 14)
+            
+            // Quick Access Grid — Tüm özellikler
+            VStack(spacing: 8) {
+                // Row 1: Namaz ile ilgili
+                HStack(spacing: 8) {
+                    QuickAccessCard(
+                        icon: "figure.stand",
+                        iconBg: Color(hex: "#1A6B4A").opacity(0.35),
+                        title: localization.localizedString("prayerGuide.howToPray"),
+                        subtitle: localization.localizedString("guidance.prayerSteps"),
+                        action: { 
+                            router.pushTo(view: MainNavigationView.builder.makeView(
+                                HowToPrayView(),
+                                withNavigationTitle: localization.localizedString("prayerGuide.howToPray")
+                            ))
+                        }
+                    )
+                    QuickAccessCard(
+                        icon: "text.book.closed.fill",
+                        iconBg: Color(hex: "#3D2B8A").opacity(0.35),
+                        title: localization.localizedString("prayerGuide.title"),
+                        subtitle: localization.localizedString("guidance.namazGuide"),
+                        action: { 
+                            router.pushTo(view: MainNavigationView.builder.makeView(
+                                PrayerGuideMainView(),
+                                withNavigationTitle: localization.localizedString("prayerGuide.title")
+                            ))
+                        }
+                    )
+                }
+                
+                // Row 2: Dualar
+                HStack(spacing: 8) {
+                    QuickAccessCard(
+                        icon: "hands.sparkles.fill",
+                        iconBg: Color(hex: "#8B3A62").opacity(0.35),
+                        title: localization.localizedString("prayerGuide.duas"),
+                        subtitle: localization.localizedString("guidance.namazDuas"),
+                        action: { 
+                            router.pushTo(view: MainNavigationView.builder.makeView(
+                                PrayerDuasView(),
+                                withNavigationTitle: localization.localizedString("prayerGuide.duas")
+                            ))
+                        }
+                    )
+                    QuickAccessCard(
+                        icon: "arrow.turn.down.right",
+                        iconBg: Color(hex: "#2E5C8A").opacity(0.35),
+                        title: localization.localizedString("prayerGuide.postPrayer"),
+                        subtitle: localization.localizedString("guidance.afterPrayer"),
+                        action: { 
+                            router.pushTo(view: MainNavigationView.builder.makeView(
+                                PostPrayerDuasView(),
+                                withNavigationTitle: localization.localizedString("prayerGuide.postPrayer")
+                            ))
+                        }
+                    )
+                }
+                
+                // Row 3: Araçlar
+                HStack(spacing: 8) {
+                    QuickAccessCard(
+                        icon: "sparkles.rectangle.stack.fill",
+                        iconBg: Color(hex: "5D3FD3").opacity(0.3),
+                        title: localization.localizedString("prayerGuide.monthlySpecial"),
+                        subtitle: localization.localizedString("guidance.specialDays"),
+                        action: { 
+                            router.pushTo(view: MainNavigationView.builder.makeView(
+                                SpecialPrayersView(),
+                                withNavigationTitle: localization.localizedString("prayerGuide.monthlySpecial")
+                            ))
+                        }
+                    )
+                    QuickAccessCard(
+                        icon: "location.north.fill",
+                        iconBg: Color(hex: "185FA5").opacity(0.3),
+                        title: localization.localizedString("home.qiblaShortcut"),
+                        subtitle: vm.qiblaDirectionText,
+                        action: { 
+                            router.pushTo(view: MainNavigationView.builder.makeView(
+                                QiblaView(),
+                                withNavigationTitle: localization.localizedString("home.qiblaShortcut")
+                            ))
+                        }
+                    )
+                }
+                
+                // Row 4: Daha fazla
+                HStack(spacing: 8) {
+                    QuickAccessCard(
+                        icon: "calendar.badge.clock",
+                        iconBg: Color.nurGold.opacity(0.2),
+                        title: localization.localizedString("home.calendar"),
+                        subtitle: vm.nextReligiousDay,
+                        action: { 
+                            router.pushTo(view: MainNavigationView.builder.makeView(
+                                IslamicCalendarView(),
+                                withNavigationTitle: localization.localizedString("home.calendar")
+                            ))
+                        }
+                    )
+                    QuickAccessCard(
+                        icon: "sparkles",
+                        iconBg: Color.nurOlive.opacity(0.2),
+                        title: "Esmaü'l-Hüsna",
+                        subtitle: "Allah'ın 99 İsmi",
+                        action: { 
+                            router.pushTo(view: MainNavigationView.builder.makeView(
+                                EsmaulHusnaView(),
+                                withNavigationTitle: "Esmaü'l-Hüsna"
+                            ))
+                        }
+                    )
+                }
+                
+                // Row 5: Zekât
+                HStack(spacing: 8) {
+                    QuickAccessCard(
+                        icon: "scalemass.fill",
+                        iconBg: Color(hex: "B8860B").opacity(0.3),
+                        title: localization.localizedString("home.zakatCalculator"),
+                        subtitle: localization.localizedString("guidance.zakatDesc"),
+                        action: { 
+                            router.pushTo(view: MainNavigationView.builder.makeView(
+                                ZakatCalculatorView(),
+                                withNavigationTitle: localization.localizedString("home.zakatCalculator")
+                            ))
+                        }
+                    )
+                    Spacer()
+                        .frame(maxWidth: .infinity)
+                }
+            }
+            .padding(.horizontal, 14)
+        }
+        .padding(.top, 40)
+        .padding(.bottom, 150) // More space for tab bar
+        .background(
+            VStack(spacing: 0) {
+                LinearGradient(
+                    colors: [.clear, Color(hex: "#0f0a1e")],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+                .frame(height: 100)
+                
+                Color(hex: "#0f0a1e")
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
+            .offset(y: -50)
+            .padding(.bottom, -1000) // Deep floor to ensure no gaps ever
+        )
+    }
+    
+    // MARK: - Sub-Components
+    private func PrayerPillView(name: PrayerName, time: String, isActive: Bool) -> some View {
+        VStack(spacing: 3) {
+            Text(localization.localizedString("prayer.\(name.rawValue)"))
+                .font(.system(size: 9, weight: .medium))
+                .foregroundColor(isActive ? .nurGold : .white.opacity(0.5))
+            
+            Text(time)
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundColor(.nurGold)
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 8)
+        .background(
+            ZStack(alignment: .leading) {
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(isActive ? Color.nurGold.opacity(0.1) : Color.white.opacity(0.05))
+                
+                if isActive {
+                    GeometryReader { geo in
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(Color.nurGold.opacity(0.15))
+                            .frame(width: geo.size.width * CGFloat(vm.prayerProgress[name] ?? 0))
+                    }
+                }
+            }
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .strokeBorder(isActive ? Color.nurGold.opacity(0.4) : Color.white.opacity(0.08), lineWidth: 1)
+        )
+    }
+    
+    private func NurCardWithHeader(title: String, icon: String, content: DailyContent) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Label(title.uppercased(), systemImage: icon)
+                    .font(.system(size: 10, weight: .medium))
+                    .foregroundColor(.white.opacity(0.5))
+                    .tracking(1.5)
+                
+                Spacer()
+                
+                HStack(spacing: 8) {
+                    // Copy Button
+                    Button(action: { 
+                        HapticManager.shared.light()
+                        UIPasteboard.general.string = content.translation(for: localization.currentLanguage) 
+                    }) {
+                        Image(systemName: "doc.on.doc")
+                            .font(.system(size: 10))
+                            .foregroundColor(.white.opacity(0.6))
+                            .padding(6)
+                            .background(Color.white.opacity(0.1))
+                            .clipShape(Circle())
+                    }
+
+                    Button(action: { 
+                        HapticManager.shared.tap()
+                        selectedShareContent = content 
+                    }) {
+                        HStack(spacing: 4) {
+                            Image(systemName: "square.and.arrow.up")
+                                .font(.system(size: 10))
+                            Text(localization.localizedString("general.share"))
+                                .font(.system(size: 9, weight: .medium))
+                        }
+                        .foregroundColor(.nurGold)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                        .background(Color.nurGold.opacity(0.12))
+                        .cornerRadius(8)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .strokeBorder(Color.nurGold.opacity(0.3), lineWidth: 1)
+                        )
+                    }
+                }
+            }
+            
+            Text(content.arabicText)
+                .font(.custom("KFGQPCUthmanicScriptHAFS", size: 16))
+                .multilineTextAlignment(.trailing)
+                .frame(maxWidth: .infinity, alignment: .trailing)
+                .environment(\.layoutDirection, .rightToLeft)
+                .foregroundColor(.white)
+                .lineSpacing(6)
+            
+            Divider().opacity(0.15).padding(.vertical, 6)
+            
+            Text(content.translation(for: localization.currentLanguage))
+                .font(.system(size: 12, weight: .light))
+                .foregroundColor(.white.opacity(0.6))
+                .italic()
+                .lineSpacing(3)
+            
+            Text(content.source)
+                .font(.system(size: 9))
+                .foregroundColor(.nurGold.opacity(0.7))
+                .padding(.top, 4)
+        }
+        .padding(14)
+        .background(.ultraThinMaterial)
+        .cornerRadius(18)
+        .overlay(
+            RoundedRectangle(cornerRadius: 18)
+                .stroke(Color.white.opacity(0.1), lineWidth: 1)
+        )
+        .padding(.horizontal, 14)
     }
     
     private func prayerDate(for name: PrayerName, in prayers: PrayerTime) -> Date {
@@ -229,10 +538,5 @@ struct HomeView: View {
         case .maghrib: return prayers.maghrib
         case .isha: return prayers.isha
         }
-    }
-    
-    private func isPast(prayer: PrayerName, in prayers: PrayerTime) -> Bool {
-        let date = prayerDate(for: prayer, in: prayers)
-        return date < Date()
     }
 }

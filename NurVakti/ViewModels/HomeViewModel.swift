@@ -4,6 +4,8 @@ import CoreLocation
 
 @MainActor
 final class HomeViewModel: ObservableObject {
+    public static let shared = HomeViewModel()
+    
     // Services
     private let prayerService: PrayerTimeService
     private let locationService: LocationService
@@ -24,6 +26,21 @@ final class HomeViewModel: ObservableObject {
     @Published var dailyGuidance: GuidanceItem? = nil
     @Published var prayerProgress: [PrayerName: Double] = [:]
     @Published var remTimeStrings: [PrayerName: String] = [:]
+    
+    // NEW additions:
+    @Published var dailyAyah: DailyContent = .placeholder
+    @Published var dailyDua: DailyContent = .placeholder
+    @Published var dhikrCount: Int = 0
+    @Published var dhikrTarget: Int = 99
+    @Published var dhikrProgress: Double = 0
+    @Published var lastReadSurah: String = "Bakara · 2. Sure"
+    @Published var qiblaDirectionText: String = "158° · Güneydoğu"
+    @Published var nextReligiousDay: String = ""
+    @Published var currentRoutineSlot: RoutineSlot = .none
+    
+    // UI Animation State
+    @Published var sunPosition: Double = 0.5
+    @Published var isNight: Bool = false
     
     private var cancellables = Set<AnyCancellable>()
     private var hasAppeared = false
@@ -93,8 +110,82 @@ final class HomeViewModel: ObservableObject {
         }
         
         self.dailyGuidance = GuidanceService.shared.getDailyGuidance(for: persistService.settings.language)
+        loadDailyContent(language: persistService.settings.language)
+        
+        updateNextReligiousDay(language: persistService.settings.language)
+        updateRoutineSlot()
+        updateDhikrStatus()
+        updateReadingProgress()
         
         languageDidChange(persistService.settings.language)
+    }
+    
+    func loadDailyContent(language: LanguageCode) {
+        // Today's indices based on year day
+        let dayIndex = Calendar.current.ordinality(of: .day, in: .year, for: Date()) ?? 1
+        
+        Task {
+            // Fetch dynamic Ayah based on day index
+            self.dailyAyah = DailyAyahProvider.ayah(for: dayIndex, language: language)
+            
+            // Fetch dynamic Dua
+            self.dailyDua = DailyDuaProvider.dua(for: dayIndex, language: language)
+        }
+    }
+    
+    // MARK: - API Content Fetchers
+    
+    func loadDailyAyah(surah: Int, ayah: Int) async -> DailyContent {
+        let editions = [
+            "tr": "tr.diyanet",
+            "en": "en.sahih", 
+            "de": "de.aburida",
+            "pt": "pt.elhayek",
+            "ar": "ar.muyassar"
+        ]
+        
+        var translations: [String: String] = [:]
+        var arabicText = ""
+        var source = ""
+        
+        // Fetch 5 editions in parallel
+        await withTaskGroup(of: (String, String).self) { group in
+            for (langCode, edition) in editions {
+                group.addTask {
+                    let url = URL(string: "https://api.alquran.cloud/v1/ayah/\(surah):\(ayah)/\(edition)")!
+                    guard let (data, _) = try? await URLSession.shared.data(from: url),
+                          let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+                          let dataObj = json["data"] as? [String: Any],
+                          let text = dataObj["text"] as? String
+                    else { return (langCode, "") }
+                    return (langCode, text)
+                }
+            }
+            
+            for await (lang, text) in group {
+                translations[lang] = text
+            }
+        }
+        
+        // Fetch Arabic text separately
+        let url = URL(string: "https://api.alquran.cloud/v1/ayah/\(surah):\(ayah)/quran-uthmani")!
+        if let (data, _) = try? await URLSession.shared.data(from: url),
+           let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+           let dataObj = json["data"] as? [String: Any],
+           let text = dataObj["text"] as? String,
+           let surahObj = dataObj["surah"] as? [String: Any],
+           let surahName = surahObj["englishName"] as? String {
+            arabicText = text
+            source = "\(surahName), \(ayah)"
+        }
+        
+        return DailyContent(
+            id: UUID(),
+            arabicText: arabicText,
+            source: source,
+            type: .ayat,
+            translations: translations
+        )
     }
     
     private func handleLocationUpdate(_ location: CLLocation, force: Bool = false) async {
@@ -104,8 +195,8 @@ final class HomeViewModel: ObservableObject {
         
         let settings = persistService.settings
         
-        // 1. Mesafe kontrolü: 10km'den az değişim varsa ve bugün için vakitler varsa çekme
-        if !force, distance < 10000 {
+        // 1. Mesafe kontrolü: 5km'den (GÜNCELLENDİ) az değişim varsa ve bugün için vakitler varsa çekme
+        if !force, distance < 5000 {
             if let cached = prayerService.loadCached(for: Date()) {
                 applyPrayers(cached)
                 let city = (cached.cityName.isEmpty) ? persistService.lastKnownCityName : cached.cityName
@@ -166,7 +257,7 @@ final class HomeViewModel: ObservableObject {
         self.nextPrayer = prayerService.findNextPrayer(from: prayers)
         self.hijriText = prayers.hijriDate.formatted(for: persistService.settings.language)
         
-        if let next = nextPrayer {
+        if nextPrayer != nil {
             bgService.updateTheme(prayers: prayers, currentTime: Date())
         }
     }
@@ -175,6 +266,8 @@ final class HomeViewModel: ObservableObject {
         if let prayers = todayPrayers {
             self.hijriText = prayers.hijriDate.formatted(for: code)
         }
+        loadDailyContent(language: code)
+        updateNextReligiousDay(language: code)
         updateCountdown()
     }
     
@@ -195,11 +288,30 @@ final class HomeViewModel: ObservableObject {
         let seconds = Int(diff) % 60
         self.countdown = String(format: "%02d:%02d:%02d", hours, minutes, seconds)
         
+        // Update UI animation states (Sun/Moon position)
+        let components = Calendar.current.dateComponents([.hour, .minute, .second], from: Date())
+        let h = Double(components.hour ?? 0) + Double(components.minute ?? 0) / 60.0
+        
+        // Calculate sun/moon position (0...1 for arc)
+        let start = h < 6 || h >= 18 ? (h >= 18 ? 18.0 : -6.0) : 6.0
+        let duration = 12.0
+        let progress = (h - start) / duration
+        self.sunPosition = min(1.0, max(0.0, progress))
+        
+        // Update night status
+        let (phase, _, _) = SkyPhase.current(for: h)
+        let nightPhases: [SkyPhase] = [.night, .deepNight, .earlyNight, .preDawn, .dusk]
+        self.isNight = nightPhases.contains(phase)
+        
         // Tamamlanan vakit sayısını güncelle
         updateCompletedPrayersCount()
         
         // Bireysel vakit sayaçlarını ve progreslerini güncelle
         updateIndividualPrayerProgress()
+        
+        // Slot ve Dhikr güncelle
+        updateRoutineSlot()
+        updateDhikrStatus()
     }
     
     private func updateIndividualPrayerProgress() {
@@ -299,5 +411,72 @@ final class HomeViewModel: ObservableObject {
         formatter.dateFormat = "HH:mm"
         formatter.locale = language.locale
         return formatter.string(from: date)
+    }
+    
+    func updateQiblaText(degrees: Double, language: LanguageCode) {
+        let directions: [String: [LanguageCode: String]] = [
+            "N": [.tr: "Kuzey", .en: "North"],
+            "NE": [.tr: "Kuzeydoğu", .en: "Northeast"],
+            "E": [.tr: "Doğu", .en: "East"],
+            "SE": [.tr: "Güneydoğu", .en: "Southeast"],
+            "S": [.tr: "Güney", .en: "South"],
+            "SW": [.tr: "Güneybatı", .en: "Southwest"],
+            "W": [.tr: "Batı", .en: "West"],
+            "NW": [.tr: "Kuzeybatı", .en: "Northwest"]
+        ]
+        
+        let index = Int((degrees + 22.5) / 45.0) & 7
+        let keys = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"]
+        let key = keys[index]
+        let dirName = directions[key]?[language] ?? key
+        
+        self.qiblaDirectionText = "\(Int(degrees))° · \(dirName)"
+    }
+    
+    func updateNextReligiousDay(language: LanguageCode) {
+        let upcoming = IslamicCalendarService.shared.upcomingEvents(within: 365)
+        if let next = upcoming.first {
+            let diff = Calendar.current.dateComponents([.day], from: Date(), to: next.date).day ?? 0
+            let daySuffix = (language == .tr) ? "Gün" : (language == .en ? "Days" : "d")
+            self.nextReligiousDay = "\(next.event.key.name(for: language)) · \(diff) \(daySuffix)"
+        } else {
+            self.nextReligiousDay = "---"
+        }
+    }
+    
+    
+    func updateRoutineSlot() {
+        guard let prayers = todayPrayers else { return }
+        let now = Date()
+        
+        // Sabah rutini: İmsak'tan Kuşluk (Sunrise + 45dk) sonrasına kadar veya öğleye kadar?
+        // Genelde Sabah Namazı vakti sabah rutinidir.
+        if now >= prayers.fajr && now < prayers.dhuhr {
+            self.currentRoutineSlot = .morning
+        } 
+        // Akşam rutini: İkindi'den yatsı sonuna kadar.
+        else if now >= prayers.asr || now < prayers.fajr {
+            self.currentRoutineSlot = .evening
+        } 
+        else {
+            self.currentRoutineSlot = .none
+        }
+    }
+    
+    public func updateDhikrStatus() {
+        let items = persistService.dhikrItems
+        let totalCount = items.reduce(0) { $0 + $1.currentCount }
+        let totalTarget = items.reduce(0) { $0 + $1.targetCount }
+        
+        self.dhikrCount = totalCount
+        self.dhikrTarget = totalTarget > 0 ? totalTarget : 99
+        self.dhikrProgress = Double(dhikrCount) / Double(dhikrTarget)
+    }
+    
+    public func updateReadingProgress() {
+        let progress = persistService.readingProgress
+        // Ideally we should have a surah name provider, but for now we format from index
+        let surahName = PrayerGuideData.surahNames[max(1, min(114, progress.lastSurah)) - 1]
+        self.lastReadSurah = "\(surahName) · \(progress.lastSurah). Sure"
     }
 }

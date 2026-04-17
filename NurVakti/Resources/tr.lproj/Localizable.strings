@@ -289,6 +289,7 @@
 "general.share"  = "Paylaş";
 "guidance.dailyAyat" = "Günün Ayeti";
 "guidance.dailyHadith" = "Günün Hadis-i Şerifi";
+"guidance.specialDays" = "Ramazan, Kandil & Bayram Duaları";
 "calendar_title" = "Dini Günler Takvimi";
 "tasbih_title" = "Namaz Sonrası Tesbihat";
 "tasbih_start" = "Tesbihat Başlat";
@@ -324,6 +325,64 @@
 "general.next"   = "İleri";
 "general.yes"    = "Evet";
 "general.no"     = "Hayır";
+"general.login"  = "Giriş Yap";
+"general.profile" = "Profilim";
+"account.welcome" = "NurVakti Dünyasına Hoş Geldiniz";
 "completed_prayers_count" = "Bugün %d vakit tamamlandı";
 "alarm.repeatDays"    = "Tekrar Günleri";
 "alarm.everyDay"       = "Her gün";
+
+// MARK: - PRAYER GUIDE
+"prayerGuide.title" = "Namaz Rehberim";
+"prayerGuide.howToPray" = "Namaz Nasıl Kılınır?";
+"prayerGuide.howToPray.desc" = "Adım adım resimli namaz rehberi";
+"prayerGuide.duas" = "Namaz Duaları";
+"prayerGuide.duas.desc" = "Namazda okunan tüm dualar";
+"prayerGuide.tasbih" = "Tesbihat";
+"prayerGuide.tasbih.desc" = "Namaz tesbihatı ve zikir sayacı";
+"prayerGuide.postPrayer" = "Namaz Sonrası Dualar";
+"prayerGuide.postPrayer.desc" = "Ayetel Kürsi, Felak, Nas ve diğerleri";
+"prayerGuide.monthlySpecial" = "Aydan Aya Özel";
+"prayerGuide.monthlySpecial.desc" = "Hicri aya göre değişen özel içerikler.";
+"prayerGuide.specialForMonth" = "Bu Ayın Özel İçeriği";
+"prayerGuide.specialDuas" = "Günün Özel Duaları";
+"prayerGuide.howToEidPrayer" = "Bayram Namazı Nasıl Kılınır?";
+"general.more" = "Devamını Gör";
+"general.less" = "Daha Az Göster";
+
+// MARK: - FAVOURITE PRAYERS & ROUTINE
+"routine.morning" = "Sabah Rutini";
+"routine.evening" = "Akşam Rutini";
+"routine.complete" = "Tamamlandı";
+"routine.remaining" = "kaldı";
+"routine.addDuas" = "Dua Ekle";
+"routine.none" = "Rutin Yok";
+"routine.both" = "Her İkisi";
+"favourites.title" = "FAVORİ DUALARIM";
+"favourites.edit" = "Düzenle";
+"favourites.empty" = "Henüz favori duan yok";
+"favourites.addMore" = "Daha Fazla";
+"library.title" = "Dua Kütüphanesi";
+"library.subtitle" = "Tüm dualar, sureler ve zikirler";
+"library.pickFavs" = "Favorilerini Seç";
+"library.pickRoutine" = "Rutinine Ekle";
+"library.searchPlaceholder" = "Dua veya sure ara...";
+"library.all" = "Hepsi";
+"library.noResults" = "Sonuç bulunamadı";
+"audio.pause" = "Durdur";
+"audio.listen" = "Dinle";
+
+// MARK: - Prayer Times View
+"prayer.completed" = "Tamamlandı";
+"prayer.active" = "Şu an";
+"prayer.remaining" = "kaldı";
+"prayer.upcoming" = "Bekliyor";
+"vakitler.title" = "Vakitler";
+"vakitler.nextPrayer" = "Sıradaki Vakit";
+"vakitler.allDone" = "Bugünkü tüm vakitler tamamlandı";
+
+"guidance.prayerSteps" = "Adım adım resimli rehber";
+"guidance.namazGuide" = "Tam namaz rehberi";
+"guidance.namazDuas" = "Namaz içi dualar";
+"guidance.afterPrayer" = "Namaz sonrası zikirler";
+"guidance.zakatDesc" = "Zekat hesaplayıcı";
