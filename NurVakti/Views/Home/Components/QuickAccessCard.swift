@@ -22,7 +22,7 @@ struct QuickAccessCard: View {
                         .frame(width: 40, height: 40)
                     Image(systemName: icon)
                         .font(.system(size: 18))
-                        .foregroundColor(.white)
+                        .foregroundColor(Color(hex: "1A1A2E"))
                 }
                 
                 Spacer()

@@ -32,13 +32,13 @@ struct DuaLibraryView: View {
                             .font(.system(size: 24, weight: .bold))
                         Text(subtitle)
                             .font(.system(size: 13))
-                            .foregroundColor(.white.opacity(0.4))
+                            .foregroundColor(Color(hex: "1A1A2E").opacity(0.4))
                     }
                     Spacer()
                     Button { dismiss() } label: {
                         Image(systemName: "xmark.circle.fill")
                             .font(.system(size: 26))
-                            .foregroundColor(.white.opacity(0.2))
+                            .foregroundColor(Color(hex: "1A1A2E").opacity(0.2))
                     }
                 }
                 .padding(.horizontal, 24)
@@ -49,19 +49,19 @@ struct DuaLibraryView: View {
                     // Search bar
                     HStack {
                         Image(systemName: "magnifyingglass")
-                            .foregroundColor(.white.opacity(0.3))
+                            .foregroundColor(Color(hex: "1A1A2E").opacity(0.3))
                         TextField(loc.localizedString("library.searchPlaceholder"), 
                                   text: $searchText)
-                            .foregroundColor(.white)
+                            .foregroundColor(Color(hex: "1A1A2E"))
                         if !searchText.isEmpty {
                             Button { searchText = "" } label: {
                                 Image(systemName: "xmark.circle.fill")
-                                    .foregroundColor(.white.opacity(0.5))
+                                    .foregroundColor(Color(hex: "1A1A2E").opacity(0.5))
                             }
                         }
                     }
                     .padding(12)
-                    .background(Color.white.opacity(0.06))
+                    .background(ColorColor(hex: "1A1A2E").opacity(0.06))
                     .cornerRadius(12)
                     
                     // Category Filter
@@ -92,9 +92,9 @@ struct DuaLibraryView: View {
                             VStack(spacing: 15) {
                                 Image(systemName: "doc.text.magnifyingglass")
                                     .font(.system(size: 40))
-                                    .foregroundColor(.white.opacity(0.15))
+                                    .foregroundColor(Color(hex: "1A1A2E").opacity(0.15))
                                 Text(loc.localizedString("library.noResults"))
-                                    .foregroundColor(.white.opacity(0.3))
+                                    .foregroundColor(Color(hex: "1A1A2E").opacity(0.3))
                             }
                             .padding(.top, 100)
                         } else {
@@ -109,7 +109,7 @@ struct DuaLibraryView: View {
                                     }
                                 )
                                 .padding(.horizontal, 16)
-                                .background(item.isFavourite ? Color.nurGold.opacity(0.08) : Color.white.opacity(0.02))
+                                .background(item.isFavourite ? Color.nurGold.opacity(0.08) : ColorColor(hex: "1A1A2E").opacity(0.02))
                                 .cornerRadius(12)
                                 .padding(.horizontal, 12)
                                 .padding(.vertical, 4)
@@ -145,10 +145,10 @@ struct FilterPill: View {
         Button(action: action) {
             Text(title)
                 .font(.system(size: 12, weight: isSelected ? .bold : .medium))
-                .foregroundColor(isSelected ? .black : .white.opacity(0.5))
+                .foregroundColor(isSelected ? .black : Color(hex: "1A1A2E").opacity(0.5))
                 .padding(.horizontal, 16)
                 .padding(.vertical, 8)
-                .background(isSelected ? Color.nurGold : Color.white.opacity(0.06))
+                .background(isSelected ? Color.nurGold : ColorColor(hex: "1A1A2E").opacity(0.06))
                 .cornerRadius(20)
         }
     }
@@ -189,7 +189,7 @@ struct DuaLibraryRow: View {
                     .foregroundColor(item.isFavourite ? .nurGold : .white)
                 Text(item.dua.libraryCategory?.localizedName(for: loc.currentLanguage) ?? "")
                     .font(.system(size: 11))
-                    .foregroundColor(.white.opacity(0.4))
+                    .foregroundColor(Color(hex: "1A1A2E").opacity(0.4))
             }
             
             Spacer()
@@ -207,13 +207,13 @@ struct DuaLibraryRow: View {
                     Button(loc.localizedString("routine.both")) { onSetRoutine(.both) }
                 } label: {
                     Image(systemName: item.userState.routineSlot == .none ? "checklist" : "checklist.checked")
-                        .foregroundColor(item.userState.routineSlot == .none ? .white.opacity(0.2) : .nurGold)
+                        .foregroundColor(item.userState.routineSlot == .none ? Color(hex: "1A1A2E").opacity(0.2) : .nurGold)
                 }
 
                 // Favourite Star
                 Button(action: onToggleFav) {
                     Image(systemName: item.isFavourite ? "star.fill" : "star")
-                        .foregroundColor(item.isFavourite ? .nurGold : .white.opacity(0.2))
+                        .foregroundColor(item.isFavourite ? .nurGold : Color(hex: "1A1A2E").opacity(0.2))
                 }
             }
             .font(.system(size: 18))
@@ -222,7 +222,7 @@ struct DuaLibraryRow: View {
         .padding(.horizontal, 16)
         .background(
             RoundedRectangle(cornerRadius: 16)
-                .fill(item.isFavourite ? Color.nurGold.opacity(0.12) : Color.white.opacity(0.04))
+                .fill(item.isFavourite ? Color.nurGold.opacity(0.12) : ColorColor(hex: "1A1A2E").opacity(0.04))
         )
         .overlay(
             RoundedRectangle(cornerRadius: 16)

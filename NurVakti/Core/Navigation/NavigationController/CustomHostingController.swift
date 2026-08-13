@@ -100,7 +100,17 @@ class CustomHostingController<Content>: UIHostingController<AnyView> where Conte
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-       
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        // Sayfadan çıkıldığında (pop) ses çalmayı durdur.
+        // isMovingFromParent → bu VC navigation stack'ten kaldırılıyor demek.
+        // isBeingDismissed → modal olarak dismiss ediliyor.
+        if isMovingFromParent || isBeingDismissed {
+            AudioManager.shared.stop()
+        }
     }
     
     func setImage() {

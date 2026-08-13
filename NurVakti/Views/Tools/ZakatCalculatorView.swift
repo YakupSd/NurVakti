@@ -9,7 +9,7 @@ struct ZakatCalculatorView: View {
     
     var body: some View {
         ZStack {
-            Color(hex: "0F172A").ignoresSafeArea()
+            Color(hex: "F8F6F0").ignoresSafeArea()
             
             VStack(spacing: 0) {
                 // Header Step Indicator
@@ -55,10 +55,10 @@ struct ZakatCalculatorView: View {
                         Button(action: { withAnimation { currentStep -= 1 } }) {
                             Text(localization.localizedString("general.back"))
                                 .nurFont(16, weight: .bold)
-                                .foregroundColor(.white)
+                                .foregroundColor(Color(hex: "1A1A2E"))
                                 .frame(maxWidth: .infinity)
                                 .padding(.vertical, 14)
-                                .background(Color.white.opacity(0.1))
+                                .background(ColorColor(hex: "1A1A2E").opacity(0.1))
                                 .cornerRadius(12)
                         }
                     }
@@ -99,7 +99,7 @@ struct ZakatCalculatorView: View {
             
             Text(localization.localizedString(title))
                 .nurFont(24, weight: .bold)
-                .foregroundColor(.white)
+                .foregroundColor(Color(hex: "1A1A2E"))
             
             VStack(spacing: 20) {
                 content()
@@ -111,13 +111,13 @@ struct ZakatCalculatorView: View {
         VStack(alignment: .leading, spacing: 8) {
             Text(localization.localizedString(label))
                 .nurFont(14, weight: .medium)
-                .foregroundColor(.white.opacity(0.6))
+                .foregroundColor(Color(hex: "1A1A2E").opacity(0.6))
             
             HStack {
                 TextField("0", value: value, format: .number)
                     .keyboardType(.decimalPad)
                     .nurFont(20, weight: .bold)
-                    .foregroundColor(.white)
+                    .foregroundColor(Color(hex: "1A1A2E"))
                 
                 if !unit.isEmpty {
                     Text(unit)
@@ -126,11 +126,11 @@ struct ZakatCalculatorView: View {
                 }
             }
             .padding()
-            .background(Color.white.opacity(0.05))
+            .background(ColorColor(hex: "1A1A2E").opacity(0.05))
             .cornerRadius(12)
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
-                    .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                    .stroke(ColorColor(hex: "1A1A2E").opacity(0.1), lineWidth: 1)
             )
         }
     }
@@ -145,12 +145,12 @@ struct ZakatCalculatorView: View {
                 Text(localization.localizedString(assets.isEligible ? "zakat.result.eligible" : "zakat.result.notEligible"))
                     .nurFont(24, weight: .bold)
                     .multilineTextAlignment(.center)
-                    .foregroundColor(.white)
+                    .foregroundColor(Color(hex: "1A1A2E"))
                 
                 if assets.isEligible {
                     Text(localization.localizedString("zakat.result.due"))
                         .nurFont(16)
-                        .foregroundColor(.white.opacity(0.6))
+                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.6))
                     
                     Text("\(assets.zakatDue, specifier: "%.2f")")
                         .nurFont(48, weight: .bold)
@@ -163,7 +163,7 @@ struct ZakatCalculatorView: View {
                 resultRow(label: "zakat.nisabThreshold", value: assets.nisabThreshold)
             }
             .padding()
-            .background(Color.white.opacity(0.05))
+            .background(ColorColor(hex: "1A1A2E").opacity(0.05))
             .cornerRadius(20)
         }
     }
@@ -172,11 +172,11 @@ struct ZakatCalculatorView: View {
         HStack {
             Text(localization.localizedString(label))
                 .nurFont(14)
-                .foregroundColor(.white.opacity(0.6))
+                .foregroundColor(Color(hex: "1A1A2E").opacity(0.6))
             Spacer()
             Text("\(value, specifier: "%.2f")")
                 .nurFont(14, weight: .bold)
-                .foregroundColor(.white)
+                .foregroundColor(Color(hex: "1A1A2E"))
         }
     }
 }

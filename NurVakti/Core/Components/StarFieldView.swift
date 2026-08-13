@@ -14,7 +14,7 @@ struct StarFieldView: View {
                 
                 context.fill(
                     Path(ellipseIn: CGRect(x: x, y: y, width: starSize, height: starSize)),
-                    with: .color(.white.opacity(Double.random(in: 0.3...1.0)))
+                    with: .color(Color(hex: "1A1A2E").opacity(Double.random(in: 0.3...1.0)))
                 )
             }
         }

@@ -19,12 +19,12 @@ struct GuidanceShareSheet: View {
                 HStack {
                     Text(localization.localizedString("general.share"))
                         .font(.system(size: 20, weight: .bold))
-                        .foregroundColor(.white)
+                        .foregroundColor(Color(hex: "1A1A2E"))
                     Spacer()
                     Button(action: { dismiss() }) {
                         Image(systemName: "xmark.circle.fill")
                             .font(.system(size: 28))
-                            .foregroundColor(.white.opacity(0.3))
+                            .foregroundColor(Color(hex: "1A1A2E").opacity(0.3))
                     }
                 }
                 .padding(24)
@@ -42,7 +42,7 @@ struct GuidanceShareSheet: View {
                         } else {
                             ZStack {
                                 RoundedRectangle(cornerRadius: 24)
-                                    .fill(Color.white.opacity(0.05))
+                                    .fill(ColorColor(hex: "1A1A2E").opacity(0.05))
                                     .frame(maxWidth: .infinity)
                                     .aspectRatio(9/16, contentMode: .fit)
                                     .padding(.horizontal, 48)
@@ -54,7 +54,7 @@ struct GuidanceShareSheet: View {
                         
                         Text("Görsel Instagram Story boyutunda optimize edilmiştir.")
                             .font(.system(size: 12))
-                            .foregroundColor(.white.opacity(0.4))
+                            .foregroundColor(Color(hex: "1A1A2E").opacity(0.4))
                             .multilineTextAlignment(.center)
                             .padding(.horizontal, 40)
                     }
@@ -81,7 +81,7 @@ struct GuidanceShareSheet: View {
                     .disabled(renderedImage == nil)
                 }
                 .padding(24)
-                .background(.ultraThinMaterial)
+                .background(Color.white)
             }
         }
         .task {
@@ -170,7 +170,7 @@ struct GuidanceShareView: View {
                         
                         Image(systemName: "sparkles")
                             .font(.system(size: 80, weight: .bold))
-                            .foregroundColor(.white)
+                            .foregroundColor(Color(hex: "1A1A2E"))
                     }
                     
                     Text("NurVakti")
@@ -187,16 +187,16 @@ struct GuidanceShareView: View {
                 ZStack {
                     // Glassmorphic Card Background
                     RoundedRectangle(cornerRadius: 60)
-                        .fill(Color.white.opacity(0.04))
+                        .fill(ColorColor(hex: "1A1A2E").opacity(0.04))
                         .background(
                             RoundedRectangle(cornerRadius: 60)
-                                .fill(Color.white.opacity(0.02))
+                                .fill(ColorColor(hex: "1A1A2E").opacity(0.02))
                                 .blur(radius: 20)
                         )
                         .overlay(
                             RoundedRectangle(cornerRadius: 60)
                                 .stroke(
-                                    LinearGradient(colors: [.white.opacity(0.2), .clear, .white.opacity(0.1)], startPoint: .topLeading, endPoint: .bottomTrailing),
+                                    LinearGradient(colors: [Color(hex: "1A1A2E").opacity(0.2), .clear, Color(hex: "1A1A2E").opacity(0.1)], startPoint: .topLeading, endPoint: .bottomTrailing),
                                     lineWidth: 2
                                 )
                         )
@@ -210,7 +210,7 @@ struct GuidanceShareView: View {
                             Text(content.arabicText)
                                 .font(.custom("KFGQPCUthmanicScriptHAFS", size: 60))
                                 .multilineTextAlignment(.center)
-                                .foregroundColor(.white)
+                                .foregroundColor(Color(hex: "1A1A2E"))
                                 .lineSpacing(20)
                                 .padding(.horizontal, 40)
                                 .environment(\.layoutDirection, .rightToLeft)
@@ -228,7 +228,7 @@ struct GuidanceShareView: View {
                                 Text(translation)
                                     .font(.system(size: 50, weight: .light))
                                     .italic()
-                                    .foregroundColor(.white.opacity(0.9))
+                                    .foregroundColor(Color(hex: "1A1A2E").opacity(0.9))
                                     .multilineTextAlignment(.center)
                                     .lineSpacing(15)
                                     .padding(.horizontal, 40)
@@ -255,7 +255,7 @@ struct GuidanceShareView: View {
                 VStack(spacing: 30) {
                     Text("NurVakti ile Manevi Yolculuğuna Başla")
                         .font(.system(size: 36, weight: .bold))
-                        .foregroundColor(.white.opacity(0.5))
+                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.5))
                     
                     HStack(spacing: 40) {
                         HStack(spacing: 12) {
@@ -265,7 +265,7 @@ struct GuidanceShareView: View {
                         .font(.system(size: 28, weight: .medium))
                         .padding(.horizontal, 30)
                         .padding(.vertical, 14)
-                        .background(Capsule().stroke(Color.white.opacity(0.2), lineWidth: 1))
+                        .background(Capsule().stroke(ColorColor(hex: "1A1A2E").opacity(0.2), lineWidth: 1))
                         
                         HStack(spacing: 12) {
                             Image(systemName: "play.fill")
@@ -274,7 +274,7 @@ struct GuidanceShareView: View {
                         .font(.system(size: 28, weight: .medium))
                         .padding(.horizontal, 30)
                         .padding(.vertical, 14)
-                        .background(Capsule().stroke(Color.white.opacity(0.2), lineWidth: 1))
+                        .background(Capsule().stroke(ColorColor(hex: "1A1A2E").opacity(0.2), lineWidth: 1))
                     }
                     .foregroundColor(.nurGold.opacity(0.6))
                 }

@@ -24,7 +24,7 @@ struct OnboardingView: View {
                 HStack(spacing: 8) {
                     ForEach(0..<3) { index in
                         Capsule()
-                            .fill(vm.currentPage == index ? Color.nurGold : Color.white.opacity(0.25))
+                            .fill(vm.currentPage == index ? Color.nurGold : ColorColor(hex: "1A1A2E").opacity(0.25))
                             .frame(width: vm.currentPage == index ? 28 : 8, height: 8)
                             .animation(.spring(response: 0.4), value: vm.currentPage)
                     }
@@ -57,7 +57,7 @@ struct OnboardingView: View {
                             Text(localization.localizedString("onboarding.back"))
                         }
                         .font(.subheadline)
-                        .foregroundColor(.white.opacity(0.5))
+                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.5))
                     }
                     .padding(.bottom, 8)
                 }
@@ -94,10 +94,10 @@ struct OnboardingLanguagePage: View {
                 VStack(spacing: 8) {
                     Text(localization.localizedString("onboarding.language.title"))
                         .font(.system(size: 32, weight: .bold))
-                        .foregroundColor(.white)
+                        .foregroundColor(Color(hex: "1A1A2E"))
                     Text(localization.localizedString("onboarding.language.subtitle"))
                         .font(.subheadline)
-                        .foregroundColor(.white.opacity(0.5))
+                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.5))
                 }
             }
 
@@ -109,7 +109,7 @@ struct OnboardingLanguagePage: View {
                             Text(flag).font(.title)
                             Text(name)
                                 .font(.system(size: 18, weight: .semibold))
-                                .foregroundColor(.white)
+                                .foregroundColor(Color(hex: "1A1A2E"))
                             Spacer()
                             if vm.selectedLanguage == code {
                                 Image(systemName: "checkmark.circle.fill")
@@ -121,7 +121,7 @@ struct OnboardingLanguagePage: View {
                         .frame(height: 60)
                         .background(vm.selectedLanguage == code
                                     ? Color.nurGold.opacity(0.15)
-                                    : Color.white.opacity(0.07))
+                                    : ColorColor(hex: "1A1A2E").opacity(0.07))
                         .cornerRadius(16)
                         .overlay(
                             RoundedRectangle(cornerRadius: 16)
@@ -168,12 +168,12 @@ struct OnboardingLocationPage: View {
                 VStack(spacing: 10) {
                     Text(localization.localizedString("onboarding.location.title"))
                         .font(.system(size: 28, weight: .bold))
-                        .foregroundColor(.white)
+                        .foregroundColor(Color(hex: "1A1A2E"))
                         .multilineTextAlignment(.center)
 
                     Text(localization.localizedString("onboarding.location.body"))
                         .font(.body)
-                        .foregroundColor(.white.opacity(0.65))
+                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.65))
                         .multilineTextAlignment(.center)
                         .padding(.horizontal, 8)
                 }
@@ -190,7 +190,7 @@ struct OnboardingLocationPage: View {
             // İzin / Atla Butonları
             VStack(spacing: 12) {
                 if vm.isRequestingLocation {
-                    ProgressView().tint(.white)
+                    ProgressView().tint(Color(hex: "C9A84C"))
                 } else {
                     NurButton(title: localization.localizedString("onboarding.location.allow"),
                               icon: "location.fill",
@@ -200,7 +200,7 @@ struct OnboardingLocationPage: View {
 
                     Button(localization.localizedString("onboarding.location.skip")) { vm.skipLocation() }
                         .font(.subheadline)
-                        .foregroundColor(.white.opacity(0.45))
+                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.45))
                 }
             }
             .padding(.horizontal, 24)
@@ -214,7 +214,7 @@ struct OnboardingLocationPage: View {
                 .foregroundColor(.nurGold)
             Text(text)
                 .font(.subheadline)
-                .foregroundColor(.white.opacity(0.8))
+                .foregroundColor(Color(hex: "1A1A2E").opacity(0.8))
             Spacer()
         }
     }
@@ -245,12 +245,12 @@ struct OnboardingNotificationPage: View {
                 VStack(spacing: 10) {
                     Text(localization.localizedString("onboarding.notif.title"))
                         .font(.system(size: 28, weight: .bold))
-                        .foregroundColor(.white)
+                        .foregroundColor(Color(hex: "1A1A2E"))
                         .multilineTextAlignment(.center)
 
                     Text(localization.localizedString("onboarding.notif.body"))
                         .font(.body)
-                        .foregroundColor(.white.opacity(0.65))
+                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.65))
                         .multilineTextAlignment(.center)
                         .padding(.horizontal, 8)
                 }
@@ -267,7 +267,7 @@ struct OnboardingNotificationPage: View {
             // İzin / Atla
             VStack(spacing: 12) {
                 if vm.isRequestingNotif {
-                    ProgressView().tint(.white)
+                    ProgressView().tint(Color(hex: "C9A84C"))
                 } else {
                     NurButton(title: localization.localizedString("onboarding.notif.allow"),
                               icon: "bell.fill",
@@ -277,7 +277,7 @@ struct OnboardingNotificationPage: View {
 
                     Button(localization.localizedString("onboarding.notif.skip")) { vm.skipNotification() }
                         .font(.subheadline)
-                        .foregroundColor(.white.opacity(0.45))
+                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.45))
                 }
             }
             .padding(.horizontal, 24)
@@ -291,7 +291,7 @@ struct OnboardingNotificationPage: View {
                 .foregroundColor(.nurGold)
             Text(text)
                 .font(.subheadline)
-                .foregroundColor(.white.opacity(0.8))
+                .foregroundColor(Color(hex: "1A1A2E").opacity(0.8))
             Spacer()
         }
     }

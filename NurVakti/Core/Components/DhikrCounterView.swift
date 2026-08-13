@@ -28,7 +28,7 @@ struct DhikrCounterView: View {
                     .overlay(
                         Circle()
                             .stroke(
-                                LinearGradient(colors: [.white.opacity(0.5), .clear, .nurGold.opacity(0.3)], startPoint: .topLeading, endPoint: .bottomTrailing),
+                                LinearGradient(colors: [Color(hex: "1A1A2E").opacity(0.5), .clear, .nurGold.opacity(0.3)], startPoint: .topLeading, endPoint: .bottomTrailing),
                                 lineWidth: 2
                             )
                     )
@@ -53,7 +53,7 @@ struct DhikrCounterView: View {
                             .minimumScaleFactor(0.5)
                             .multilineTextAlignment(.center)
                             .padding(.horizontal, 40)
-                            .foregroundColor(.white)
+                            .foregroundColor(Color(hex: "1A1A2E"))
                         
                         Text(String(item.currentCount))
                             .nurFont(90, weight: .heavy, design: .rounded)
@@ -68,10 +68,10 @@ struct DhikrCounterView: View {
                             Text("HEDEF")
                                 .nurFont(10, weight: .bold)
                         }
-                        .foregroundColor(.white.opacity(0.5))
+                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.5))
                         .padding(.horizontal, 16)
                         .padding(.vertical, 4)
-                        .background(Color.white.opacity(0.1))
+                        .background(ColorColor(hex: "1A1A2E").opacity(0.1))
                         .cornerRadius(20)
                     }
                     .frame(width: 300, height: 300)
@@ -91,7 +91,7 @@ struct DhikrCounterView: View {
                         Text("Sıfırla")
                             .nurFont(12, weight: .bold)
                     }
-                    .foregroundColor(.white.opacity(0.6))
+                    .foregroundColor(Color(hex: "1A1A2E").opacity(0.6))
                 }
                 
                 // Settings for this Dhikr
@@ -102,7 +102,7 @@ struct DhikrCounterView: View {
                         Text("Düzenle")
                             .nurFont(12, weight: .bold)
                     }
-                    .foregroundColor(.white.opacity(0.6))
+                    .foregroundColor(Color(hex: "1A1A2E").opacity(0.6))
                 }
             }
         }

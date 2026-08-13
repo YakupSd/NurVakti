@@ -6,7 +6,7 @@ struct AyahTextView: UIViewRepresentable {
     let text: String
     let tajweedRanges: [MushafRange]
     let fontSize: CGFloat
-    let lineSpacing: CGFloat = 18
+    let lineSpacing: CGFloat = 20
     @Binding var dynamicHeight: CGFloat
     
     func makeUIView(context: Context) -> UITextView {
@@ -44,7 +44,7 @@ struct AyahTextView: UIViewRepresentable {
         paragraphStyle.lineBreakMode = .byWordWrapping
         
         // Font handling with fallback
-        let font = UIFont(name: "AmiriQuran", size: fontSize) ?? .systemFont(ofSize: fontSize)
+        let font = UIFont(name: "ScheherazadeNew-Bold", size: fontSize) ?? .systemFont(ofSize: fontSize)
         
         let attributes: [NSAttributedString.Key: Any] = [
             .font: font,

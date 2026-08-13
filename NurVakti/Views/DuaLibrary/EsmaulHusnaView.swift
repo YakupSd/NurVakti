@@ -29,15 +29,15 @@ struct EsmaulHusnaView: View {
                         VStack(spacing: 12) {
                             Text("أَسْمَاءُ اللَّهِ الْحُسْنَى")
                                 .font(.custom("Amiri-Bold", size: 36))
-                                .foregroundColor(.white)
+                                .foregroundColor(Color(hex: "1A1A2E"))
                             
                             VStack(spacing: 4) {
                                 Text("Allah'ın 99 Güzel İsmi")
                                     .font(.system(size: 18, weight: .bold))
-                                    .foregroundColor(.white)
+                                    .foregroundColor(Color(hex: "1A1A2E"))
                                 Text("Her isim eşsiz bir sıfatı ifade eder")
                                     .font(.system(size: 12))
-                                    .foregroundColor(.white.opacity(0.8))
+                                    .foregroundColor(Color(hex: "1A1A2E").opacity(0.8))
                             }
                         }
                         .padding(.vertical, 40)
@@ -283,7 +283,7 @@ struct EsmaDetailSheet: View {
                 dismiss()
             }
             .font(.system(size: 16, weight: .bold))
-            .foregroundColor(.white)
+            .foregroundColor(Color(hex: "1A1A2E"))
             .frame(maxWidth: .infinity)
             .frame(height: 54)
             .background(Color.nurOlive)

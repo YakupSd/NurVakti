@@ -2,7 +2,6 @@ import Foundation
 import CoreLocation
 import Combine
 import WidgetKit
-// import Adhan // SPM ile eklendiği varsayılıyor
 
 @MainActor
 final class PrayerTimeService: ObservableObject {
@@ -16,13 +15,10 @@ final class PrayerTimeService: ObservableObject {
     private var timer: AnyCancellable?
     
     init() {
-        startCountdownTimer()
+        // Timer kaldırıldı — HomeViewModel kendi 1-saniyelik timer'ını kullanıyor.
+        // İkili timer gereksiz CPU yükü yaratıyordu.
     }
     
-    // Verilen koordinat için vakitleri Aladhan API'den (Diyanet Metodu) çeker.
-    // Artık astronomik hesaplama yerine servis tabanlı çalışıyoruz.
-    // ------------------------------------------------------------------
-
     // MARK: - Widget Veri Yazma (App Group)
     private func writeWidgetData(prayer: PrayerTime) {
         guard let next = findNextPrayer(from: prayer) else { return }
@@ -55,7 +51,7 @@ final class PrayerTimeService: ObservableObject {
         WidgetCenter.shared.reloadAllTimelines()
     }
 
-    private func prayerDate(for name: PrayerName, in prayer: PrayerTime) -> Date {
+    func prayerDate(for name: PrayerName, in prayer: PrayerTime) -> Date {
         switch name {
         case .imsak:   return prayer.imsak
         case .fajr:    return prayer.fajr
@@ -69,7 +65,7 @@ final class PrayerTimeService: ObservableObject {
     
     private let prayerManager = PrayerManager()
     
-    // API'den 30 günlük (veya takvim ayı bazlı) çek
+    // MARK: - API'den 30 Günlük Çek (Sadece cache geçersiz olduğunda çağrılır)
     func calculateMonthly(for location: CLLocation,
                           method: String,
                           madhab: Madhab) async throws -> [PrayerTime] {
@@ -77,7 +73,7 @@ final class PrayerTimeService: ObservableObject {
         let lat = location.coordinate.latitude
         let lng = location.coordinate.longitude
         
-        // Aladhan API Calendar RPC (Diyanet=13, default=method)
+        // Aladhan API Method mapping
         let methodInt: Int
         switch method.lowercased() {
         case "diyanet": methodInt = 13
@@ -93,7 +89,7 @@ final class PrayerTimeService: ObservableObject {
             prayerManager.getPrayerTimes(latitude: lat, longitude: lng, method: methodInt) { response in
                 let results = response.data.compactMap { day -> PrayerTime? in
                     let timings = day.timings
-                    let dateStr = day.date.readable // "24 Mar 2026"
+                    let dateStr = day.date.readable
                     
                     let dateFormatter = DateFormatter()
                     dateFormatter.dateFormat = "dd MMM yyyy"
@@ -143,7 +139,8 @@ final class PrayerTimeService: ObservableObject {
                         self.nextPrayer = self.findNextPrayer(from: firstToday)
                         self.writeWidgetData(prayer: firstToday)
                     }
-                    self.saveToCache(results)
+                    // Cache'i metadata ile birlikte kaydet
+                    PersistenceService.shared.savePrayerCacheWithMetadata(results, location: location, method: method)
                     continuation.resume(returning: results)
                 }
             } onFailure: { error in
@@ -165,7 +162,6 @@ final class PrayerTimeService: ObservableObject {
     func findNextPrayer(from today: PrayerTime) -> (name: PrayerName, time: Date)? {
         let now = Date()
         
-        // Bugün içindeki vakitleri kontrol et
         let allToday: [(PrayerName, Date)] = [
             (.imsak, today.imsak),
             (.fajr, today.fajr),
@@ -205,10 +201,20 @@ final class PrayerTimeService: ObservableObject {
             }
     }
     
-    // Cache
+    // MARK: - Cache Operations
+    
+    /// Bugünün cache'ten yüklenmesi
     func loadCached(for date: Date) -> PrayerTime? {
         let all = PersistenceService.shared.loadPrayerCache()
         return all.first { Calendar.current.isDate($0.date, inSameDayAs: date) }
+    }
+    
+    /// Cache'ten aylık veriyi yükle ve monthlyPrayers'ı doldur
+    func loadMonthlyFromCache() {
+        let all = PersistenceService.shared.loadPrayerCache()
+        if !all.isEmpty {
+            self.monthlyPrayers = all
+        }
     }
     
     func saveToCache(_ prayers: [PrayerTime]) {

@@ -2,6 +2,18 @@ import Foundation
 import Combine
 import CoreLocation
 
+// MARK: - Cache Metadata Model
+/// 30 günlük namaz vakitleri cache'inin metadata bilgisi.
+/// Cache'in hangi konum, metod ve tarih aralığı için oluşturulduğunu tutar.
+struct PrayerCacheMetadata: Codable {
+    let createdAt: Date
+    let latitude: Double
+    let longitude: Double
+    let method: String
+    let startDate: Date
+    let endDate: Date
+}
+
 public final class PersistenceService: ObservableObject {
     public static let shared = PersistenceService()
     
@@ -28,6 +40,7 @@ public final class PersistenceService: ObservableObject {
     private enum Keys: String {
         case settings, dhikr, alarms
         case bookmarks, readingProgress, prayerCache
+        case prayerCacheMetadata
     }
     
     init() {
@@ -49,8 +62,11 @@ public final class PersistenceService: ObservableObject {
             saveDhikr(self.dhikrItems)
         }
         
-        if let a: [AlarmModel] = load(key: Keys.alarms.rawValue, as: [AlarmModel].self) {
+        if let a: [AlarmModel] = load(key: Keys.alarms.rawValue, as: [AlarmModel].self), !a.isEmpty {
             self.alarms = a
+        } else {
+            self.alarms = defaultAlarms()
+            saveAlarms(self.alarms)
         }
         
         if let b: [QuranBookmark] = load(key: Keys.bookmarks.rawValue, as: [QuranBookmark].self) {
@@ -140,7 +156,22 @@ public final class PersistenceService: ObservableObject {
     }
     
     public func loadAlarms() -> [AlarmModel] {
-        load(key: Keys.alarms.rawValue, as: [AlarmModel].self) ?? []
+        let loaded = load(key: Keys.alarms.rawValue, as: [AlarmModel].self) ?? []
+        return loaded.isEmpty ? defaultAlarms() : loaded
+    }
+    
+    private func defaultAlarms() -> [AlarmModel] {
+        let mainPrayers: [PrayerName] = [.imsak, .fajr, .sunrise, .dhuhr, .asr, .maghrib, .isha]
+        return mainPrayers.map { prayer in
+            AlarmModel(
+                id: UUID(),
+                prayerName: prayer,
+                minutesBefore: 0,
+                isActive: true,
+                soundType: (prayer == .fajr || prayer == .imsak) ? .fajr : .ezan,
+                repeatDays: []
+            )
+        }
     }
     
     public func saveBookmark(_ bookmark: QuranBookmark) {
@@ -158,7 +189,8 @@ public final class PersistenceService: ObservableObject {
         save(progress, key: Keys.readingProgress.rawValue)
     }
     
-    // Cache
+    // MARK: - Prayer Cache (30 Günlük Akıllı Cache)
+    
     public func savePrayerCache(_ prayers: [PrayerTime]) {
         save(prayers, key: Keys.prayerCache.rawValue)
     }
@@ -167,6 +199,63 @@ public final class PersistenceService: ObservableObject {
         load(key: Keys.prayerCache.rawValue, as: [PrayerTime].self) ?? []
     }
     
+    /// Cache metadata'yı prayer verileriyle birlikte kaydeder
+    func savePrayerCacheWithMetadata(_ prayers: [PrayerTime], location: CLLocation, method: String) {
+        // Önce eski cache'i tamamen sil, üzerine yaz
+        savePrayerCache(prayers)
+        
+        let metadata = PrayerCacheMetadata(
+            createdAt: Date(),
+            latitude: location.coordinate.latitude,
+            longitude: location.coordinate.longitude,
+            method: method,
+            startDate: prayers.map(\.date).min() ?? Date(),
+            endDate: prayers.map(\.date).max() ?? Date()
+        )
+        save(metadata, key: Keys.prayerCacheMetadata.rawValue)
+    }
+    
+    /// Cache metadata'yı yükler
+    func loadCacheMetadata() -> PrayerCacheMetadata? {
+        load(key: Keys.prayerCacheMetadata.rawValue, as: PrayerCacheMetadata.self)
+    }
+    
+    /// Akıllı cache validasyonu:
+    /// - Bugün cache'te var mı?
+    /// - Konum 5km'den az mı uzak?
+    /// - Hesaplama metodu aynı mı?
+    func isCacheValid(for location: CLLocation?, method: String) -> Bool {
+        guard let meta = loadCacheMetadata() else {
+            return false
+        }
+        
+        let today = Calendar.current.startOfDay(for: Date())
+        
+        // 1. Bugün cache tarih aralığında mı?
+        let startDay = Calendar.current.startOfDay(for: meta.startDate)
+        let endDay = Calendar.current.startOfDay(for: meta.endDate)
+        guard today >= startDay && today <= endDay else {
+            return false
+        }
+        
+        // 2. Hesaplama metodu aynı mı?
+        guard meta.method == method else {
+            return false
+        }
+        
+        // 3. Konum 5km'den az mı uzak? (nil konum = konum alınamadı, cache'i kullan)
+        if let loc = location {
+            let cachedLocation = CLLocation(latitude: meta.latitude, longitude: meta.longitude)
+            let distance = loc.distance(from: cachedLocation)
+            guard distance < 5000 else {
+                return false
+            }
+        }
+        
+        return true
+    }
+    
+    /// Eski ve geçersiz cache verilerini temizler
     func clearExpiredCache() {
         var all = loadPrayerCache()
         let now = Date()

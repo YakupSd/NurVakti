@@ -5,9 +5,13 @@ struct ContentView: View {
     @State private var showSplash: Bool = true
     @State private var showOnboarding: Bool = !PersistenceService.shared.settings.hasCompletedOnboarding
     @EnvironmentObject var localization: LocalizationManager
+    
+    // ViewModel'ları bir kez oluştur, tab geçişlerinde yeniden oluşturma
+    @StateObject private var dhikrVM = DhikrViewModel()
+    @StateObject private var alarmVM = AlarmViewModel()
 
     init() {
-        // Hide the native tab bar completely — we use our own floating bar
+        // Hide the native tab bar completely — we use our own custom bar
         UITabBar.appearance().isHidden = true
     }
 
@@ -30,7 +34,7 @@ struct ContentView: View {
         }
     }
 
-    // MARK: - Main Content with Floating Tab Bar
+    // MARK: - Main Content with Fixed Bottom Tab Bar
     @ViewBuilder
     private var mainContent: some View {
         ZStack(alignment: .bottom) {
@@ -45,29 +49,24 @@ struct ContentView: View {
                     QuranView()
                         .transition(.opacity)
                 case .dhikr:
-                    DhikrView(vm: DhikrViewModel())
+                    DhikrView(vm: dhikrVM)
                         .transition(.opacity)
                 case .alarms:
-                    AlarmView(vm: AlarmViewModel())
+                    AlarmView(vm: alarmVM)
                         .transition(.opacity)
                 case .vakitler:
                     PrayerTimesView(vm: HomeViewModel.shared)
                         .transition(.opacity)
                 }
             }
-            // Bottom padding so content isn't hidden behind the floating bar
+            // Bottom padding so content isn't hidden behind the tab bar
             .safeAreaInset(edge: .bottom) {
-                Color.clear.frame(height: 100)
+                Color.clear.frame(height: 82)
             }
 
-            // ── Floating Tab Bar ──
-            VStack(spacing: 0) {
-                Spacer()
-                FloatingTabBar(selectedTab: $selectedTab)
-                    .environmentObject(localization)
-                    .padding(.bottom, 12)
-            }
-            .ignoresSafeArea(edges: .bottom)
+            // ── Fixed Bottom Tab Bar ──
+            FloatingTabBar(selectedTab: $selectedTab)
+                .environmentObject(localization)
         }
         .ignoresSafeArea(edges: .bottom)
         .environment(\.layoutDirection, localization.isRTL ? .rightToLeft : .leftToRight)

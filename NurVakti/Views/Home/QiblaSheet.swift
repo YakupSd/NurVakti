@@ -7,7 +7,7 @@ struct QiblaSheet: View {
     
     var body: some View {
         ZStack {
-            Color(hex: "0F2027").ignoresSafeArea()
+            Color(hex: "F8F6F0").ignoresSafeArea()
             
             VStack(spacing: 40) {
                 HStack {
@@ -15,19 +15,19 @@ struct QiblaSheet: View {
                     Button(action: { dismiss() }) {
                         Image(systemName: "xmark.circle.fill")
                             .font(.title)
-                            .foregroundColor(.white.opacity(0.5))
+                            .foregroundColor(Color(hex: "1A1A2E").opacity(0.5))
                     }
                 }
                 .padding()
                 
                 Text(LocalizationManager.shared.localizedString("qibla.qiblaDirection"))
                     .font(.title.bold())
-                    .foregroundColor(.white)
+                    .foregroundColor(Color(hex: "1A1A2E"))
                 
                 ZStack {
                     // Pusula Arka Planı
                     Circle()
-                        .stroke(Color.white.opacity(0.1), lineWidth: 4)
+                        .stroke(ColorColor(hex: "1A1A2E").opacity(0.1), lineWidth: 4)
                         .frame(width: 300, height: 300)
                     
                     // Pusula İğnesi
@@ -47,7 +47,7 @@ struct QiblaSheet: View {
                 VStack(spacing: 8) {
                     Text(LocalizationManager.shared.localizedString("qibla.kaabaDirection"))
                         .font(.headline)
-                        .foregroundColor(.white)
+                        .foregroundColor(Color(hex: "1A1A2E"))
                     Text("\(Int(qiblaAngle))°")
                         .font(.system(size: 44, weight: .bold, design: .monospaced))
                         .foregroundColor(.nurGold)
@@ -55,7 +55,7 @@ struct QiblaSheet: View {
                 
                 Text(LocalizationManager.shared.localizedString("qibla.calibrateHint"))
                     .font(.caption)
-                    .foregroundColor(.white.opacity(0.6))
+                    .foregroundColor(Color(hex: "1A1A2E").opacity(0.6))
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 40)
                 

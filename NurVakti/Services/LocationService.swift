@@ -42,17 +42,13 @@ final class LocationService: NSObject, ObservableObject {
             if let placemark = placemarks.first {
                 let city = placemark.locality ?? placemark.administrativeArea ?? ""
                 if !city.isEmpty {
-                    DispatchQueue.main.async {
-                        self.cityName = city
-                        self.countryCode = placemark.isoCountryCode ?? ""
-                    }
+                    self.cityName = city
+                    self.countryCode = placemark.isoCountryCode ?? ""
                 }
                 return city
             }
         } catch {
-            DispatchQueue.main.async {
-                self.error = .geocodingFailed
-            }
+            self.error = .geocodingFailed
         }
         return ""
     }
@@ -65,21 +61,22 @@ final class LocationService: NSObject, ObservableObject {
 }
 
 extension LocationService: CLLocationManagerDelegate {
-    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        DispatchQueue.main.async {
-            self.authStatus = manager.authorizationStatus
+    nonisolated func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        let status = manager.authorizationStatus
+        Task { @MainActor in
+            self.authStatus = status
         }
     }
     
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    nonisolated func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
-        DispatchQueue.main.async {
+        Task { @MainActor in
             self.currentLocation = location
         }
     }
     
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        DispatchQueue.main.async {
+    nonisolated func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        Task { @MainActor in
             self.error = .locationUnavailable
         }
     }

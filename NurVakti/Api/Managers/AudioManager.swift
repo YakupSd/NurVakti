@@ -22,7 +22,6 @@ public class AudioManager: ObservableObject {
     private var currentQueueIndex = 0
     private var isSequentialMode = false
 
-    private var loadingView: LoadingView?
     private let audioService = AudioService.shared
     private var cancellables = Set<AnyCancellable>()
 
@@ -47,12 +46,6 @@ public class AudioManager: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] isBuffering in
                 self?.isBuffering = isBuffering
-                if isBuffering {
-                    self?.loadingView = LoadingView.showOverWindow()
-                } else {
-                    self?.loadingView?.dismiss()
-                    self?.loadingView = nil
-                }
             }
             .store(in: &cancellables)
     }
@@ -62,9 +55,11 @@ public class AudioManager: ObservableObject {
     /// Main entry: play a PrayerDua.
     /// Priority: audioURL (only everyayah CDN trusted) → audioFileName → error
     public func playPrayerDua(_ dua: PrayerDua) {
+        let lang = LocalizationManager.shared.currentLanguage.rawValue
+        let title = dua.titles[lang] ?? dua.titles["tr"] ?? "Dua 🤲"
         if let urlStr = dua.audioURL, isReliableURL(urlStr), let url = URL(string: urlStr) {
             stopQueue()
-            audioService.play(url: url)
+            audioService.play(url: url, title: title)
             return
         }
 
@@ -73,27 +68,30 @@ public class AudioManager: ObservableObject {
             return
         }
 
-        play(idType: parseAudioID(fileName))
+        play(idType: parseAudioID(fileName), title: title)
     }
 
     /// Play by resolved IDType — handles single ayah, surah sequence, direct URL.
-    public func play(idType: AudioIDType) {
+    public func play(idType: AudioIDType, title: String? = nil) {
+        let displayTitle = title ?? "Kur'an-ı Kerim 📖"
         switch idType {
         case .ayahID(let surah, let ayah):
             guard let url = URL(string: AudioAPI.getAyahAudioURL(surah: surah, ayah: ayah)) else {
                 showServiceError(); return
             }
             stopQueue()
-            audioService.play(url: url)
+            let t = title ?? "Sure \(surah), Ayet \(ayah)"
+            audioService.play(url: url, title: t)
 
         case .surahID(let surah):
             let ayahCount = AudioAPI.surahAyahCounts[surah] ?? 1
             let urls = AudioAPI.getAyahURLs(surah: surah, from: 1, to: ayahCount)
-            startQueue(urls)
+            let t = title ?? "Sure \(surah)"
+            startQueue(urls, title: t)
 
         case .directURL(let url):
             stopQueue()
-            audioService.play(url: url)
+            audioService.play(url: url, title: displayTitle)
 
         case .localFile(let name):
             let normalizedName = name.decomposedStringWithCanonicalMapping
@@ -117,7 +115,7 @@ public class AudioManager: ObservableObject {
             }
             
             stopQueue()
-            audioService.play(url: finalUrl)
+            audioService.play(url: finalUrl, title: displayTitle)
         }
     }
 
@@ -133,29 +131,32 @@ public class AudioManager: ObservableObject {
     public func stop() {
         stopQueue()
         audioService.stop()
-        loadingView?.dismiss()
-        loadingView = nil
     }
 
     // MARK: - Sequential Queue
+    private var currentQueueTitle: String? = nil
 
-    private func startQueue(_ urls: [URL]) {
+    private func startQueue(_ urls: [URL], title: String? = nil) {
         guard !urls.isEmpty else { showServiceError(); return }
         ayahQueue = urls
         currentQueueIndex = 0
+        currentQueueTitle = title
         isSequentialMode = true
         isPlaying = true
-        audioService.play(url: urls[0])
+        let t = title ?? "Kur'an-ı Kerim 📖"
+        audioService.play(url: urls[0], title: t)
     }
 
     private func playNextInQueue() {
         currentQueueIndex += 1
         if currentQueueIndex < ayahQueue.count {
-            audioService.play(url: ayahQueue[currentQueueIndex])
+            let t = currentQueueTitle ?? "Kur'an-ı Kerim 📖"
+            audioService.play(url: ayahQueue[currentQueueIndex], title: "\(t) (\(currentQueueIndex + 1)/\(ayahQueue.count))")
         } else {
             isSequentialMode = false
             isPlaying = false
             ayahQueue = []
+            currentQueueTitle = nil
         }
     }
 
@@ -225,13 +226,11 @@ public class AudioManager: ObservableObject {
     }
 
     private func showServiceError() {
-        DispatchQueue.main.async {
-            let message = "Hizmetimiz şu an çalışmıyor"
-            let popup = ServerErrorPopup(message: message, buttonText: "Tamam")
-            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-               let rootVC = windowScene.windows.first?.rootViewController {
-                rootVC.present(popup, animated: true)
-            }
+        let message = "Hizmetimiz şu an çalışmıyor"
+        let popup = ServerErrorPopup(message: message, buttonText: "Tamam")
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let rootVC = windowScene.windows.first?.rootViewController {
+            rootVC.present(popup, animated: true)
         }
     }
 }

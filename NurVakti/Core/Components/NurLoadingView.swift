@@ -12,7 +12,7 @@ struct NurLoadingView: View {
         ZStack {
             // Semi-transparent background
             Color.black.opacity(0.4)
-                .background(.ultraThinMaterial)
+                .background(Color.white)
                 .ignoresSafeArea()
             
             VStack(spacing: 30) {
@@ -48,7 +48,7 @@ struct NurLoadingView: View {
                     
                     Text("Lütfen Bekleyin...")
                         .font(.system(size: 11, weight: .light))
-                        .foregroundColor(.white.opacity(0.6))
+                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.6))
                         .italic()
                 }
             }
@@ -82,7 +82,7 @@ struct BeadView: View {
     
     var body: some View {
         Circle()
-            .fill(isActive ? Color.nurGold : Color.white.opacity(0.2))
+            .fill(isActive ? Color.nurGold : ColorColor(hex: "1A1A2E").opacity(0.2))
             .frame(width: isActive ? 8 : 4, height: isActive ? 8 : 4)
             .offset(y: -60) // Radius of the tasbih ring
             .shadow(color: isActive ? .nurGold.opacity(0.6) : .clear, radius: 4)

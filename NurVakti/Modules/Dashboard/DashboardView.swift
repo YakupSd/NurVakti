@@ -14,9 +14,17 @@ struct DashboardView: View {
     
     var body: some View {
         ZStack {
-            // Background
-            // Background - Light Green
-            Color.nurLightGreenBg.ignoresSafeArea()
+            // Background — Unified Dark Theme
+            LinearGradient(
+                colors: [
+                    Color(hex: "F8F6F0"),
+                    Color(hex: "F8F6F0"),
+                    Color(hex: "F8F6F0")
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .ignoresSafeArea()
             
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(spacing: 0) {
@@ -45,7 +53,7 @@ struct DashboardView: View {
             CustomCardShape(cutEdge: .bottom, radius: 40, fillColor: .clear)
                 .overlay(
                     CustomCardShape.shape(cutEdge: .bottom, radius: 40)
-                        .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                        .stroke(ColorColor(hex: "1A1A2E").opacity(0.1), lineWidth: 1)
                 )
             
             // 3. Information Overlays
@@ -76,16 +84,16 @@ struct DashboardView: View {
             if let next = vm.nextPrayer {
                 Text(localization.localizedString("vakitler.nextPrayer").uppercased())
                     .nurFont(11, weight: .bold)
-                    .foregroundColor(.white.opacity(0.5))
+                    .foregroundColor(Color(hex: "1A1A2E").opacity(0.5))
                     .tracking(2)
                 
                 HStack(spacing: 12) {
                     Text(next.name.localizedName(for: localization.currentLanguage))
-                    Text("·").foregroundColor(.white.opacity(0.3))
+                    Text("·").foregroundColor(Color(hex: "1A1A2E").opacity(0.3))
                     Text(next.name.arabicName)
                 }
                 .nurFont(34, weight: .bold)
-                .foregroundColor(.white)
+                .foregroundColor(Color(hex: "1A1A2E"))
                 .shadow(color: .black.opacity(0.3), radius: 8)
                 
                 Text(vm.countdown)
@@ -133,18 +141,18 @@ struct DashboardView: View {
         return VStack(spacing: 4) {
             Text(name.localizedName(for: localization.currentLanguage))
                 .nurFont(10, weight: .bold)
-                .foregroundColor(.white.opacity(0.8))
+                .foregroundColor(Color(hex: "1A1A2E").opacity(0.8))
             
             Text(vm.formattedTime(time, language: localization.currentLanguage))
                 .nurFont(15, weight: .bold)
                 .foregroundColor(isNext ? .nurGold : .white)
         }
         .frame(width: 80, height: 64)
-        .background(isNext ? .black.opacity(0.3) : .white.opacity(0.1))
+        .background(isNext ? .black.opacity(0.3) : Color(hex: "1A1A2E").opacity(0.1))
         .cornerRadius(16)
         .overlay(
             RoundedRectangle(cornerRadius: 16)
-                .stroke(isNext ? Color.nurGold : Color.white.opacity(0.2), lineWidth: isNext ? 2 : 1)
+                .stroke(isNext ? Color.nurGold : ColorColor(hex: "1A1A2E").opacity(0.2), lineWidth: isNext ? 2 : 1)
         )
     }
     
@@ -183,12 +191,18 @@ struct DashboardView: View {
                         .nurFont(15, weight: .bold)
                         .tracking(1.2)
                 }
-                .foregroundColor(.white)
+                .foregroundColor(.black)
                 .frame(maxWidth: .infinity)
                 .frame(height: 56)
-                .background(Color.nurLightGreenSecondary)
+                .background(
+                    LinearGradient(
+                        colors: [Color.nurGold, Color(hex: "FFD700")],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
                 .cornerRadius(16)
-                .shadow(color: .nurLightGreenSecondary.opacity(0.2), radius: 10, y: 5)
+                .shadow(color: .nurGold.opacity(0.3), radius: 12, y: 5)
             }
             .padding(.horizontal, 20)
             
@@ -197,24 +211,30 @@ struct DashboardView: View {
                 HStack {
                     Label(localization.localizedString("dhikr.dailyTotal"), systemImage: "bolt.heart.fill")
                         .nurFont(12, weight: .bold)
-                        .foregroundColor(.nurLightGreenPrimary.opacity(0.6))
+                        .foregroundColor(.nurGold.opacity(0.7))
                     
                     Spacer()
                     
                     Text("\(vm.dhikrCount) / \(vm.dhikrTarget)")
                         .nurFont(12, weight: .bold, design: .monospaced)
-                        .foregroundColor(.nurLightGreenPrimary)
+                        .foregroundColor(.nurGold)
                 }
                 
                 GeometryReader { geo in
                     ZStack(alignment: .leading) {
                         Capsule()
-                            .fill(Color.nurLightGreenSecondary.opacity(0.1))
+                            .fill(ColorColor(hex: "1A1A2E").opacity(0.08))
                         
                         Capsule()
-                            .fill(Color.nurLightGreenSecondary)
+                            .fill(
+                                LinearGradient(
+                                    colors: [Color.nurGold, Color(hex: "FFD700")],
+                                    startPoint: .leading,
+                                    endPoint: .trailing
+                                )
+                            )
                             .frame(width: geo.size.width * CGFloat(min(1.0, Double(vm.dhikrCount) / Double(vm.dhikrTarget))))
-                            .shadow(color: .nurLightGreenSecondary.opacity(0.3), radius: 4)
+                            .shadow(color: .nurGold.opacity(0.4), radius: 6)
                     }
                 }
                 .frame(height: 6)
@@ -222,10 +242,9 @@ struct DashboardView: View {
             .padding(20)
             .background(Color.white)
             .cornerRadius(20)
-            .shadow(color: Color.black.opacity(0.04), radius: 10, x: 0, y: 4)
             .overlay(
                 RoundedRectangle(cornerRadius: 20)
-                    .stroke(Color.nurLightGreenBorder, lineWidth: 1)
+                    .stroke(ColorColor(hex: "1A1A2E").opacity(0.08), lineWidth: 1)
             )
             .padding(.horizontal, 20)
             
@@ -328,9 +347,9 @@ struct DashboardView: View {
             }) {
                 Image(systemName: "gearshape.fill")
                     .font(.system(size: 18))
-                    .foregroundColor(.white)
+                    .foregroundColor(Color(hex: "1A1A2E"))
                     .frame(width: 40, height: 40)
-                    .background(.ultraThinMaterial.opacity(0.5))
+                    .background(Color.white)
                     .clipShape(Circle())
             }
             
@@ -344,12 +363,12 @@ struct DashboardView: View {
                 HStack(spacing: 8) {
                     Text(dashboardVM.userSession.isLoggedIn ? localization.localizedString("general.profile") : localization.localizedString("general.login"))
                         .nurFont(11, weight: .bold)
-                        .foregroundColor(.white)
+                        .foregroundColor(Color(hex: "1A1A2E"))
                         .padding(.leading, 12)
                     
                     Image(systemName: dashboardVM.userSession.isLoggedIn ? "person.fill" : "person.circle.fill")
                         .font(.system(size: dashboardVM.userSession.isLoggedIn ? 20 : 24))
-                        .foregroundColor(.white)
+                        .foregroundColor(Color(hex: "1A1A2E"))
                         .padding(dashboardVM.userSession.isLoggedIn ? 6 : 2)
                 }
                 .background(.black.opacity(0.2))
@@ -367,7 +386,7 @@ struct DashboardView: View {
                 Text(vm.cityName)
                     .nurFont(18, weight: .bold)
             }
-            .foregroundColor(.white)
+            .foregroundColor(Color(hex: "1A1A2E"))
             .shadow(color: .black.opacity(0.5), radius: 4)
             
             Spacer()
@@ -380,15 +399,15 @@ struct DashboardView: View {
                 
                 Text(formattedGregorianDate)
                     .nurFont(11, weight: .medium)
-                    .foregroundColor(.white.opacity(0.6))
+                    .foregroundColor(Color(hex: "1A1A2E").opacity(0.6))
             }
             .padding(.horizontal, 14)
             .padding(.vertical, 8)
-            .background(.ultraThinMaterial.opacity(0.1))
+            .background(Color.white)
             .cornerRadius(16)
             .overlay(
                 RoundedRectangle(cornerRadius: 16)
-                    .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                    .stroke(ColorColor(hex: "1A1A2E").opacity(0.1), lineWidth: 1)
             )
         }
     }

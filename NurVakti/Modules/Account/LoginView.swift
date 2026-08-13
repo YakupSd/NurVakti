@@ -35,11 +35,11 @@ struct LoginView: View {
             Text(localization.localizedString("account.welcome"))
                 .nurFont(28, weight: .bold)
                 .multilineTextAlignment(.center)
-                .foregroundColor(.white)
+                .foregroundColor(Color(hex: "1A1A2E"))
             
             Text("NurVakti müridleri arasına katılın.")
                 .nurFont(14, weight: .medium)
-                .foregroundColor(.white.opacity(0.5))
+                .foregroundColor(Color(hex: "1A1A2E").opacity(0.5))
         }
     }
     
@@ -92,9 +92,9 @@ struct LoginView: View {
     private var socialSection: some View {
         VStack(spacing: 16) {
             HStack {
-                Rectangle().fill(Color.white.opacity(0.1)).frame(height: 1)
-                Text("veya").nurFont(12).foregroundColor(.white.opacity(0.3))
-                Rectangle().fill(Color.white.opacity(0.1)).frame(height: 1)
+                Rectangle().fill(ColorColor(hex: "1A1A2E").opacity(0.1)).frame(height: 1)
+                Text("veya").nurFont(12).foregroundColor(Color(hex: "1A1A2E").opacity(0.3))
+                Rectangle().fill(ColorColor(hex: "1A1A2E").opacity(0.1)).frame(height: 1)
             }
             
             HStack(spacing: 16) {
@@ -108,7 +108,7 @@ struct LoginView: View {
         Button(action: vm.goToRegister) {
             HStack {
                 Text("Hesabınız yok mu?")
-                    .foregroundColor(.white.opacity(0.5))
+                    .foregroundColor(Color(hex: "1A1A2E").opacity(0.5))
                 Text("Kayıt Ol")
                     .foregroundColor(.nurGold)
                     .bold()
@@ -125,13 +125,13 @@ struct NurTextFieldStyle: TextFieldStyle {
         configuration
             .padding(.horizontal, 16)
             .frame(height: 50)
-            .background(Color.white.opacity(0.05))
+            .background(ColorColor(hex: "1A1A2E").opacity(0.05))
             .cornerRadius(12)
-            .foregroundColor(.white)
+            .foregroundColor(Color(hex: "1A1A2E"))
             .accentColor(.nurGold)
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
-                    .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                    .stroke(ColorColor(hex: "1A1A2E").opacity(0.1), lineWidth: 1)
             )
     }
 }
@@ -151,12 +151,12 @@ struct SocialLoginButton: View {
             }
             .frame(maxWidth: .infinity)
             .frame(height: 50)
-            .background(Color.white.opacity(0.05))
-            .foregroundColor(.white)
+            .background(ColorColor(hex: "1A1A2E").opacity(0.05))
+            .foregroundColor(Color(hex: "1A1A2E"))
             .cornerRadius(12)
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
-                    .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                    .stroke(ColorColor(hex: "1A1A2E").opacity(0.1), lineWidth: 1)
             )
         }
     }

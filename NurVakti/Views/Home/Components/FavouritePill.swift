@@ -16,7 +16,7 @@ struct FavouritePill: View {
                     .foregroundColor(item.dua.libraryCategory?.accentColor ?? .nurGold)
                 Text(item.dua.title(for: loc.currentLanguage))
                     .font(.system(size: 9, weight: .medium))
-                    .foregroundColor(.white.opacity(0.8))
+                    .foregroundColor(Color(hex: "1A1A2E").opacity(0.8))
                     .lineLimit(1)
             }
             .padding(.horizontal, 10)

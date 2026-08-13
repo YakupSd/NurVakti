@@ -9,7 +9,7 @@ struct SettingsView: View {
         ZStack {
             // Arka plan: Zengin Gradyan
             // Arka plan: Zengin Gradyan
-            LinearGradient(colors: [Color(hex: "0F2027"), Color(hex: "203A43"), Color(hex: "2C5364")], 
+            LinearGradient(colors: [Color(hex: "F8F6F0"), Color(hex: "F0EDE6"), Color(hex: "F0EDE6")], 
                            startPoint: .topLeading, 
                            endPoint: .bottomTrailing)
                 .ignoresSafeArea()
@@ -32,7 +32,7 @@ struct SettingsView: View {
                             vm.changeLanguage(code)
                         }
                         .padding(.vertical, 10)
-                        .background(.ultraThinMaterial)
+                        .background(Color.white)
                         .cornerRadius(24)
                     }
                     
@@ -57,7 +57,7 @@ struct SettingsView: View {
                                             }
                                             .frame(maxWidth: .infinity)
                                             .frame(height: 70)
-                                            .background(vm.fontSize == size ? Color.nurGold : Color.white.opacity(0.05))
+                                            .background(vm.fontSize == size ? Color.nurGold : ColorColor(hex: "1A1A2E").opacity(0.05))
                                             .foregroundColor(vm.fontSize == size ? .black : .white)
                                             .cornerRadius(16)
                                             .overlay(
@@ -72,19 +72,19 @@ struct SettingsView: View {
                                 VStack(alignment: .center, spacing: 12) {
                                     Text(localization.localizedString("settings.previewText"))
                                         .nurFont(12)
-                                        .foregroundColor(.white.opacity(0.4))
+                                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.4))
                                     
                                     Text("Bismillahirrahmanirrahim")
                                         .nurFont(20, weight: .bold) // scaled font test
-                                        .foregroundColor(.white)
+                                        .foregroundColor(Color(hex: "1A1A2E"))
                                         .padding()
                                         .frame(maxWidth: .infinity)
                                         .background(
                                             RoundedRectangle(cornerRadius: 16)
-                                                .fill(.white.opacity(0.05))
+                                                .fill(Color(hex: "1A1A2E").opacity(0.05))
                                                 .overlay(
                                                     RoundedRectangle(cornerRadius: 16)
-                                                        .stroke(.white.opacity(0.1), lineWidth: 1)
+                                                        .stroke(Color(hex: "1A1A2E").opacity(0.1), lineWidth: 1)
                                                 )
                                         )
                                 }
@@ -109,14 +109,14 @@ struct SettingsView: View {
                                             .font(.system(size: 13, weight: .bold))
                                             .padding(.horizontal, 14)
                                             .padding(.vertical, 8)
-                                            .background(vm.madhab == m ? Color.nurGold : Color.white.opacity(0.1))
+                                            .background(vm.madhab == m ? Color.nurGold : ColorColor(hex: "1A1A2E").opacity(0.1))
                                             .foregroundColor(vm.madhab == m ? .black : .white)
                                             .cornerRadius(8)
                                         }
                                     }
                                 }
                                 
-                                Divider().background(Color.white.opacity(0.1))
+                                Divider().background(ColorColor(hex: "1A1A2E").opacity(0.1))
                                 
                                 // Hesap Metodu
                                 settingRow(title: localization.localizedString("settings.method"), icon: "calendar.badge.clock") {
@@ -150,7 +150,7 @@ struct SettingsView: View {
                                 
                                 Text(vm.notifStatus == .authorized ? localization.localizedString("settings.notifAuthorized") : localization.localizedString("settings.notifRequired"))
                                     .nurFont(16, weight: .bold)
-                                    .foregroundColor(.white)
+                                    .foregroundColor(Color(hex: "1A1A2E"))
                                 
                                 Spacer()
                                 
@@ -172,11 +172,11 @@ struct SettingsView: View {
                     VStack(spacing: 12) {
                         Text("NurVakti © 2024")
                             .nurFont(12)
-                            .foregroundColor(.white.opacity(0.4))
+                            .foregroundColor(Color(hex: "1A1A2E").opacity(0.4))
                         
                         Text(String(format: localization.localizedString("settings.versionInfo"), vm.appVersion, vm.buildNumber))
                             .nurFont(10)
-                            .foregroundColor(.white.opacity(0.3))
+                            .foregroundColor(Color(hex: "1A1A2E").opacity(0.3))
                         
                         NurButton(title: localization.localizedString("settings.rateApp"), style: .secondary, fontSize: .small) {
                             HapticManager.shared.success()
@@ -199,7 +199,7 @@ struct SettingsView: View {
                 .foregroundColor(.nurGold.opacity(0.8))
                 .frame(width: 24)
             Text(title)
-                .foregroundColor(.white.opacity(0.9))
+                .foregroundColor(Color(hex: "1A1A2E").opacity(0.9))
             Spacer()
             content()
         }

@@ -86,7 +86,7 @@ struct HomeView: View {
                     Text(vm.cityName)
                         .font(.system(size: 15, weight: .semibold))
                 }
-                .foregroundColor(.white)
+                .foregroundColor(Color(hex: "1A1A2E"))
                 .shadow(color: .black.opacity(0.4), radius: 3)
                 
                 Spacer()
@@ -107,7 +107,7 @@ struct HomeView: View {
                 Text(localization.localizedString("home.nextPrayer").uppercased())
                     .font(.system(size: 12, weight: .bold))
                     .kerning(3)
-                    .foregroundColor(.white.opacity(0.9))
+                    .foregroundColor(Color(hex: "1A1A2E").opacity(0.9))
                     .shadow(color: .black.opacity(0.5), radius: 2)
                 
                 if let next = vm.nextPrayer {
@@ -117,7 +117,7 @@ struct HomeView: View {
                         Text(next.name.arabicName)
                     }
                     .font(.system(size: 34, weight: .bold))
-                    .foregroundColor(.white)
+                    .foregroundColor(Color(hex: "1A1A2E"))
                     .shadow(color: .black.opacity(0.4), radius: 4)
                 }
                 
@@ -153,7 +153,7 @@ struct HomeView: View {
                 .padding(.horizontal, 16)
             }
             .frame(height: 60)
-            .background(.ultraThinMaterial.opacity(0.8))
+            .background(Color.white)
             
             HStack(spacing: 8) {
                 Text(String(format: localization.localizedString("home.completedToday"), vm.completedPrayers))
@@ -161,11 +161,11 @@ struct HomeView: View {
                 Text(localization.localizedString("home.allCompleted") + " →")
             }
             .font(.system(size: 12, weight: .bold))
-            .foregroundColor(.white)
+            .foregroundColor(Color(hex: "1A1A2E"))
             .shadow(color: .black.opacity(0.5), radius: 4)
             .padding(.vertical, 8)
             .padding(.horizontal, 20)
-            .background(.white.opacity(0.1))
+            .background(Color(hex: "1A1A2E").opacity(0.1))
             .cornerRadius(20)
             .onTapGesture {
                 HapticManager.shared.tap()
@@ -206,7 +206,7 @@ struct HomeView: View {
                     Text(localization.localizedString("tasbih_start"))
                         .font(.system(size: 15, weight: .semibold))
                 }
-                .foregroundColor(.white)
+                .foregroundColor(Color(hex: "1A1A2E"))
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 16)
                 .background(
@@ -226,7 +226,7 @@ struct HomeView: View {
                 HStack {
                     Label(localization.localizedString("dhikr.dailyTotal"), systemImage: "bolt.heart.fill")
                         .font(.system(size: 12, weight: .medium))
-                        .foregroundColor(.white.opacity(0.6))
+                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.6))
                     
                     Spacer()
                     
@@ -239,7 +239,7 @@ struct HomeView: View {
                 GeometryReader { geo in
                     ZStack(alignment: .leading) {
                         RoundedRectangle(cornerRadius: 4)
-                            .fill(Color.white.opacity(0.1))
+                            .fill(ColorColor(hex: "1A1A2E").opacity(0.1))
                         
                         RoundedRectangle(cornerRadius: 4)
                             .fill(
@@ -256,11 +256,11 @@ struct HomeView: View {
                 .frame(height: 6)
             }
             .padding(16)
-            .background(.ultraThinMaterial)
+            .background(Color.white)
             .cornerRadius(16)
             .overlay(
                 RoundedRectangle(cornerRadius: 16)
-                    .stroke(Color.white.opacity(0.05), lineWidth: 1)
+                    .stroke(ColorColor(hex: "1A1A2E").opacity(0.05), lineWidth: 1)
             )
             .padding(.horizontal, 14)
             
@@ -422,7 +422,7 @@ struct HomeView: View {
         VStack(spacing: 3) {
             Text(localization.localizedString("prayer.\(name.rawValue)"))
                 .font(.system(size: 9, weight: .medium))
-                .foregroundColor(isActive ? .nurGold : .white.opacity(0.5))
+                .foregroundColor(isActive ? .nurGold : Color(hex: "1A1A2E").opacity(0.5))
             
             Text(time)
                 .font(.system(size: 12, weight: .semibold))
@@ -433,7 +433,7 @@ struct HomeView: View {
         .background(
             ZStack(alignment: .leading) {
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(isActive ? Color.nurGold.opacity(0.1) : Color.white.opacity(0.05))
+                    .fill(isActive ? Color.nurGold.opacity(0.1) : ColorColor(hex: "1A1A2E").opacity(0.05))
                 
                 if isActive {
                     GeometryReader { geo in
@@ -446,7 +446,7 @@ struct HomeView: View {
         )
         .overlay(
             RoundedRectangle(cornerRadius: 12)
-                .strokeBorder(isActive ? Color.nurGold.opacity(0.4) : Color.white.opacity(0.08), lineWidth: 1)
+                .strokeBorder(isActive ? Color.nurGold.opacity(0.4) : ColorColor(hex: "1A1A2E").opacity(0.08), lineWidth: 1)
         )
     }
     
@@ -455,7 +455,7 @@ struct HomeView: View {
             HStack {
                 Label(title.uppercased(), systemImage: icon)
                     .font(.system(size: 10, weight: .medium))
-                    .foregroundColor(.white.opacity(0.5))
+                    .foregroundColor(Color(hex: "1A1A2E").opacity(0.5))
                     .tracking(1.5)
                 
                 Spacer()
@@ -468,9 +468,9 @@ struct HomeView: View {
                     }) {
                         Image(systemName: "doc.on.doc")
                             .font(.system(size: 10))
-                            .foregroundColor(.white.opacity(0.6))
+                            .foregroundColor(Color(hex: "1A1A2E").opacity(0.6))
                             .padding(6)
-                            .background(Color.white.opacity(0.1))
+                            .background(ColorColor(hex: "1A1A2E").opacity(0.1))
                             .clipShape(Circle())
                     }
 
@@ -502,14 +502,14 @@ struct HomeView: View {
                 .multilineTextAlignment(.trailing)
                 .frame(maxWidth: .infinity, alignment: .trailing)
                 .environment(\.layoutDirection, .rightToLeft)
-                .foregroundColor(.white)
+                .foregroundColor(Color(hex: "1A1A2E"))
                 .lineSpacing(6)
             
             Divider().opacity(0.15).padding(.vertical, 6)
             
             Text(content.translation(for: localization.currentLanguage))
                 .font(.system(size: 12, weight: .light))
-                .foregroundColor(.white.opacity(0.6))
+                .foregroundColor(Color(hex: "1A1A2E").opacity(0.6))
                 .italic()
                 .lineSpacing(3)
             
@@ -519,11 +519,11 @@ struct HomeView: View {
                 .padding(.top, 4)
         }
         .padding(14)
-        .background(.ultraThinMaterial)
+        .background(Color.white)
         .cornerRadius(18)
         .overlay(
             RoundedRectangle(cornerRadius: 18)
-                .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                .stroke(ColorColor(hex: "1A1A2E").opacity(0.1), lineWidth: 1)
         )
         .padding(.horizontal, 14)
     }

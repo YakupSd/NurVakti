@@ -42,7 +42,7 @@ struct PrayerTimeRow: View {
                 VStack(alignment: .leading, spacing: 3) {
                     Text(prayer.localizedName(for: language))
                         .nurFont(fontSize.body + 2, weight: .bold)
-                        .foregroundColor(isActive ? .white : (isPast ? .white.opacity(0.45) : .white.opacity(0.9)))
+                        .foregroundColor(isActive ? .white : (isPast ? Color(hex: "1A1A2E").opacity(0.45) : Color(hex: "1A1A2E").opacity(0.9)))
                     
                     if isActive, let rem = remainingTime {
                         HStack(spacing: 4) {
@@ -55,7 +55,7 @@ struct PrayerTimeRow: View {
                     } else {
                         Text(prayer.arabicText)
                             .font(.custom("Amiri-Regular", size: 13))
-                            .foregroundColor(.white.opacity(isPast ? 0.25 : 0.4))
+                            .foregroundColor(Color(hex: "1A1A2E").opacity(isPast ? 0.25 : 0.4))
                     }
                 }
                 
@@ -65,7 +65,7 @@ struct PrayerTimeRow: View {
                 VStack(alignment: .trailing, spacing: 5) {
                     Text(timeFormatter.string(from: time))
                         .nurFont(22, weight: .bold, design: .monospaced)
-                        .foregroundColor(isActive ? .white : (isPast ? .white.opacity(0.3) : .white.opacity(0.8)))
+                        .foregroundColor(isActive ? .white : (isPast ? Color(hex: "1A1A2E").opacity(0.3) : Color(hex: "1A1A2E").opacity(0.8)))
                     
                     statusBadge
                 }
@@ -78,7 +78,7 @@ struct PrayerTimeRow: View {
                 GeometryReader { geo in
                     ZStack(alignment: .leading) {
                         Capsule()
-                            .fill(Color.white.opacity(0.08))
+                            .fill(ColorColor(hex: "1A1A2E").opacity(0.08))
                             .frame(height: 4)
                         
                         Capsule()
@@ -103,7 +103,7 @@ struct PrayerTimeRow: View {
         .overlay(
             RoundedRectangle(cornerRadius: 20)
                 .stroke(
-                    isActive ? Color.nurGold.opacity(0.5) : Color.white.opacity(isPast ? 0.03 : 0.07),
+                    isActive ? Color.nurGold.opacity(0.5) : ColorColor(hex: "1A1A2E").opacity(isPast ? 0.03 : 0.07),
                     lineWidth: isActive ? 1.5 : 1
                 )
         )
@@ -148,7 +148,7 @@ struct PrayerTimeRow: View {
             Button(action: onNotificationToggle) {
                 Image(systemName: notificationEnabled ? "bell.fill" : "bell.slash")
                     .font(.system(size: 13))
-                    .foregroundColor(notificationEnabled ? .nurGold.opacity(0.7) : .white.opacity(0.2))
+                    .foregroundColor(notificationEnabled ? .nurGold.opacity(0.7) : Color(hex: "1A1A2E").opacity(0.2))
             }
         }
     }
@@ -162,20 +162,20 @@ struct PrayerTimeRow: View {
     private var iconColor: Color {
         if isPast { return .green.opacity(0.5) }
         if isActive { return .nurGold }
-        return .white.opacity(0.35)
+        return Color(hex: "1A1A2E").opacity(0.35)
     }
     
     private var iconBg: Color {
         if isPast { return Color.green.opacity(0.06) }
         if isActive { return prayer.startColor.opacity(0.2) }
-        return Color.white.opacity(0.05)
+        return ColorColor(hex: "1A1A2E").opacity(0.05)
     }
     
     @ViewBuilder
     private var rowBackground: some View {
         if isActive {
             LinearGradient(
-                colors: [prayer.startColor.opacity(0.45), Color(hex: "0F172A")],
+                colors: [prayer.startColor.opacity(0.45), Color(hex: "F8F6F0")],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
@@ -214,5 +214,5 @@ fileprivate extension PrayerName {
         PrayerTimeRow(prayer: .asr, time: Date(), isActive: false, isPast: false, progress: 0.0, remainingTime: nil, notificationEnabled: false, fontSize: .medium, language: .tr) {}
     }
     .padding()
-    .background(Color(hex: "0F172A"))
+    .background(Color(hex: "F8F6F0"))
 }

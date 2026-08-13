@@ -15,7 +15,7 @@ struct CountdownRing: View {
         ZStack {
             // Dış Halkalar
             Circle()
-                .stroke(Color.white.opacity(0.1), lineWidth: 8)
+                .stroke(ColorColor(hex: "1A1A2E").opacity(0.1), lineWidth: 8)
             
             Circle()
                 .trim(from: 0, to: progress)
@@ -30,12 +30,12 @@ struct CountdownRing: View {
             VStack(spacing: 8) {
                 Text(nextPrayerLabel)
                     .font(.system(size: fontSize.caption, weight: .medium))
-                    .foregroundColor(.white.opacity(0.7))
+                    .foregroundColor(Color(hex: "1A1A2E").opacity(0.7))
                     .textCase(.uppercase)
                 
                 Text(nextPrayerName.localizedName(for: language))
                     .font(.system(size: fontSize.title, weight: .bold))
-                    .foregroundColor(.white)
+                    .foregroundColor(Color(hex: "1A1A2E"))
                 
                 Text(timeString)
                     .font(.system(size: fontSize.body + 10, weight: .bold, design: .monospaced))
@@ -48,7 +48,7 @@ struct CountdownRing: View {
                 Spacer()
                 Text(nextPrayerName.rawValue.capitalized) // Basitleştirilmiş
                     .font(.system(size: 10))
-                    .foregroundColor(.white.opacity(0.3))
+                    .foregroundColor(Color(hex: "1A1A2E").opacity(0.3))
                     .padding(.bottom, 20)
             }
         }

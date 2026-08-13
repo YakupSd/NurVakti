@@ -65,10 +65,14 @@ final class AlarmViewModel: ObservableObject {
     
     private func saveAndReschedule() {
         persistService.saveAlarms(alarms)
-        let prayers = persistService.loadPrayerCache()
+        var prayers = persistService.loadPrayerCache()
+        if prayers.isEmpty {
+            prayers = PrayerTimeService.shared.monthlyPrayers
+        }
         let language = LocalizationManager.shared.currentLanguage
+        let currentAlarms = alarms
         Task {
-            await notifService.scheduleAll(prayers: prayers, alarms: alarms, language: language)
+            await notifService.scheduleAll(prayers: prayers, alarms: currentAlarms, language: language)
         }
     }
     

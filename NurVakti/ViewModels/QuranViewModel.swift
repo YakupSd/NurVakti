@@ -94,7 +94,8 @@ final class QuranViewModel: ObservableObject {
             let (arabicRes, translationRes, tajweedRes) = try await (arabicResponse, translationResponse, tajweedResponse)
             
             var items: [AyahItem] = []
-            for i in 0..<arabicRes.data.ayahs.count {
+            let count = min(arabicRes.data.ayahs.count, translationRes.data.ayahs.count, tajweedRes.data.ayahs.count)
+            for i in 0..<count {
                 let arabic = arabicRes.data.ayahs[i]
                 let translation = translationRes.data.ayahs[i]
                 let tajweed = tajweedRes.data.ayahs[i].text
@@ -135,7 +136,8 @@ final class QuranViewModel: ObservableObject {
             let (arabicRes, translationRes, tajweedRes) = try await (arabicResponse, translationResponse, tajweedResponse)
             
             var items: [AyahItem] = []
-            for i in 0..<arabicRes.data.ayahs.count {
+            let count = min(arabicRes.data.ayahs.count, translationRes.data.ayahs.count, tajweedRes.data.ayahs.count)
+            for i in 0..<count {
                 let arabic = arabicRes.data.ayahs[i]
                 let translation = translationRes.data.ayahs[i]
                 let tajweed = tajweedRes.data.ayahs[i].text

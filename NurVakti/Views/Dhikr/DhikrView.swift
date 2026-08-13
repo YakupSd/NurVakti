@@ -10,9 +10,9 @@ struct DhikrView: View {
         ZStack {
             LinearGradient(
                 colors: [
-                    Color(hex: "0B132B"), // Deep Navy
-                    Color(hex: "1C2541"), // Prayer Blue
-                    Color(hex: "000000")  // Deep Black
+                    Color(hex: "F8F6F0"), // Deep Navy
+                    Color(hex: "F8F6F0"), // Prayer Blue
+                    Color(hex: "F8F6F0")  // Deep Black
                 ],
                 startPoint: .top,
                 endPoint: .bottom
@@ -42,7 +42,7 @@ struct DhikrView: View {
                                 .foregroundColor(.nurGold.opacity(0.8))
                             Text(localization.localizedString("dhikr.zikirAndDua"))
                                 .nurFont(32, weight: .bold)
-                                .foregroundColor(.white)
+                                .foregroundColor(Color(hex: "1A1A2E"))
                         }
                         Spacer()
                         Button(action: { vm.showingAddSheet = true }) {
@@ -50,7 +50,7 @@ struct DhikrView: View {
                                 .font(.title2)
                                 .foregroundColor(.nurGold)
                                 .padding(8)
-                                .background(Color.white.opacity(0.05))
+                                .background(ColorColor(hex: "1A1A2E").opacity(0.05))
                                 .clipShape(Circle())
                         }
                     }
@@ -63,11 +63,11 @@ struct DhikrView: View {
                         tabButton(title: localization.localizedString("dhikr.prayers"), index: 1)
                     }
                     .padding(5)
-                    .background(.ultraThinMaterial.opacity(0.15))
+                    .background(Color.white)
                     .cornerRadius(20)
                     .overlay(
                         RoundedRectangle(cornerRadius: 20)
-                            .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                            .stroke(ColorColor(hex: "1A1A2E").opacity(0.1), lineWidth: 1)
                     )
                     .padding(.horizontal)
                 }
@@ -123,7 +123,7 @@ struct DhikrView: View {
                     HStack {
                         Text(localization.localizedString("dhikr.collection"))
                             .nurFont(18, weight: .bold)
-                            .foregroundColor(.white)
+                            .foregroundColor(Color(hex: "1A1A2E"))
                         Spacer()
                         Text("\(vm.dhikrItems.count)")
                             .nurFont(12, weight: .bold)
@@ -182,7 +182,7 @@ struct DhikrView: View {
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 12)
                 .background(selectedTab == index ? Color.nurGold : Color.clear)
-                .foregroundColor(selectedTab == index ? .black : .white.opacity(0.6))
+                .foregroundColor(selectedTab == index ? .black : Color(hex: "1A1A2E").opacity(0.6))
                 .cornerRadius(12)
         }
     }
@@ -199,10 +199,10 @@ struct DhikrMiniCard: View {
             VStack(alignment: .leading, spacing: 12) {
                 ZStack(alignment: .center) {
                     Circle()
-                        .fill(isActive ? Color.nurGold.opacity(0.2) : Color.white.opacity(0.05))
+                        .fill(isActive ? Color.nurGold.opacity(0.2) : ColorColor(hex: "1A1A2E").opacity(0.05))
                         .frame(width: 40, height: 40)
                     Image(systemName: "hands.sparkles.fill")
-                        .foregroundColor(isActive ? .nurGold : .white.opacity(0.3))
+                        .foregroundColor(isActive ? .nurGold : Color(hex: "1A1A2E").opacity(0.3))
                         .font(.system(size: 16))
                 }
                 
@@ -210,22 +210,22 @@ struct DhikrMiniCard: View {
                     Text(item.arabicText)
                         .nurFont(16, weight: .bold)
                         .lineLimit(1)
-                        .foregroundColor(.white)
+                        .foregroundColor(Color(hex: "1A1A2E"))
                     
                     // Anlam (Meal)
                     Text(item.meanings[localization.currentLanguage] ?? item.meanings[.tr] ?? "")
                         .nurFont(12)
                         .lineLimit(1)
-                        .foregroundColor(.white.opacity(0.6))
+                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.6))
                     
                     HStack {
                         HStack(spacing: 4) {
                             Text("\(item.currentCount)")
                                 .foregroundColor(.nurGold)
                             Text("/")
-                                .foregroundColor(.white.opacity(0.3))
+                                .foregroundColor(Color(hex: "1A1A2E").opacity(0.3))
                             Text("\(item.targetCount)")
-                                .foregroundColor(.white.opacity(0.6))
+                                .foregroundColor(Color(hex: "1A1A2E").opacity(0.6))
                         }
                         .nurFont(12, weight: .medium)
                         
@@ -245,7 +245,7 @@ struct DhikrMiniCard: View {
             }
             .padding(16)
             .frame(width: 150, height: 130, alignment: .leading)
-            .background(isActive ? Color.white.opacity(0.12) : Color.white.opacity(0.05))
+            .background(isActive ? ColorColor(hex: "1A1A2E").opacity(0.12) : ColorColor(hex: "1A1A2E").opacity(0.05))
             .cornerRadius(20)
             .overlay(
                 RoundedRectangle(cornerRadius: 20)
@@ -273,15 +273,15 @@ struct SummaryBox: View {
             
             Text(value)
                 .nurFont(28, weight: .heavy)
-                .foregroundColor(.white)
+                .foregroundColor(Color(hex: "1A1A2E"))
             
             Text(title)
                 .nurFont(12, weight: .medium)
-                .foregroundColor(.white.opacity(0.5))
+                .foregroundColor(Color(hex: "1A1A2E").opacity(0.5))
         }
         .padding(16)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.white.opacity(0.05))
+        .background(ColorColor(hex: "1A1A2E").opacity(0.05))
         .cornerRadius(20)
     }
 }
@@ -303,7 +303,7 @@ struct PrayerDuaList: View {
                     duaTabButton(title: localization.localizedString("dhikr.evening"), index: 1)
                 }
                 .padding(4)
-                .background(Color.white.opacity(0.07))
+                .background(ColorColor(hex: "1A1A2E").opacity(0.07))
                 .cornerRadius(12)
                 
                 let currentDuas = duaTab == 0 ? vm.morningDuas : vm.eveningDuas
@@ -323,29 +323,29 @@ struct PrayerDuaList: View {
                                 Spacer()
                                 Image(systemName: "hand.raised.fill")
                                     .font(.system(size: 14))
-                                    .foregroundColor(.white.opacity(0.2))
+                                    .foregroundColor(Color(hex: "1A1A2E").opacity(0.2))
                             }
                             
                             Text(dua.arabicText)
                                 .font(.custom("Traditional Arabic", size: 24))
                                 .lineLimit(2)
                                 .multilineTextAlignment(.trailing)
-                                .foregroundColor(.white)
+                                .foregroundColor(Color(hex: "1A1A2E"))
                                 .padding(.vertical, 4)
                             
                             Text(dua.translation[language] ?? "")
                                 .nurFont(14)
                                 .lineLimit(2)
-                                .foregroundColor(.white.opacity(0.6))
+                                .foregroundColor(Color(hex: "1A1A2E").opacity(0.6))
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .multilineTextAlignment(.leading)
                         }
                         .padding(20)
-                        .background(Color.white.opacity(0.05))
+                        .background(ColorColor(hex: "1A1A2E").opacity(0.05))
                         .cornerRadius(20)
                         .overlay(
                             RoundedRectangle(cornerRadius: 20)
-                                .stroke(Color.white.opacity(0.05), lineWidth: 1)
+                                .stroke(ColorColor(hex: "1A1A2E").opacity(0.05), lineWidth: 1)
                         )
                     }
                     .buttonStyle(.plain)
@@ -364,7 +364,7 @@ struct PrayerDuaList: View {
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 10)
                 .background(duaTab == index ? Color.nurGold : Color.clear)
-                .foregroundColor(duaTab == index ? .black : .white.opacity(0.6))
+                .foregroundColor(duaTab == index ? .black : Color(hex: "1A1A2E").opacity(0.6))
                 .cornerRadius(10)
         }
     }

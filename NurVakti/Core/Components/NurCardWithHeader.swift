@@ -12,7 +12,7 @@ struct NurCardWithHeader: View {
             HStack {
                 Label(title.uppercased(), systemImage: icon)
                     .font(.system(size: 10, weight: .bold))
-                    .foregroundColor(.nurLightGreenSecondary)
+                    .foregroundColor(.nurGold)
                     .tracking(1.5)
                 
                 Spacer()
@@ -25,9 +25,9 @@ struct NurCardWithHeader: View {
                     }) {
                         Image(systemName: "doc.on.doc")
                             .font(.system(size: 10))
-                            .foregroundColor(.nurLightGreenPrimary.opacity(0.6))
+                            .foregroundColor(Color(hex: "1A1A2E").opacity(0.5))
                             .padding(6)
-                            .background(Color.nurLightGreenSecondary.opacity(0.1))
+                            .background(ColorColor(hex: "1A1A2E").opacity(0.08))
                             .clipShape(Circle())
                     }
 
@@ -41,10 +41,10 @@ struct NurCardWithHeader: View {
                             Text(localization.localizedString("general.share"))
                                 .font(.system(size: 9, weight: .bold))
                         }
-                        .foregroundColor(.white)
+                        .foregroundColor(.black)
                         .padding(.horizontal, 10)
                         .padding(.vertical, 6)
-                        .background(Color.nurLightGreenSecondary)
+                        .background(Color.nurGold)
                         .cornerRadius(10)
                     }
                 }
@@ -55,29 +55,29 @@ struct NurCardWithHeader: View {
                 .multilineTextAlignment(.trailing)
                 .frame(maxWidth: .infinity, alignment: .trailing)
                 .environment(\.layoutDirection, .rightToLeft)
-                .foregroundColor(.black)
+                .foregroundColor(Color(hex: "1A1A2E"))
                 .lineSpacing(6)
             
-            Divider().background(Color.nurLightGreenBorder).padding(.vertical, 4)
+            Divider().background(ColorColor(hex: "1A1A2E").opacity(0.1)).padding(.vertical, 4)
             
             Text(content.translation(for: localization.currentLanguage))
                 .font(.system(size: 14, weight: .medium))
-                .foregroundColor(.black.opacity(0.7))
+                .foregroundColor(Color(hex: "1A1A2E").opacity(0.7))
                 .italic()
                 .lineSpacing(4)
             
             Text(content.source)
                 .font(.system(size: 10, weight: .bold))
-                .foregroundColor(.nurLightGreenSecondary)
+                .foregroundColor(.nurGold.opacity(0.7))
                 .padding(.top, 4)
         }
         .padding(20)
         .background(Color.white)
         .cornerRadius(20)
-        .shadow(color: Color.black.opacity(0.05), radius: 10, x: 0, y: 5)
+        .shadow(color: Color.black.opacity(0.2), radius: 12, x: 0, y: 6)
         .overlay(
             RoundedRectangle(cornerRadius: 20)
-                .stroke(Color.nurLightGreenBorder, lineWidth: 1)
+                .stroke(ColorColor(hex: "1A1A2E").opacity(0.08), lineWidth: 1)
         )
         .sheet(isPresented: $showShareSheet) {
             GuidanceShareSheet(content: content)

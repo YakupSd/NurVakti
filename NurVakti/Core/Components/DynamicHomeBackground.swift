@@ -9,7 +9,7 @@ struct DynamicHomeBackground: View {
             LinearGradient(
                 colors: [
                     Color(hex: "0D1B2A"), // Deepest Navy
-                    Color(hex: "000000")  // Pure Black bottom
+                    Color(hex: "F8F6F0")  // Pure Black bottom
                 ],
                 startPoint: .top,
                 endPoint: .bottom

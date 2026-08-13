@@ -18,7 +18,7 @@ struct NurCard<Content: View>: View {
                     if let title = title {
                         Text(title)
                             .nurFont(18, weight: .bold)
-                            .foregroundColor(.white)
+                            .foregroundColor(Color(hex: "1A1A2E"))
                             .lineLimit(1)
                             .minimumScaleFactor(0.8)
                     }
@@ -32,12 +32,12 @@ struct NurCard<Content: View>: View {
             content()
                 .padding(padding)
         }
-        .background(.ultraThinMaterial)
+        .background(Color.white)
         .cornerRadius(24)
         .shadow(color: .black.opacity(0.15), radius: 12, x: 0, y: 6)
         .overlay(
             RoundedRectangle(cornerRadius: 24)
-                .stroke(Color.white.opacity(0.05), lineWidth: 0.5)
+                .stroke(ColorColor(hex: "1A1A2E").opacity(0.05), lineWidth: 0.5)
         )
         // ── Accessibility ──────────────────────────────────────────
         .accessibilityElement(children: .combine)
@@ -48,7 +48,7 @@ struct NurCard<Content: View>: View {
 #Preview {
     NurCard(title: "Vakitler", icon: "clock.fill") {
         Text("Kart İçeriği Örneği")
-            .foregroundColor(.white)
+            .foregroundColor(Color(hex: "1A1A2E"))
     }
     .padding()
     .background(Color.blue)

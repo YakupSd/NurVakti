@@ -7,7 +7,7 @@ struct BesmeleView: View {
             decorationLine
             
             Text("بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ")
-                .font(.custom("AmiriQuran", size: 30))
+                .font(.custom("ScheherazadeNew-Bold", size: 30))
                 .foregroundColor(.black.opacity(0.9))
             
             // Right Ornament

@@ -50,7 +50,7 @@ struct HowToPrayView: View {
             Button(action: { dismiss() }) {
                 Image(systemName: "chevron.left")
                     .font(.system(size: 18, weight: .bold))
-                    .foregroundColor(.white)
+                    .foregroundColor(Color(hex: "1A1A2E"))
                     .frame(width: 44, height: 44)
                     .background(
                         Circle()
@@ -66,7 +66,7 @@ struct HowToPrayView: View {
             // Title
             Text("Namaz Nasıl Kılınır?")
                 .font(.system(size: 22, weight: .bold))
-                .foregroundColor(.white)
+                .foregroundColor(Color(hex: "1A1A2E"))
             
             Spacer()
             
@@ -115,7 +115,7 @@ struct HowToPrayView: View {
             Button(action: prevStep) {
                 Image(systemName: "arrow.left")
                     .font(.system(size: 24))
-                    .foregroundColor(.white)
+                    .foregroundColor(Color(hex: "1A1A2E"))
                     .frame(width: 56, height: 56)
                     .background(Color.prayerCard)
                     .clipShape(Circle())

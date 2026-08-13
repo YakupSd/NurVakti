@@ -36,20 +36,20 @@ struct DuaCard: View {
                 .dynamicArabicFont(text: dua.arabicText, baseSize: 28)
                 .multilineTextAlignment(.trailing)
                 .frame(maxWidth: .infinity, alignment: .trailing)
-                .foregroundColor(.white)
+                .foregroundColor(Color(hex: "1A1A2E"))
                 .lineSpacing(8)
             
             VStack(alignment: .leading, spacing: 12) {
                 Text(dua.transliteration)
                     .nurFont(14)
                     .italic()
-                    .foregroundColor(.white.opacity(0.7))
+                    .foregroundColor(Color(hex: "1A1A2E").opacity(0.7))
                 
                 if isExpanded {
                     let meaningText = dua.meaning(for: language)
                     Text(meaningText)
                         .dynamicMeaningFont(text: meaningText, baseSize: 15)
-                        .foregroundColor(.white.opacity(0.9))
+                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.9))
                         .transition(.opacity)
                 }
                 
@@ -65,11 +65,11 @@ struct DuaCard: View {
             }
         }
         .padding(20)
-        .background(Color.white.opacity(0.05))
+        .background(ColorColor(hex: "1A1A2E").opacity(0.05))
         .cornerRadius(20)
         .overlay(
             RoundedRectangle(cornerRadius: 20)
-                .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                .stroke(ColorColor(hex: "1A1A2E").opacity(0.1), lineWidth: 1)
         )
     }
 }
