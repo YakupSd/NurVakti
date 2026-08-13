@@ -6,7 +6,7 @@ struct PrayerDuasView: View {
     
     var body: some View {
         ZStack {
-            Color(hex: "0F172A").ignoresSafeArea()
+            Color(hex: "F8F6F0").ignoresSafeArea()
             
             ScrollView {
                 VStack(spacing: 20) {

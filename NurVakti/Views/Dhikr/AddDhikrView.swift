@@ -28,15 +28,15 @@ struct AddDhikrView: View {
                                     .scrollContentBackground(.hidden) // Show background
                                     .frame(height: 120)
                                     .padding(12)
-                                    .background(.ultraThinMaterial)
+                                    .background(Color.white)
                                     .cornerRadius(16)
-                                    .foregroundColor(.white)
+                                    .foregroundColor(Color(hex: "1A1A2E"))
                                     .nurFont(24)
                                 
                                 if vm.newDhikrArabic.isEmpty {
                                     Text(localization.localizedString("dhikr.subhanallah") + "...")
                                         .nurFont(24)
-                                        .foregroundColor(.white.opacity(0.1))
+                                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.1))
                                         .padding(20)
                                         .allowsHitTesting(false)
                                 }
@@ -51,7 +51,7 @@ struct AddDhikrView: View {
                         
                         Text(localization.localizedString("dhikr.addHint"))
                             .nurFont(13)
-                            .foregroundColor(.white.opacity(0.4))
+                            .foregroundColor(Color(hex: "1A1A2E").opacity(0.4))
                             .multilineTextAlignment(.center)
                             .padding(.top, 20)
                             .padding(.horizontal)
@@ -71,12 +71,12 @@ struct AddDhikrView: View {
             TextField(placeholder, text: text)
                 .keyboardType(keyboardType)
                 .padding(16)
-                .background(.ultraThinMaterial)
+                .background(Color.white)
                 .cornerRadius(16)
-                .foregroundColor(.white)
+                .foregroundColor(Color(hex: "1A1A2E"))
                 .overlay(
                     RoundedRectangle(cornerRadius: 16)
-                        .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                        .stroke(ColorColor(hex: "1A1A2E").opacity(0.1), lineWidth: 1)
                 )
         }
     }

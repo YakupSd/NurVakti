@@ -31,7 +31,7 @@ struct SplashView: View {
                 VStack(spacing: 12) {
                     Text("NurVakti")
                         .font(.system(size: 40, weight: .bold, design: .serif))
-                        .foregroundColor(.white)
+                        .foregroundColor(Color(hex: "1A1A2E"))
                     
                     Text("بِسْمِ اللهِ الرَّحْمٰنِ الرَّحيمِ")
                         .font(.custom("Traditional Arabic", size: 28))

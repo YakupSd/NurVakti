@@ -7,7 +7,7 @@ struct IslamicCalendarView: View {
     
     var body: some View {
         ZStack {
-            Color(hex: "0F172A").ignoresSafeArea()
+            Color(hex: "F8F6F0").ignoresSafeArea()
             
             VStack(spacing: 0) {
                 Spacer().frame(height: 16)
@@ -45,12 +45,12 @@ struct IslamicCalendarView: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text(item.event.key.name(for: localization.currentLanguage))
                     .nurFont(16, weight: .bold)
-                    .foregroundColor(.white)
+                    .foregroundColor(Color(hex: "1A1A2E"))
                 
                 let daysLeft = Calendar.current.dateComponents([.day], from: Date(), to: item.date).day ?? 0
                 Text(daysLeft == 0 ? "Bugün" : "\(daysLeft) gün kaldı")
                     .nurFont(13)
-                    .foregroundColor(.white.opacity(0.5))
+                    .foregroundColor(Color(hex: "1A1A2E").opacity(0.5))
             }
             
             Spacer()
@@ -59,11 +59,11 @@ struct IslamicCalendarView: View {
                 .font(.system(size: 30))
         }
         .padding()
-        .background(Color.white.opacity(0.05))
+        .background(ColorColor(hex: "1A1A2E").opacity(0.05))
         .cornerRadius(20)
         .overlay(
             RoundedRectangle(cornerRadius: 20)
-                .stroke(Color.white.opacity(0.05), lineWidth: 1)
+                .stroke(ColorColor(hex: "1A1A2E").opacity(0.05), lineWidth: 1)
         )
     }
 }

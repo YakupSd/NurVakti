@@ -61,7 +61,7 @@ public enum PrayerName: String, CaseIterable, Codable {
     
     public var startColor: Color {
         switch self {
-        case .imsak: return Color(hex: "0F2027")
+        case .imsak: return Color(hex: "F8F6F0")
         case .fajr: return Color(hex: "2C3E50")
         case .sunrise: return Color(hex: "FF8C00")
         case .dhuhr: return Color(hex: "4FA8F8")

@@ -35,11 +35,11 @@ struct DuaRoutineRow: View {
                     .font(.system(size: 11, weight: .medium))
                     .foregroundColor(
                         item.userState.isReadToday 
-                            ? .white.opacity(0.4) 
-                            : .white.opacity(0.85))
+                            ? Color(hex: "1A1A2E").opacity(0.4) 
+                            : Color(hex: "1A1A2E").opacity(0.85))
                 Text(item.dua.arabicText.prefix(30) + "...")
                     .font(.system(size: 9))
-                    .foregroundColor(.white.opacity(0.3))
+                    .foregroundColor(Color(hex: "1A1A2E").opacity(0.3))
                     .environment(\.layoutDirection, .rightToLeft)
             }
             

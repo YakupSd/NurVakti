@@ -50,6 +50,8 @@ final class QiblaViewModel: ObservableObject {
         locationManager.stopUpdatingLocation()
     }
 
+    private var hasTriggeredAlignedHaptic = false
+
     // MARK: - Heading Update
     func updateHeading(_ newHeading: CLHeading) {
         // Manyetik kuzey bilgisi al
@@ -65,7 +67,17 @@ final class QiblaViewModel: ObservableObject {
         // Kalibrasyon gereksinimi: Hata payı çok yüksekse (örn > 45) veya negatifse
         isCalibrating = newHeading.headingAccuracy < 0 || newHeading.headingAccuracy > 45
         
-        relativeAngle = (qiblaAngle - heading + 360).truncatingRemainder(dividingBy: 360)
+        let rel = (qiblaAngle - heading + 360).truncatingRemainder(dividingBy: 360)
+        relativeAngle = rel
+        
+        // Kıble yönü yakalandığında (tam açıda) dokunsal titreşim ver
+        let isAligned = rel < 3 || rel > 357
+        if isAligned && !hasTriggeredAlignedHaptic {
+            hasTriggeredAlignedHaptic = true
+            HapticManager.shared.success()
+        } else if !isAligned {
+            hasTriggeredAlignedHaptic = false
+        }
     }
 
     func updateLocation(_ location: CLLocation) {

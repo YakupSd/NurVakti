@@ -30,13 +30,13 @@ struct DailyRoutineCard: View {
                     VStack(alignment: .leading, spacing: 2) {
                         Text(slotTitle)
                             .font(.system(size: 13, weight: .semibold))
-                            .foregroundColor(.white)
+                            .foregroundColor(Color(hex: "1A1A2E"))
                         Text(isComplete 
                             ? loc.localizedString("routine.complete")
                             : "\(completedCount)/\(totalCount) " + 
                               loc.localizedString("routine.remaining"))
                             .font(.system(size: 10))
-                            .foregroundColor(isComplete ? .green : .white.opacity(0.4))
+                            .foregroundColor(isComplete ? .green : Color(hex: "1A1A2E").opacity(0.4))
                     }
                     Spacer()
                     // Completion badge
@@ -59,7 +59,7 @@ struct DailyRoutineCard: View {
                 // ── Progress bar ────────────────
                 GeometryReader { geo in
                     ZStack(alignment: .leading) {
-                        Capsule().fill(Color.white.opacity(0.08))
+                        Capsule().fill(ColorColor(hex: "1A1A2E").opacity(0.08))
                         Capsule()
                             .fill(LinearGradient(
                                 colors: [.nurGold, Color(hex:"#FFD700")],

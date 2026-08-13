@@ -7,7 +7,7 @@ struct AlarmView: View {
     var body: some View {
         ZStack {
             // Arka plan
-            LinearGradient(colors: [Color(hex: "0D1B2A"), Color(hex: "000000")], startPoint: .top, endPoint: .bottom)
+            LinearGradient(colors: [Color(hex: "0D1B2A"), Color(hex: "F8F6F0")], startPoint: .top, endPoint: .bottom)
                 .ignoresSafeArea()
             
             StarFieldView(opacity: 0.2)
@@ -24,12 +24,12 @@ struct AlarmView: View {
                                     .font(.title3)
                                 Text(localization.localizedString("alarm.permissionRequired"))
                                     .nurFont(18, weight: .bold)
-                                    .foregroundColor(.white)
+                                    .foregroundColor(Color(hex: "1A1A2E"))
                                 Spacer()
                             }
                             Text(localization.localizedString("alarm.permissionDesc"))
                                 .nurFont(14)
-                                .foregroundColor(.white.opacity(0.7))
+                                .foregroundColor(Color(hex: "1A1A2E").opacity(0.7))
                             
                             Button(action: {
                                 HapticManager.shared.light()
@@ -45,11 +45,11 @@ struct AlarmView: View {
                             }
                         }
                         .padding(20)
-                        .background(.ultraThinMaterial)
+                        .background(Color.white)
                         .cornerRadius(20)
                         .overlay(
                             RoundedRectangle(cornerRadius: 20)
-                                .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                                .stroke(ColorColor(hex: "1A1A2E").opacity(0.1), lineWidth: 1)
                         )
                     }
                     
@@ -57,7 +57,7 @@ struct AlarmView: View {
                     HStack {
                         Text(localization.localizedString("alarm.vakitReminder"))
                             .font(.system(size: 32, weight: .black))
-                            .foregroundColor(.white)
+                            .foregroundColor(Color(hex: "1A1A2E"))
                         Spacer()
                     }
                     .padding(.top, 10)
@@ -72,7 +72,7 @@ struct AlarmView: View {
                     // ALT BİLGİ
                     Text(localization.localizedString("alarm.footerNote"))
                         .nurFont(11)
-                        .foregroundColor(.white.opacity(0.3))
+                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.3))
                         .multilineTextAlignment(.center)
                         .padding(.top, 10)
                         .padding(.horizontal, 20)
@@ -107,10 +107,10 @@ struct AlarmCard: View {
                     VStack(alignment: .leading, spacing: 2) {
                         Text(alarm.prayerName.localizedName(for: language))
                             .nurFont(18, weight: .bold)
-                            .foregroundColor(.white)
+                            .foregroundColor(Color(hex: "1A1A2E"))
                         Text(LocalizationManager.shared.localizedString("alarm.vakitBased"))
                             .nurFont(12)
-                            .foregroundColor(.white.opacity(0.4))
+                            .foregroundColor(Color(hex: "1A1A2E").opacity(0.4))
                     }
                     
                     Spacer()
@@ -127,7 +127,7 @@ struct AlarmCard: View {
                 }
                 
                 if alarm.isActive {
-                    Divider().background(Color.white.opacity(0.08))
+                    Divider().background(ColorColor(hex: "1A1A2E").opacity(0.08))
                     
                     DisclosureGroup(isExpanded: $isExpanded) {
                         VStack(spacing: 24) {
@@ -135,7 +135,7 @@ struct AlarmCard: View {
                             HStack {
                                 Text(LocalizationManager.shared.localizedString("alarm.minutesBeforeLabel"))
                                     .nurFont(14)
-                                    .foregroundColor(.white.opacity(0.8))
+                                    .foregroundColor(Color(hex: "1A1A2E").opacity(0.8))
                                 Spacer()
                                 Stepper(value: Binding(
                                     get: { alarm.minutesBefore },
@@ -154,7 +154,7 @@ struct AlarmCard: View {
                             HStack {
                                 Text(LocalizationManager.shared.localizedString("alarm.soundLabel"))
                                     .nurFont(14)
-                                    .foregroundColor(.white.opacity(0.8))
+                                    .foregroundColor(Color(hex: "1A1A2E").opacity(0.8))
                                 Spacer()
                                 Menu {
                                     ForEach(AlarmSound.allCases, id: \.self) { sound in
@@ -182,7 +182,7 @@ struct AlarmCard: View {
                             VStack(alignment: .leading, spacing: 8) {
                                 Text(LocalizationManager.shared.localizedString("alarm.repeatDays"))
                                     .nurFont(13, weight: .medium)
-                                    .foregroundColor(.white.opacity(0.6))
+                                    .foregroundColor(Color(hex: "1A1A2E").opacity(0.6))
                                 
                                 HStack(spacing: 6) {
                                     ForEach(Weekday.allCases, id: \.self) { day in
@@ -194,12 +194,12 @@ struct AlarmCard: View {
                                             Text(day.shortName(for: language))
                                                 .nurFont(10, weight: .bold)
                                                 .frame(width: 34, height: 34)
-                                                .background(isSelected ? Color.nurGold.opacity(0.2) : Color.white.opacity(0.05))
-                                                .foregroundColor(isSelected ? .nurGold : .white.opacity(0.3))
+                                                .background(isSelected ? Color.nurGold.opacity(0.2) : ColorColor(hex: "1A1A2E").opacity(0.05))
+                                                .foregroundColor(isSelected ? .nurGold : Color(hex: "1A1A2E").opacity(0.3))
                                                 .cornerRadius(8)
                                                 .overlay(
                                                     RoundedRectangle(cornerRadius: 8)
-                                                        .stroke(isSelected ? Color.nurGold.opacity(0.5) : Color.white.opacity(0.08), lineWidth: 1)
+                                                        .stroke(isSelected ? Color.nurGold.opacity(0.5) : ColorColor(hex: "1A1A2E").opacity(0.08), lineWidth: 1)
                                                 )
                                         }
                                         .buttonStyle(.plain)

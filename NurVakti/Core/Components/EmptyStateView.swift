@@ -97,16 +97,16 @@ struct EmptyStateView: View {
             // Animasyonlu İkon
             ZStack {
                 Circle()
-                    .fill(Color.white.opacity(0.05))
+                    .fill(ColorColor(hex: "1A1A2E").opacity(0.05))
                     .frame(width: 110, height: 110)
                 Circle()
-                    .stroke(Color.white.opacity(0.08), lineWidth: 1)
+                    .stroke(ColorColor(hex: "1A1A2E").opacity(0.08), lineWidth: 1)
                     .frame(width: 130, height: 130)
                 Image(systemName: type.icon)
                     .font(.system(size: 48))
                     .foregroundStyle(
                         LinearGradient(
-                            colors: [Color.nurGold.opacity(0.7), Color.white.opacity(0.3)],
+                            colors: [Color.nurGold.opacity(0.7), ColorColor(hex: "1A1A2E").opacity(0.3)],
                             startPoint: .topLeading, endPoint: .bottomTrailing
                         )
                     )
@@ -124,14 +124,14 @@ struct EmptyStateView: View {
             VStack(spacing: 10) {
                 Text(type.title(for: language))
                     .font(.title3.bold())
-                    .foregroundColor(.white)
+                    .foregroundColor(Color(hex: "1A1A2E"))
                     .multilineTextAlignment(.center)
 
                 let sub = type.subtitle(for: language)
                 if !sub.isEmpty {
                     Text(sub)
                         .font(.subheadline)
-                        .foregroundColor(.white.opacity(0.55))
+                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.55))
                         .multilineTextAlignment(.center)
                         .padding(.horizontal, 12)
                 }

@@ -43,7 +43,7 @@ struct SkySimulationView: View {
             VStack {
                 Spacer()
                 LinearGradient(
-                    gradient: Gradient(colors: [.white.opacity(0.15), .clear]),
+                    gradient: Gradient(colors: [Color(hex: "1A1A2E").opacity(0.15), .clear]),
                     startPoint: .bottom,
                     endPoint: .top
                 )

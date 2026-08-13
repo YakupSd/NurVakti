@@ -52,10 +52,10 @@ struct PrayerTimesView: View {
                         HStack(spacing: 5) {
                             Image(systemName: "location.fill")
                                 .font(.system(size: 12, weight: .semibold))
-                                .foregroundColor(.white.opacity(0.6))
+                                .foregroundColor(Color(hex: "1A1A2E").opacity(0.6))
                             Text(vm.cityName.isEmpty ? "···" : vm.cityName)
                                 .nurFont(28, weight: .bold)
-                                .foregroundColor(.white)
+                                .foregroundColor(Color(hex: "1A1A2E"))
                         }
                         .shadow(color: .black.opacity(0.5), radius: 6)
                         
@@ -63,12 +63,12 @@ struct PrayerTimesView: View {
                             if let prayers = vm.todayPrayers {
                                 Text(prayers.hijriDate.formatted(for: localization.currentLanguage))
                                     .nurFont(13)
-                                    .foregroundColor(.white.opacity(0.5))
-                                Text("·").foregroundColor(.white.opacity(0.2))
+                                    .foregroundColor(Color(hex: "1A1A2E").opacity(0.5))
+                                Text("·").foregroundColor(Color(hex: "1A1A2E").opacity(0.2))
                             }
                             Text(localizedDate())
                                 .nurFont(13)
-                                .foregroundColor(.white.opacity(0.5))
+                                .foregroundColor(Color(hex: "1A1A2E").opacity(0.5))
                         }
                     }
                     .frame(maxWidth: .infinity)
@@ -85,7 +85,7 @@ struct PrayerTimesView: View {
                     HStack {
                         Text(NSLocalizedString("vakitler.title", comment: "").uppercased())
                             .nurFont(11, weight: .bold)
-                            .foregroundColor(.white.opacity(0.25))
+                            .foregroundColor(Color(hex: "1A1A2E").opacity(0.25))
                             .tracking(2.5)
                         Spacer()
                         if let prayers = vm.todayPrayers {
@@ -124,7 +124,7 @@ struct PrayerTimesView: View {
                             ProgressView().tint(.nurGold)
                             Text(NSLocalizedString("general.loading", comment: ""))
                                 .nurFont(13)
-                                .foregroundColor(.white.opacity(0.3))
+                                .foregroundColor(Color(hex: "1A1A2E").opacity(0.3))
                         }
                         .padding(.top, 40)
                     }
@@ -145,18 +145,18 @@ struct PrayerTimesView: View {
             VStack(alignment: .leading, spacing: 5) {
                 Text(NSLocalizedString("vakitler.nextPrayer", comment: "").uppercased())
                     .nurFont(9, weight: .bold)
-                    .foregroundColor(.white.opacity(0.35))
+                    .foregroundColor(Color(hex: "1A1A2E").opacity(0.35))
                     .tracking(1.5)
                 Text(next.name.localizedName(for: localization.currentLanguage))
                     .nurFont(22, weight: .bold)
-                    .foregroundColor(.white)
+                    .foregroundColor(Color(hex: "1A1A2E"))
             }
             
             Spacer()
             
             // Thin separator
             Rectangle()
-                .fill(Color.white.opacity(0.12))
+                .fill(ColorColor(hex: "1A1A2E").opacity(0.12))
                 .frame(width: 1, height: 38)
                 .padding(.horizontal, 18)
             
@@ -168,7 +168,7 @@ struct PrayerTimesView: View {
                     .shadow(color: .nurGold.opacity(0.4), radius: 10)
                 Text(NSLocalizedString("prayer.remaining", comment: ""))
                     .nurFont(10)
-                    .foregroundColor(.white.opacity(0.35))
+                    .foregroundColor(Color(hex: "1A1A2E").opacity(0.35))
             }
         }
         .padding(.horizontal, 22)
@@ -192,7 +192,7 @@ struct PrayerTimesView: View {
         )
         .overlay(
             RoundedRectangle(cornerRadius: 22)
-                .stroke(Color.white.opacity(0.14), lineWidth: 1)
+                .stroke(ColorColor(hex: "1A1A2E").opacity(0.14), lineWidth: 1)
         )
         .shadow(color: .black.opacity(0.35), radius: 24, y: 10)
     }

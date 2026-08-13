@@ -74,7 +74,7 @@ struct PrayerTheme: Equatable {
     
     static let ishaTheme: PrayerTheme = PrayerTheme(
         prayerName: .isha,
-        topColor: Color(hex: "000000"),
+        topColor: Color(hex: "F8F6F0"),
         bottomColor: Color(hex: "0f2027"),
         starOpacity: 1.0,
         sunPosition: -0.5,

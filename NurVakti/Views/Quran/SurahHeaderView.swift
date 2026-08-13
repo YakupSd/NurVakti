@@ -39,7 +39,7 @@ struct SurahHeaderView: View {
                 
                 // Name Arabic
                 Text("سُورَةُ \(surahName)")
-                    .font(.custom("AmiriQuran", size: 28))
+                    .font(.custom("ScheherazadeNew-Bold", size: 28))
                     .foregroundColor(.white)
                     .shadow(color: .black.opacity(0.2), radius: 1, x: 0, y: 1)
                 

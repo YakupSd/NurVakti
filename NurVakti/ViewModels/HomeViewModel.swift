@@ -68,8 +68,7 @@ final class HomeViewModel: ObservableObject {
             }
             .store(in: &cancellables)
             
-        // Saniyede bir bağımsız timer — prayerService.nextPrayer'a değil,
-        // kendi nextPrayer'ına bakıyor; cache'den yüklenince de çalışır
+        // Saniyede bir bağımsız timer
         Timer.publish(every: 1, on: .main, in: .common)
             .autoconnect()
             .sink { [weak self] _ in
@@ -92,43 +91,77 @@ final class HomeViewModel: ObservableObject {
         }
         hasAppeared = true
         
-        // 1. Önce cache kontrolü
-        if let cached = prayerService.loadCached(for: Date()) {
-            applyPrayers(cached)
-            let city = (cached.cityName.isEmpty) ? persistService.lastKnownCityName : cached.cityName
-            self.cityName = city.isEmpty ? NSLocalizedString("general.calculating", comment: "") : city
+        let settings = persistService.settings
+        
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // CACHE-FIRST STRATEJİ
+        // Önce 30 günlük cache'i kontrol et.
+        // Cache geçerliyse API'ye hiç istek atma — anında yükle.
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        
+        let currentLocation = persistService.lastKnownLocation
+        let cacheValid = persistService.isCacheValid(
+            for: currentLocation,
+            method: settings.calculationMethod
+        )
+        
+        if cacheValid {
+            // ✅ Cache geçerli — API'ye istek ATMA, cache'ten anında yükle
+            let cachedPrayers = persistService.loadPrayerCache()
+            prayerService.loadMonthlyFromCache()
+            
+            if let today = cachedPrayers.first(where: { Calendar.current.isDateInToday($0.date) }) {
+                let city = today.cityName.isEmpty ? persistService.lastKnownCityName : today.cityName
+                self.cityName = city.isEmpty ? NSLocalizedString("general.calculating", comment: "") : city
+                applyPrayers(today)
+                
+                // Bildirimleri planla
+                Task {
+                    await notifService.scheduleAll(
+                        prayers: cachedPrayers,
+                        alarms: persistService.loadAlarms(),
+                        language: settings.language
+                    )
+                }
+            }
+            
             isLoading = false
+            print("HomeViewModel: ✅ Cache'ten yüklendi (API çağrısı yapılmadı)")
+        } else {
+            // Cache yok veya geçersiz — bugün için varsa geçici göster
+            if let cached = prayerService.loadCached(for: Date()) {
+                applyPrayers(cached)
+                let city = cached.cityName.isEmpty ? persistService.lastKnownCityName : cached.cityName
+                self.cityName = city.isEmpty ? NSLocalizedString("general.calculating", comment: "") : city
+                isLoading = false
+            }
         }
         
-        // 2. Konum izni ve güncelleme başlat
+        // Konum izni ve güncelleme başlat
         locationService.requestPermission()
         locationService.startUpdating()
         
-        // 3. Eğer hala loading ise ve son bilinen konum varsa onu kullan
+        // Eğer hala loading ise ve son bilinen konum varsa onu kullan
         if isLoading, let lastLoc = persistService.lastKnownLocation {
             await handleLocationUpdate(lastLoc, force: true)
         }
         
-        self.dailyGuidance = GuidanceService.shared.getDailyGuidance(for: persistService.settings.language)
-        loadDailyContent(language: persistService.settings.language)
+        self.dailyGuidance = GuidanceService.shared.getDailyGuidance(for: settings.language)
+        loadDailyContent(language: settings.language)
         
-        updateNextReligiousDay(language: persistService.settings.language)
+        updateNextReligiousDay(language: settings.language)
         updateRoutineSlot()
         updateDhikrStatus()
         updateReadingProgress()
         
-        languageDidChange(persistService.settings.language)
+        languageDidChange(settings.language)
     }
     
     func loadDailyContent(language: LanguageCode) {
-        // Today's indices based on year day
         let dayIndex = Calendar.current.ordinality(of: .day, in: .year, for: Date()) ?? 1
         
         Task {
-            // Fetch dynamic Ayah based on day index
             self.dailyAyah = DailyAyahProvider.ayah(for: dayIndex, language: language)
-            
-            // Fetch dynamic Dua
             self.dailyDua = DailyDuaProvider.dua(for: dayIndex, language: language)
         }
     }
@@ -148,7 +181,6 @@ final class HomeViewModel: ObservableObject {
         var arabicText = ""
         var source = ""
         
-        // Fetch 5 editions in parallel
         await withTaskGroup(of: (String, String).self) { group in
             for (langCode, edition) in editions {
                 group.addTask {
@@ -167,7 +199,6 @@ final class HomeViewModel: ObservableObject {
             }
         }
         
-        // Fetch Arabic text separately
         let url = URL(string: "https://api.alquran.cloud/v1/ayah/\(surah):\(ayah)/quran-uthmani")!
         if let (data, _) = try? await URLSession.shared.data(from: url),
            let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
@@ -188,34 +219,59 @@ final class HomeViewModel: ObservableObject {
         )
     }
     
+    // MARK: - Konum Güncelleme (Akıllı Cache ile)
     private func handleLocationUpdate(_ location: CLLocation, force: Bool = false) async {
-        let lastLoc = persistService.lastKnownLocation
-        // GÜNCELLEME: Kullanıcının yeni matematik formüllerini görmesi için mesafeyi zorla büyük tutuyoruz
-        let distance = (force || lastLoc == nil) ? Double.greatestFiniteMagnitude : location.distance(from: lastLoc!)
-        
         let settings = persistService.settings
         
-        // 1. Mesafe kontrolü: 5km'den (GÜNCELLENDİ) az değişim varsa ve bugün için vakitler varsa çekme
-        if !force, distance < 5000 {
-            if let cached = prayerService.loadCached(for: Date()) {
-                applyPrayers(cached)
-                let city = (cached.cityName.isEmpty) ? persistService.lastKnownCityName : cached.cityName
-                self.cityName = city.isEmpty ? NSLocalizedString("general.calculating", comment: "") : city
-                isLoading = false
-                return
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // AKILLI CACHE KONTROLÜ
+        // Cache geçerliyse (konum <5km, bugün dahil, metod aynı)
+        // → API çağırMA, cache'ten yükle
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        
+        if !force {
+            let cacheValid = persistService.isCacheValid(
+                for: location,
+                method: settings.calculationMethod
+            )
+            
+            if cacheValid {
+                // Cache geçerli — API'ye istek ATMA
+                if let cached = prayerService.loadCached(for: Date()) {
+                    prayerService.loadMonthlyFromCache()
+                    applyPrayers(cached)
+                    let city = cached.cityName.isEmpty ? persistService.lastKnownCityName : cached.cityName
+                    self.cityName = city.isEmpty ? NSLocalizedString("general.calculating", comment: "") : city
+                    isLoading = false
+                    
+                    let cachedMonthly = prayerService.monthlyPrayers.isEmpty
+                        ? persistService.loadPrayerCache()
+                        : prayerService.monthlyPrayers
+                    await notifService.scheduleAll(
+                        prayers: cachedMonthly,
+                        alarms: persistService.loadAlarms(),
+                        language: settings.language
+                    )
+                    return
+                }
             }
         }
         
-        // 2. Konum değiştiyse veya cache yoksa
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // CACHE GEÇERSİZ — API'den 30 günlük çek
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        
+        print("HomeViewModel: 🔄 Cache geçersiz veya force — API'den çekiliyor...")
+        
         let resolvedCity = await locationService.resolveCity(for: location)
-        let finalCity = (resolvedCity.isEmpty) ? persistService.lastKnownCityName : resolvedCity
+        let finalCity = resolvedCity.isEmpty ? persistService.lastKnownCityName : resolvedCity
         self.cityName = finalCity
         persistService.saveLastKnownLocation(location)
         if !resolvedCity.isEmpty {
             persistService.saveLastKnownCityName(resolvedCity)
         }
         
-        // 30 günlük veriyi API'den çek (async)
+        // 30 günlük veriyi API'den çek
         do {
             let monthlyPrayers = try await prayerService.calculateMonthly(
                 for: location,
@@ -224,7 +280,6 @@ final class HomeViewModel: ObservableObject {
             )
             
             if let first = monthlyPrayers.first(where: { Calendar.current.isDateInToday($0.date) }) {
-                // Struct immutable olduğu için city ismini manuel ekliyoruz
                 let prayerWithCity = PrayerTime(
                     id: first.id,
                     date: first.date,
@@ -242,11 +297,24 @@ final class HomeViewModel: ObservableObject {
                 applyPrayers(prayerWithCity)
                 
                 // Bildirimleri planla
-                await notifService.scheduleAll(prayers: monthlyPrayers, alarms: persistService.loadAlarms(), language: settings.language)
+                await notifService.scheduleAll(
+                    prayers: monthlyPrayers,
+                    alarms: persistService.loadAlarms(),
+                    language: settings.language
+                )
             }
+            
+            print("HomeViewModel: ✅ API'den \(monthlyPrayers.count) gün çekildi ve cache'lendi")
         } catch {
             self.errorMessage = "Vakitler güncellenemedi: \(error.localizedDescription)"
-            print("HomeViewModel: API Error — \(error)")
+            print("HomeViewModel: ❌ API Error — \(error)")
+            
+            // API başarısız olsa bile cache'ten bir şey varsa göster
+            if todayPrayers == nil, let cached = prayerService.loadCached(for: Date()) {
+                applyPrayers(cached)
+                let city = cached.cityName.isEmpty ? persistService.lastKnownCityName : cached.cityName
+                self.cityName = city
+            }
         }
         
         isLoading = false
@@ -288,28 +356,21 @@ final class HomeViewModel: ObservableObject {
         let seconds = Int(diff) % 60
         self.countdown = String(format: "%02d:%02d:%02d", hours, minutes, seconds)
         
-        // Update UI animation states (Sun/Moon position)
+        // Update UI animation states
         let components = Calendar.current.dateComponents([.hour, .minute, .second], from: Date())
         let h = Double(components.hour ?? 0) + Double(components.minute ?? 0) / 60.0
         
-        // Calculate sun/moon position (0...1 for arc)
         let start = h < 6 || h >= 18 ? (h >= 18 ? 18.0 : -6.0) : 6.0
         let duration = 12.0
         let progress = (h - start) / duration
         self.sunPosition = min(1.0, max(0.0, progress))
         
-        // Update night status
         let (phase, _, _) = SkyPhase.current(for: h)
         let nightPhases: [SkyPhase] = [.night, .deepNight, .earlyNight, .preDawn, .dusk]
         self.isNight = nightPhases.contains(phase)
         
-        // Tamamlanan vakit sayısını güncelle
         updateCompletedPrayersCount()
-        
-        // Bireysel vakit sayaçlarını ve progreslerini güncelle
         updateIndividualPrayerProgress()
-        
-        // Slot ve Dhikr güncelle
         updateRoutineSlot()
         updateDhikrStatus()
     }
@@ -320,7 +381,6 @@ final class HomeViewModel: ObservableObject {
         var newProgress: [PrayerName: Double] = [:]
         var newRemStrings: [PrayerName: String] = [:]
         
-        // Vakitlerin başlangıç/bitişlerini hesapla (basitleştirilmiş periyotlar)
         let periods: [(PrayerName, Date, Date)] = [
             (.imsak, prayers.imsak, prayers.fajr),
             (.fajr, prayers.fajr, prayers.sunrise),
@@ -370,10 +430,8 @@ final class HomeViewModel: ObservableObject {
         var allAlarms = persistService.loadAlarms()
         
         if let index = allAlarms.firstIndex(where: { $0.prayerName == prayer }) {
-            // Mevcut alarmı kapat/aç
             allAlarms[index].isActive.toggle()
         } else {
-            // Yeni aktif alarm oluştur (varsayılan: 0 dk önce, ezan sesi)
             let newAlarm = AlarmModel(
                 id: UUID(),
                 prayerName: prayer,
@@ -387,7 +445,6 @@ final class HomeViewModel: ObservableObject {
         
         persistService.saveAlarms(allAlarms)
         
-        // Bildirimleri sistemde güncelle
         if let monthly = prayerService.monthlyPrayers.isEmpty ? nil : prayerService.monthlyPrayers {
             Task {
                 await notifService.scheduleAll(
@@ -398,7 +455,6 @@ final class HomeViewModel: ObservableObject {
             }
         }
         
-        // UI'ı güncellemek için
         objectWillChange.send()
     }
     
@@ -449,12 +505,9 @@ final class HomeViewModel: ObservableObject {
         guard let prayers = todayPrayers else { return }
         let now = Date()
         
-        // Sabah rutini: İmsak'tan Kuşluk (Sunrise + 45dk) sonrasına kadar veya öğleye kadar?
-        // Genelde Sabah Namazı vakti sabah rutinidir.
         if now >= prayers.fajr && now < prayers.dhuhr {
             self.currentRoutineSlot = .morning
         } 
-        // Akşam rutini: İkindi'den yatsı sonuna kadar.
         else if now >= prayers.asr || now < prayers.fajr {
             self.currentRoutineSlot = .evening
         } 
@@ -475,7 +528,6 @@ final class HomeViewModel: ObservableObject {
     
     public func updateReadingProgress() {
         let progress = persistService.readingProgress
-        // Ideally we should have a surah name provider, but for now we format from index
         let surahName = PrayerGuideData.surahNames[max(1, min(114, progress.lastSurah)) - 1]
         self.lastReadSurah = "\(surahName) · \(progress.lastSurah). Sure"
     }

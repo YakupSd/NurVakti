@@ -23,7 +23,7 @@ struct FavouritesStrip: View {
             HStack {
                 Text(loc.localizedString("favourites.title"))
                     .font(.system(size: 14, weight: .bold))
-                    .foregroundColor(.white)
+                    .foregroundColor(Color(hex: "1A1A2E"))
                     .shadow(color: .black.opacity(0.5), radius: 4)
                     .tracking(1.5)
                     .textCase(.uppercase)
@@ -50,7 +50,7 @@ struct FavouritesStrip: View {
                         .foregroundColor(.nurGold)
                     Text(loc.localizedString("favourites.empty"))
                         .font(.system(size: 13, weight: .semibold))
-                        .foregroundColor(.white)
+                        .foregroundColor(Color(hex: "1A1A2E"))
                         .shadow(color: .black.opacity(0.5), radius: 4)
                 }
                 .padding(.vertical, 16)
@@ -74,14 +74,14 @@ struct FavouritesStrip: View {
                                 Text(loc.localizedString("favourites.addMore"))
                                     .font(.system(size: 11, weight: .semibold))
                             }
-                            .foregroundColor(.white.opacity(0.8))
+                            .foregroundColor(Color(hex: "1A1A2E").opacity(0.8))
                             .padding(.horizontal, 14)
                             .padding(.vertical, 8)
-                            .background(Color.white.opacity(0.1))
+                            .background(ColorColor(hex: "1A1A2E").opacity(0.1))
                             .cornerRadius(20)
                             .overlay(
                                 Capsule()
-                                    .strokeBorder(Color.white.opacity(0.2), 
+                                    .strokeBorder(ColorColor(hex: "1A1A2E").opacity(0.2), 
                                                   lineWidth: 1))
                         }
                         .buttonStyle(.plain)
@@ -92,11 +92,11 @@ struct FavouritesStrip: View {
             }
         }
         .padding(18)
-        .background(.ultraThinMaterial.opacity(0.5))
+        .background(Color.white)
         .cornerRadius(24)
         .overlay(
             RoundedRectangle(cornerRadius: 24)
-                .stroke(Color.white.opacity(0.12), lineWidth: 1)
+                .stroke(ColorColor(hex: "1A1A2E").opacity(0.12), lineWidth: 1)
         )
         .sheet(item: $activeSheet) { sheet in
             switch sheet {

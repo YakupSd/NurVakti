@@ -60,6 +60,10 @@ fastlane/test_output
 
 iOSInjectionProject/
 
+# Xcode Archives & dSYMs
+*.xcarchive
+*.dSYM
+
 # Assets
 !Contents.json
 !*.xcassets/**/Contents.json

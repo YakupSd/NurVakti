@@ -40,7 +40,7 @@ struct NurVaktiWidgetEntryView : View {
 
     var body: some View {
         ZStack {
-            Color(hex: "0F172A")
+            Color(hex: "F8F6F0")
             
             VStack(alignment: .leading, spacing: 8) {
                 HStack {

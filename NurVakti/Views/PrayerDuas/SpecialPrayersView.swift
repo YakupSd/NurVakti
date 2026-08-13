@@ -11,7 +11,7 @@ struct SpecialPrayersView: View {
     
     var body: some View {
         ZStack {
-            Color(hex: "0F172A").ignoresSafeArea()
+            Color(hex: "F8F6F0").ignoresSafeArea()
             
             ScrollView {
                 VStack(spacing: 24) {
@@ -23,11 +23,11 @@ struct SpecialPrayersView: View {
                         
                         Text(currentMonth.name[localization.currentLanguage.rawValue] ?? "")
                             .nurFont(24, weight: .bold)
-                            .foregroundColor(.white)
+                            .foregroundColor(Color(hex: "1A1A2E"))
                         
                         Text(localization.localizedString("prayerGuide.specialForMonth"))
                             .nurFont(14)
-                            .foregroundColor(.white.opacity(0.6))
+                            .foregroundColor(Color(hex: "1A1A2E").opacity(0.6))
                     }
                     .padding(.top, 20)
                     
@@ -49,7 +49,7 @@ struct SpecialPrayersView: View {
                         } else if monthlyService.monthlyDuas.isEmpty {
                             Text(localization.localizedString("error.network")) // Or appropriate empty message
                                 .nurFont(14)
-                                .foregroundColor(.white.opacity(0.5))
+                                .foregroundColor(Color(hex: "1A1A2E").opacity(0.5))
                                 .padding(.horizontal)
                         } else {
                             ForEach(monthlyService.monthlyDuas) { dua in
@@ -75,7 +75,7 @@ struct SpecialPrayersView: View {
                     // Eid Prayer Guidance (if relevant)
                     if currentMonth == .ramadan || currentMonth == .shawwal || currentMonth == .dhuAlHijjah {
                         VStack(alignment: .leading, spacing: 16) {
-                            Divider().background(Color.white.opacity(0.1))
+                            Divider().background(ColorColor(hex: "1A1A2E").opacity(0.1))
                                 .padding(.vertical, 10)
                             
                             Text(localization.localizedString("prayerGuide.howToEidPrayer"))

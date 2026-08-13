@@ -11,7 +11,7 @@ struct TesbihatView: View {
     
     var body: some View {
         ZStack {
-            Color(hex: "0F172A").ignoresSafeArea()
+            Color(hex: "F8F6F0").ignoresSafeArea()
             
             VStack(spacing: 0) {
                 // Progress Header
@@ -37,7 +37,7 @@ struct TesbihatView: View {
         HStack(spacing: 6) {
             ForEach(0..<steps.count, id: \.self) { index in
                 Capsule()
-                    .fill(index == currentStepIndex ? Color.nurGold : (index < currentStepIndex ? Color.nurGold.opacity(0.4) : Color.white.opacity(0.1)))
+                    .fill(index == currentStepIndex ? Color.nurGold : (index < currentStepIndex ? Color.nurGold.opacity(0.4) : ColorColor(hex: "1A1A2E").opacity(0.1)))
                     .frame(width: index == currentStepIndex ? 30 : 10, height: 4)
                     .animation(.spring(), value: currentStepIndex)
             }
@@ -59,7 +59,7 @@ struct TesbihatView: View {
                     Text(step.arabicText)
                         .dynamicArabicFont(text: step.arabicText, baseSize: 34)
                         .multilineTextAlignment(.center)
-                        .foregroundColor(.white)
+                        .foregroundColor(Color(hex: "1A1A2E"))
                         .padding(.horizontal, 20)
                         .lineSpacing(12)
                         .fixedSize(horizontal: false, vertical: true)
@@ -91,14 +91,14 @@ struct TesbihatView: View {
                     Text(step.transliteration)
                         .dynamicMeaningFont(text: step.transliteration, baseSize: 15)
                         .italic()
-                        .foregroundColor(.white.opacity(0.7))
+                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.7))
                         .multilineTextAlignment(.center)
                         .padding(.horizontal, 24)
                         .fixedSize(horizontal: false, vertical: true)
                     
                     Text(step.meaning(for: localization.currentLanguage))
                         .dynamicMeaningFont(text: step.meaning(for: localization.currentLanguage), baseSize: 13)
-                        .foregroundColor(.white.opacity(0.5))
+                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.5))
                         .multilineTextAlignment(.center)
                         .padding(.horizontal, 24)
                         .fixedSize(horizontal: false, vertical: true)
@@ -120,7 +120,7 @@ struct TesbihatView: View {
     private var counterUI: some View {
         ZStack {
             Circle()
-                .stroke(Color.white.opacity(0.05), lineWidth: 12)
+                .stroke(ColorColor(hex: "1A1A2E").opacity(0.05), lineWidth: 12)
                 .frame(width: 180, height: 180)
             
             Circle()
@@ -134,7 +134,7 @@ struct TesbihatView: View {
             
             Text("\(count)")
                 .nurFont(60, weight: .bold)
-                .foregroundColor(.white)
+                .foregroundColor(Color(hex: "1A1A2E"))
         }
         .onTapGesture {
             increment()
@@ -150,7 +150,7 @@ struct TesbihatView: View {
             Button(action: prevStep) {
                 Image(systemName: "chevron.left")
                     .font(.title2)
-                    .foregroundColor(currentStepIndex > 0 ? .white : .white.opacity(0.1))
+                    .foregroundColor(currentStepIndex > 0 ? .white : Color(hex: "1A1A2E").opacity(0.1))
             }
             .disabled(currentStepIndex == 0)
             
@@ -195,7 +195,7 @@ struct TesbihatView: View {
             Button(action: nextStep) {
                 Image(systemName: "chevron.right")
                     .font(.title2)
-                    .foregroundColor(currentStepIndex < steps.count - 1 ? .white : .white.opacity(0.1))
+                    .foregroundColor(currentStepIndex < steps.count - 1 ? .white : Color(hex: "1A1A2E").opacity(0.1))
             }
             .disabled(isLastStep)
         }

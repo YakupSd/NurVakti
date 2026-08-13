@@ -6,7 +6,7 @@ struct PrayerGuideMainView: View {
     
     var body: some View {
         ZStack {
-            Color(hex: "0F172A").ignoresSafeArea()
+            Color(hex: "F8F6F0").ignoresSafeArea()
             
             ScrollView {
                 VStack(spacing: 20) {
@@ -91,25 +91,25 @@ struct PrayerGuideMainView: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(localization.localizedString(title))
                         .nurFont(20, weight: .bold)
-                        .foregroundColor(.white)
+                        .foregroundColor(Color(hex: "1A1A2E"))
                     
                     Text(localization.localizedString(subtitle))
                         .nurFont(14)
-                        .foregroundColor(.white.opacity(0.6))
+                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.6))
                         .multilineTextAlignment(.leading)
                 }
                 
                 Spacer()
                 
                 Image(systemName: "chevron.right")
-                    .foregroundColor(.white.opacity(0.3))
+                    .foregroundColor(Color(hex: "1A1A2E").opacity(0.3))
             }
             .padding(20)
-            .background(Color.white.opacity(0.05))
+            .background(ColorColor(hex: "1A1A2E").opacity(0.05))
             .cornerRadius(24)
             .overlay(
                 RoundedRectangle(cornerRadius: 24)
-                    .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                    .stroke(ColorColor(hex: "1A1A2E").opacity(0.1), lineWidth: 1)
             )
         }
     }

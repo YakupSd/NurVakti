@@ -14,11 +14,11 @@ struct HijriDateBadge: View {
             
             Text(miladiFormatter.string(from: miladi))
                 .font(.system(size: fontSize.caption))
-                .foregroundColor(.white.opacity(0.6))
+                .foregroundColor(Color(hex: "1A1A2E").opacity(0.6))
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 10)
-        .background(.white.opacity(0.1))
+        .background(Color(hex: "1A1A2E").opacity(0.1))
         .cornerRadius(12)
         .environment(\.layoutDirection, language.isRTL ? .rightToLeft : .leftToRight)
     }

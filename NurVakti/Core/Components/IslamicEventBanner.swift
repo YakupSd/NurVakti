@@ -22,13 +22,13 @@ struct IslamicEventBanner: View {
             VStack(alignment: .leading, spacing: 3) {
                 Text(bannerTitle)
                     .font(.system(size: 11, weight: .semibold))
-                    .foregroundColor(.white.opacity(0.6))
+                    .foregroundColor(Color(hex: "1A1A2E").opacity(0.6))
                     .textCase(.uppercase)
                     .tracking(0.5)
 
                 Text(event.key.name(for: language))
                     .font(.system(size: 17, weight: .bold))
-                    .foregroundColor(.white)
+                    .foregroundColor(Color(hex: "1A1A2E"))
             }
 
             Spacer()
@@ -47,9 +47,9 @@ struct IslamicEventBanner: View {
                 }) {
                     Image(systemName: "xmark")
                         .font(.system(size: 12, weight: .bold))
-                        .foregroundColor(.white.opacity(0.5))
+                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.5))
                         .padding(8)
-                        .background(Color.white.opacity(0.1))
+                        .background(ColorColor(hex: "1A1A2E").opacity(0.1))
                         .clipShape(Circle())
                 }
                 .accessibilityLabel("Banner'ı kapat")

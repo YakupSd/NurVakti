@@ -22,11 +22,11 @@ struct SkySimulationPreview: View {
                     
                     Text(formatTime(hour: hour))
                         .font(.system(size: 32, weight: .bold, design: .monospaced))
-                        .foregroundColor(.white)
+                        .foregroundColor(Color(hex: "1A1A2E"))
                     
                     Text(current.rawValue)
                         .font(.headline)
-                        .foregroundColor(.white.opacity(0.8))
+                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.8))
                     
                     Slider(value: $timeProgress, in: 0...0.999)
                         .accentColor(.orange)
@@ -34,10 +34,10 @@ struct SkySimulationPreview: View {
                     
                     Text("Time Scrubber (00:00 - 23:59)")
                         .font(.caption)
-                        .foregroundColor(.white.opacity(0.6))
+                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.6))
                 }
                 .padding()
-                .background(.ultraThinMaterial)
+                .background(Color.white)
                 .cornerRadius(20)
                 .padding()
             }

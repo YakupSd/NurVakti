@@ -18,7 +18,7 @@ struct LanguagePicker: View {
                         VStack(spacing: 12) {
                             ZStack {
                                 Circle()
-                                    .fill(selectedLanguage == language ? Color.nurGold.opacity(0.2) : Color.white.opacity(0.05))
+                                    .fill(selectedLanguage == language ? Color.nurGold.opacity(0.2) : ColorColor(hex: "1A1A2E").opacity(0.05))
                                     .frame(width: 64, height: 64)
                                     .overlay(
                                         Circle()
@@ -32,7 +32,7 @@ struct LanguagePicker: View {
                             
                             Text(language.displayName)
                                 .font(.system(size: 14, weight: selectedLanguage == language ? .bold : .medium))
-                                .foregroundColor(selectedLanguage == language ? .nurGold : .white.opacity(0.7))
+                                .foregroundColor(selectedLanguage == language ? .nurGold : Color(hex: "1A1A2E").opacity(0.7))
                         }
                         .frame(width: 90)
                         .padding(.vertical, 8)

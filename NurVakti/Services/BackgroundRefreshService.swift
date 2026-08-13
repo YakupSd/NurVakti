@@ -23,7 +23,11 @@ final class BackgroundRefreshService {
     // MARK: - Kayıt (AppDelegate'te çağrılır)
     func register() {
         BGTaskScheduler.shared.register(forTaskWithIdentifier: Self.taskIdentifier, using: nil) { task in
-            self.handle(task: task as! BGAppRefreshTask)
+            guard let refreshTask = task as? BGAppRefreshTask else {
+                task.setTaskCompleted(success: false)
+                return
+            }
+            self.handle(task: refreshTask)
         }
     }
 

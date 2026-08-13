@@ -25,7 +25,7 @@ struct TasbihModeView: View {
     
     var body: some View {
         ZStack {
-            Color(hex: "0F172A").ignoresSafeArea()
+            Color(hex: "F8F6F0").ignoresSafeArea()
             
             // Dynamic Background Glow
             RadialGradient(colors: [stages[currentStageIndex].color.opacity(0.15), .clear], 
@@ -41,7 +41,7 @@ struct TasbihModeView: View {
                     HStack(spacing: 8) {
                         ForEach(0..<3) { idx in
                             Circle()
-                                .fill(idx == currentStageIndex ? stages[idx].color : Color.white.opacity(0.1))
+                                .fill(idx == currentStageIndex ? stages[idx].color : ColorColor(hex: "1A1A2E").opacity(0.1))
                                 .frame(width: 8, height: 8)
                         }
                     }
@@ -58,7 +58,7 @@ struct TasbihModeView: View {
                             .foregroundColor(.nurGold)
                         Text(localization.localizedString("tasbih_finish"))
                             .nurFont(28, weight: .bold)
-                            .foregroundColor(.white)
+                            .foregroundColor(Color(hex: "1A1A2E"))
                         
                         Button(action: { router.pop() }) {
                             Text(localization.localizedString("general.done"))
@@ -94,18 +94,18 @@ struct TasbihModeView: View {
                     VStack(spacing: 12) {
                         Text(stages[currentStageIndex].arabic)
                             .font(.custom("Traditional Arabic", size: 60))
-                            .foregroundColor(.white)
+                            .foregroundColor(Color(hex: "1A1A2E"))
                             .shadow(color: stages[currentStageIndex].color.opacity(0.5), radius: 10)
                         
                         Text(localization.localizedString(stages[currentStageIndex].nameKey))
                             .nurFont(22, weight: .medium)
-                            .foregroundColor(.white.opacity(0.7))
+                            .foregroundColor(Color(hex: "1A1A2E").opacity(0.7))
                     }
                     
                     // Counter Ring
                     ZStack {
                         Circle()
-                            .stroke(Color.white.opacity(0.05), lineWidth: 15)
+                            .stroke(ColorColor(hex: "1A1A2E").opacity(0.05), lineWidth: 15)
                         Circle()
                             .trim(from: 0, to: CGFloat(currentCount) / 33.0)
                             .stroke(stages[currentStageIndex].color, style: StrokeStyle(lineWidth: 15, lineCap: .round))
@@ -114,7 +114,7 @@ struct TasbihModeView: View {
                         
                         Text("\(currentCount)")
                             .nurFont(64, weight: .bold)
-                            .foregroundColor(.white)
+                            .foregroundColor(Color(hex: "1A1A2E"))
                     }
                     .frame(width: 240, height: 240)
                     .contentShape(Circle())
@@ -126,7 +126,7 @@ struct TasbihModeView: View {
                         let nextKey = stages[currentStageIndex+1].nameKey
                         Text(String(format: localization.localizedString("tasbih_next"), localization.localizedString(nextKey)))
                             .nurFont(14)
-                            .foregroundColor(.white.opacity(0.4))
+                            .foregroundColor(Color(hex: "1A1A2E").opacity(0.4))
                     }
                 }
                 
@@ -134,7 +134,7 @@ struct TasbihModeView: View {
                 
                 Text(localization.localizedString("dhikr.addHint")) // Or similar info
                     .nurFont(12)
-                    .foregroundColor(.white.opacity(0.2))
+                    .foregroundColor(Color(hex: "1A1A2E").opacity(0.2))
                     .padding(.bottom)
             }
         }

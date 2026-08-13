@@ -19,7 +19,7 @@ struct DailyGuidanceView: View {
                 Button(action: shareContent) {
                     Image(systemName: "square.and.arrow.up")
                         .font(.system(size: 14))
-                        .foregroundColor(.white.opacity(0.6))
+                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.6))
                 }
             }
             .padding(.horizontal)
@@ -28,7 +28,7 @@ struct DailyGuidanceView: View {
             Text(item.text)
                 .nurFont(20, weight: .medium)
                 .italic()
-                .foregroundColor(.white)
+                .foregroundColor(Color(hex: "1A1A2E"))
                 .multilineTextAlignment(.center)
                 .lineSpacing(4)
                 .padding(.horizontal)
@@ -37,7 +37,7 @@ struct DailyGuidanceView: View {
             if let source = item.source {
                 Text(source)
                     .nurFont(12, weight: .light)
-                    .foregroundColor(.white.opacity(0.5))
+                    .foregroundColor(Color(hex: "1A1A2E").opacity(0.5))
             }
         }
         .padding(.vertical, 24)

@@ -28,7 +28,7 @@ struct QuickDuaSheet: View {
                             }
                             Text(item.dua.title(for: loc.currentLanguage))
                                 .font(.system(size: 24, weight: .bold))
-                                .foregroundColor(.white)
+                                .foregroundColor(Color(hex: "1A1A2E"))
                                 .fixedSize(horizontal: false, vertical: true)
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -40,7 +40,7 @@ struct QuickDuaSheet: View {
                             .font(.custom("Amiri-Bold", size: 32))
                             .lineSpacing(12)
                             .multilineTextAlignment(.trailing)
-                            .foregroundColor(.white)
+                            .foregroundColor(Color(hex: "1A1A2E"))
                             .frame(maxWidth: .infinity, alignment: .trailing)
                             .padding(.horizontal, 24)
                             .padding(.vertical, 10)
@@ -56,7 +56,7 @@ struct QuickDuaSheet: View {
                             Text(item.dua.transliteration)
                                 .font(.system(size: 15, weight: .medium, design: .serif))
                                 .italic()
-                                .foregroundColor(.white.opacity(0.8))
+                                .foregroundColor(Color(hex: "1A1A2E").opacity(0.8))
                                 .lineSpacing(6)
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -70,15 +70,15 @@ struct QuickDuaSheet: View {
                                 .textCase(.uppercase)
                             Text(item.dua.meaning(for: loc.currentLanguage))
                                 .font(.system(size: 16))
-                                .foregroundColor(.white)
+                                .foregroundColor(Color(hex: "1A1A2E"))
                                 .lineSpacing(8)
                         }
                         .padding(24)
-                        .background(.ultraThinMaterial.opacity(0.1))
+                        .background(Color.white)
                         .cornerRadius(24)
                         .overlay(
                             RoundedRectangle(cornerRadius: 24)
-                                .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                                .stroke(ColorColor(hex: "1A1A2E").opacity(0.1), lineWidth: 1)
                         )
                         .padding(.horizontal, 24)
                     }
@@ -104,16 +104,16 @@ struct QuickDuaSheet: View {
                                 HStack(spacing: 12) {
                                     ZStack {
                                         Circle()
-                                            .fill(Color.white.opacity(0.2))
+                                            .fill(ColorColor(hex: "1A1A2E").opacity(0.2))
                                             .frame(width: 40, height: 40)
                                         Image(systemName: isPlaying ? "pause.fill" : "play.fill")
-                                            .foregroundColor(.white)
+                                            .foregroundColor(Color(hex: "1A1A2E"))
                                     }
                                     Text(isPlaying 
                                         ? loc.localizedString("audio.pause") 
                                         : loc.localizedString("audio.listen"))
                                         .font(.system(size: 14, weight: .bold))
-                                        .foregroundColor(.white)
+                                        .foregroundColor(Color(hex: "1A1A2E"))
                                 }
                                 .padding(.leading, 8)
                                 .padding(.trailing, 24)
@@ -130,11 +130,11 @@ struct QuickDuaSheet: View {
                             } label: {
                                 ZStack {
                                     Circle()
-                                        .fill(item.userState.isReadToday ? Color.green : Color.white.opacity(0.12))
+                                        .fill(item.userState.isReadToday ? Color.green : ColorColor(hex: "1A1A2E").opacity(0.12))
                                         .frame(width: 60, height: 60)
                                     Image(systemName: "checkmark")
                                         .font(.system(size: 22, weight: .bold))
-                                        .foregroundColor(.white)
+                                        .foregroundColor(Color(hex: "1A1A2E"))
                                 }
                                 .shadow(color: .black.opacity(0.3), radius: 15, y: 8)
                             }
@@ -150,9 +150,9 @@ struct QuickDuaSheet: View {
                     Button { dismiss() } label: {
                         Image(systemName: "xmark")
                             .font(.system(size: 18, weight: .bold))
-                            .foregroundColor(.white.opacity(0.5))
+                            .foregroundColor(Color(hex: "1A1A2E").opacity(0.5))
                             .padding(12)
-                            .background(.white.opacity(0.08))
+                            .background(Color(hex: "1A1A2E").opacity(0.08))
                             .clipShape(Circle())
                     }
                     
@@ -164,9 +164,9 @@ struct QuickDuaSheet: View {
                     } label: {
                         Image(systemName: item.isFavourite ? "star.fill" : "star")
                             .font(.system(size: 20, weight: .bold))
-                            .foregroundColor(item.isFavourite ? .nurGold : .white.opacity(0.3))
+                            .foregroundColor(item.isFavourite ? .nurGold : Color(hex: "1A1A2E").opacity(0.3))
                             .padding(12)
-                            .background(.white.opacity(0.08))
+                            .background(Color(hex: "1A1A2E").opacity(0.08))
                             .clipShape(Circle())
                     }
                 }

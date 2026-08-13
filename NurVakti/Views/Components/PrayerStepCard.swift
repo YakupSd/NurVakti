@@ -21,22 +21,22 @@ struct PrayerStepCard: View {
             VStack(alignment: .leading, spacing: 8) {
                 Text(step.title(for: language))
                     .nurFont(20, weight: .bold)
-                    .foregroundColor(.white)
+                    .foregroundColor(Color(hex: "1A1A2E"))
                 
                 Text(step.description(for: language))
                     .nurFont(16)
-                    .foregroundColor(.white.opacity(0.7))
+                    .foregroundColor(Color(hex: "1A1A2E").opacity(0.7))
                     .fixedSize(horizontal: false, vertical: true)
                 
                 if let imageName = step.imageName {
                     ZStack {
                         // Fallback background
                         RoundedRectangle(cornerRadius: 12)
-                            .fill(Color.white.opacity(0.05))
+                            .fill(ColorColor(hex: "1A1A2E").opacity(0.05))
                         
                         Image(systemName: "figure.pray")
                             .font(.system(size: 40))
-                            .foregroundColor(.white.opacity(0.1))
+                            .foregroundColor(Color(hex: "1A1A2E").opacity(0.1))
                         
                         // Actual Image
                         Image(imageName)
@@ -48,18 +48,18 @@ struct PrayerStepCard: View {
                     .cornerRadius(12)
                     .overlay(
                         RoundedRectangle(cornerRadius: 12)
-                            .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                            .stroke(ColorColor(hex: "1A1A2E").opacity(0.1), lineWidth: 1)
                     )
                     .padding(.top, 8)
                 }
             }
         }
         .padding(24)
-        .background(Color.white.opacity(0.05))
+        .background(ColorColor(hex: "1A1A2E").opacity(0.05))
         .cornerRadius(24)
         .overlay(
             RoundedRectangle(cornerRadius: 24)
-                .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                .stroke(ColorColor(hex: "1A1A2E").opacity(0.1), lineWidth: 1)
         )
     }
 }

@@ -4,7 +4,7 @@ import Foundation
 // Ana uygulama bu struct'ı App Group container'a yazar.
 // Widget extension aynı container'dan okur.
 //
-// App Group ID: group.com.nurvakti.shared
+// App Group ID: group.com.yakupsuda.NurVaktiApp
 // (Xcode'da her iki target'a da eklenmelidir)
 
 struct NurWidgetData: Codable {
@@ -28,7 +28,7 @@ struct NurWidgetData: Codable {
     // Son güncelleme
     var lastUpdated: Date
 
-    static let appGroupID = "group.com.nurvakti.shared"
+    static let appGroupID = "group.com.yakupsuda.NurVaktiApp"
     static let dataKey    = "widget_data"
 }
 

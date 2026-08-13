@@ -41,11 +41,11 @@ struct ProfileView: View {
             VStack(spacing: 4) {
                 Text(vm.userSession.userName ?? "Misafir")
                     .nurFont(24, weight: .bold)
-                    .foregroundColor(.white)
+                    .foregroundColor(Color(hex: "1A1A2E"))
                 
                 Text(vm.userSession.userEmail ?? "nurvakti@example.com")
                     .nurFont(14, weight: .medium)
-                    .foregroundColor(.white.opacity(0.5))
+                    .foregroundColor(Color(hex: "1A1A2E").opacity(0.5))
             }
         }
         .padding(.vertical, 20)
@@ -98,19 +98,19 @@ struct StatCard: View {
             
             Text(value)
                 .nurFont(18, weight: .bold)
-                .foregroundColor(.white)
+                .foregroundColor(Color(hex: "1A1A2E"))
             
             Text(title)
                 .nurFont(10, weight: .medium)
-                .foregroundColor(.white.opacity(0.4))
+                .foregroundColor(Color(hex: "1A1A2E").opacity(0.4))
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 16)
-        .background(Color.white.opacity(0.05))
+        .background(ColorColor(hex: "1A1A2E").opacity(0.05))
         .cornerRadius(16)
         .overlay(
             RoundedRectangle(cornerRadius: 16)
-                .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                .stroke(ColorColor(hex: "1A1A2E").opacity(0.1), lineWidth: 1)
         )
     }
 }
@@ -136,11 +136,11 @@ struct ProfileActionButton: View {
                 
                 Image(systemName: "chevron.right")
                     .font(.system(size: 12))
-                    .foregroundColor(.white.opacity(0.3))
+                    .foregroundColor(Color(hex: "1A1A2E").opacity(0.3))
             }
             .padding(.horizontal, 16)
             .frame(height: 50)
-            .background(Color.white.opacity(0.05))
+            .background(ColorColor(hex: "1A1A2E").opacity(0.05))
             .cornerRadius(12)
         }
     }

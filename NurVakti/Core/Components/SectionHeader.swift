@@ -18,7 +18,7 @@ struct SectionHeader: View {
             Text(title.uppercased())
                 .font(.system(size: 13, weight: .black))
                 .spacing(1.2)
-                .foregroundColor(.white.opacity(0.8))
+                .foregroundColor(Color(hex: "1A1A2E").opacity(0.8))
             
             Spacer()
             

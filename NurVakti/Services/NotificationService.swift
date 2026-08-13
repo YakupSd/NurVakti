@@ -8,7 +8,6 @@ final class NotificationService: NSObject, ObservableObject {
     
     override init() {
         super.init()
-        UNUserNotificationCenter.current().delegate = self
     }
     
     func requestPermission() async -> Bool {
@@ -28,18 +27,29 @@ final class NotificationService: NSObject, ObservableObject {
         }
     }
     
-    // 30 günlük bildirimleri toplu planla
+    // Gelecekteki bildirimleri planla (iOS 64 limitine uygun olarak en yakın 50 bildirim)
     func scheduleAll(prayers: [PrayerTime], 
                      alarms: [AlarmModel],
                      language: LanguageCode) async {
         cancelAll()
+        
+        struct PendingItem {
+            let prayer: PrayerName
+            let date: Date
+            let minutesBefore: Int
+            let sound: AlarmSound
+            let identifier: String
+        }
+        
+        var pendingItems: [PendingItem] = []
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyyMMdd_HHmm"
+        
         for prayer in prayers {
-            // Bu gün hangi haftanın günü?
             let weekdayRaw = Calendar.current.component(.weekday, from: prayer.date)
             let currentWeekday = Weekday(rawValue: weekdayRaw)
             
             for alarm in alarms where alarm.isActive {
-                // repeatDays doluysa sadece seçili günlerde planla
                 if !alarm.repeatDays.isEmpty,
                    let wd = currentWeekday,
                    !alarm.repeatDays.contains(wd) {
@@ -51,12 +61,28 @@ final class NotificationService: NSObject, ObservableObject {
                 
                 guard notifyDate > Date() else { continue }
                 
-                await schedule(prayer: alarm.prayerName,
-                               at: notifyDate,
-                               minutesBefore: alarm.minutesBefore,
-                               sound: alarm.soundType,
-                               language: language)
+                let id = "nurvakti_\(alarm.prayerName.rawValue)_\(dateFormatter.string(from: notifyDate))_\(alarm.minutesBefore)"
+                pendingItems.append(PendingItem(
+                    prayer: alarm.prayerName,
+                    date: notifyDate,
+                    minutesBefore: alarm.minutesBefore,
+                    sound: alarm.soundType,
+                    identifier: id
+                ))
             }
+        }
+        
+        // En yakın zamana göre sırala ve iOS 64 limitine takılmamak için ilk 50 bildirimi al
+        pendingItems.sort { $0.date < $1.date }
+        let topItems = Array(pendingItems.prefix(50))
+        
+        for item in topItems {
+            await schedule(prayer: item.prayer,
+                           at: item.date,
+                           minutesBefore: item.minutesBefore,
+                           sound: item.sound,
+                           language: language,
+                           identifier: item.identifier)
         }
     }
     
@@ -65,20 +91,19 @@ final class NotificationService: NSObject, ObservableObject {
                   at date: Date,
                   minutesBefore: Int,
                   sound: AlarmSound,
-                  language: LanguageCode) async {
+                  language: LanguageCode,
+                  identifier: String? = nil) async {
         let content = UNMutableNotificationContent()
         content.title = "NurVakti 🕌"
         content.body = notificationBody(prayer: prayer, minutes: minutesBefore, language: language)
-        // Time-sensitive seviye: cihaz Odak modu'nda bile görünsün
         content.interruptionLevel = .timeSensitive
         
         // Ses ayarı
-        // Not: ezan.mp3 / fajr.mp3 için Resources/Sounds/ klasörüne ses dosyası eklenmelidir.
         switch sound {
         case .ezan:
-            content.sound = UNNotificationSound(named: UNNotificationSoundName("ezan.mp3"))
+            content.sound = UNNotificationSound(named: UNNotificationSoundName("ezan_short.mp3"))
         case .fajr:
-            content.sound = UNNotificationSound(named: UNNotificationSoundName("fajr.mp3"))
+            content.sound = UNNotificationSound(named: UNNotificationSoundName("fajr_short.mp3"))
         case .silent:
             content.sound = nil
         case .system:
@@ -88,7 +113,8 @@ final class NotificationService: NSObject, ObservableObject {
         let components = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
         
-        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+        let requestID = identifier ?? UUID().uuidString
+        let request = UNNotificationRequest(identifier: requestID, content: content, trigger: trigger)
         try? await UNUserNotificationCenter.current().add(request)
     }
     
@@ -125,11 +151,5 @@ final class NotificationService: NSObject, ObservableObject {
         case .maghrib: return prayer.maghrib
         case .isha: return prayer.isha
         }
-    }
-}
-
-extension NotificationService: UNUserNotificationCenterDelegate {
-    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        completionHandler([.banner, .sound])
     }
 }

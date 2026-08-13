@@ -22,17 +22,17 @@ struct QiblaView: View {
                 VStack(spacing: 12) {
                     Text(localization.localizedString("qibla.title"))
                         .nurFont(24, weight: .bold)
-                        .foregroundColor(.white)
+                        .foregroundColor(Color(hex: "1A1A2E"))
                     
                     Text(city)
                         .nurFont(14, weight: .medium)
-                        .foregroundColor(.white.opacity(0.6))
+                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.6))
                     
                     VStack(spacing: 4) {
                         HStack(alignment: .lastTextBaseline, spacing: 4) {
                             Text(String(format: "%.0f°", vm.heading))
                                 .nurFont(64, weight: .black)
-                                .foregroundColor(.white)
+                                .foregroundColor(Color(hex: "1A1A2E"))
                             Text(currentDirectionString)
                                 .nurFont(24, weight: .bold)
                                 .foregroundColor(.nurGold)
@@ -45,10 +45,10 @@ struct QiblaView: View {
                             Text("\(localization.localizedString("qibla.title")): \(String(format: "%.0f°", vm.qiblaAngle)) SE")
                                 .nurFont(12, weight: .bold)
                         }
-                        .foregroundColor(.white.opacity(0.5))
+                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.5))
                         .padding(.horizontal, 12)
                         .padding(.vertical, 4)
-                        .background(Color.white.opacity(0.1))
+                        .background(ColorColor(hex: "1A1A2E").opacity(0.1))
                         .cornerRadius(20)
                     }
                     
@@ -107,7 +107,7 @@ struct QiblaView: View {
                 } else {
                     Text(localization.localizedString("qibla.calibrateHint"))
                         .nurFont(12)
-                        .foregroundColor(.white.opacity(0.4))
+                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.4))
                         .multilineTextAlignment(.center)
                         .padding(.horizontal, 40)
                 }
@@ -194,7 +194,7 @@ struct CompassDiskView: View {
                 .fill(.ultraThinMaterial)
                 .overlay(
                     Circle()
-                        .stroke(Color.white.opacity(0.2), lineWidth: 1)
+                        .stroke(ColorColor(hex: "1A1A2E").opacity(0.2), lineWidth: 1)
                 )
                 .shadow(color: .black.opacity(0.3), radius: 20, y: 10)
             
@@ -206,7 +206,7 @@ struct CompassDiskView: View {
             // Marks
             ForEach(0..<72) { i in
                 Rectangle()
-                    .fill(i % 18 == 0 ? Color.nurGold : Color.white.opacity(0.3))
+                    .fill(i % 18 == 0 ? Color.nurGold : ColorColor(hex: "1A1A2E").opacity(0.3))
                     .frame(width: i % 18 == 0 ? 3 : 1, height: i % 18 == 0 ? 18 : 10)
                     .offset(y: -135)
                     .rotationEffect(.degrees(Double(i) * 5))
@@ -220,7 +220,7 @@ struct CompassDiskView: View {
                 Text("W").offset(x: -110)
             }
             .nurFont(16, weight: .black)
-            .foregroundColor(.white)
+            .foregroundColor(Color(hex: "1A1A2E"))
         }
         .frame(width: 300, height: 300)
     }

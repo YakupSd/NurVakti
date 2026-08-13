@@ -141,12 +141,12 @@ struct ErrorStateView: View {
             VStack(spacing: 12) {
                 Text(error.title(for: language))
                     .font(.title2.bold())
-                    .foregroundColor(.white)
+                    .foregroundColor(Color(hex: "1A1A2E"))
                     .multilineTextAlignment(.center)
 
                 Text(error.message(for: language))
                     .font(.body)
-                    .foregroundColor(.white.opacity(0.65))
+                    .foregroundColor(Color(hex: "1A1A2E").opacity(0.65))
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 8)
             }
@@ -171,7 +171,7 @@ struct ErrorStateView: View {
                 if let onDismiss = onDismiss {
                     Button(language == .tr ? "Atla" : "Skip") { onDismiss() }
                         .font(.subheadline)
-                        .foregroundColor(.white.opacity(0.4))
+                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.4))
                 }
             }
             .padding(.horizontal, 28)

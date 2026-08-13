@@ -109,7 +109,10 @@ public class LoadingView: UIView {
 
 public extension UIApplication {
     static func topMostViewController(
-        base: UIViewController? = UIApplication.shared.windows.first?.rootViewController
+        base: UIViewController? = {
+            guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene else { return nil }
+            return scene.windows.first(where: { $0.isKeyWindow })?.rootViewController ?? scene.windows.first?.rootViewController
+        }()
     ) -> UIViewController? {
         if let nav = base as? UINavigationController {
             return topMostViewController(base: nav.visibleViewController)

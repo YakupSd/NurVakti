@@ -26,7 +26,7 @@ struct PrayerStepInteractiveView: View {
                     } else {
                         Image(systemName: "figure.pray")
                             .font(.system(size: 80))
-                            .foregroundColor(.white.opacity(0.1))
+                            .foregroundColor(Color(hex: "1A1A2E").opacity(0.1))
                     }
                 }
                 .frame(width: geometry.size.width * 0.8)
