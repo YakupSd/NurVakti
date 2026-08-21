@@ -25,139 +25,149 @@ struct TasbihModeView: View {
     
     var body: some View {
         ZStack {
+            // Background
             Color(hex: "F8F6F0").ignoresSafeArea()
             
-            // Dynamic Background Glow
-            RadialGradient(colors: [stages[currentStageIndex].color.opacity(0.15), .clear], 
-                           center: .center, startRadius: 0, endRadius: 300)
-                .ignoresSafeArea()
-                .animation(.easeInOut, value: currentStageIndex)
+            // Dynamic Background Ambient Glow
+            RadialGradient(
+                colors: [stages[currentStageIndex].color.opacity(0.12), .clear], 
+                center: .center, 
+                startRadius: 40, 
+                endRadius: 280
+            )
+            .ignoresSafeArea()
+            .animation(.spring(response: 0.5, dampingFraction: 0.8), value: currentStageIndex)
             
-            VStack(spacing: 40) {
-                // Header Progress
-                HStack {
-                    Spacer()
-                    // Progress dots
-                    HStack(spacing: 8) {
-                        ForEach(0..<3) { idx in
-                            Circle()
-                                .fill(idx == currentStageIndex ? stages[idx].color : ColorColor(hex: "1A1A2E").opacity(0.1))
-                                .frame(width: 8, height: 8)
-                        }
+            VStack(spacing: 32) {
+                // Header Progress Dots (VIP Apple Capsule)
+                HStack(spacing: 8) {
+                    ForEach(0..<3) { idx in
+                        Capsule()
+                            .fill(idx <= currentStageIndex ? stages[idx].color : Color(hex: "1A1A2E").opacity(0.1))
+                            .frame(width: idx == currentStageIndex ? 28 : 8, height: 8)
+                            .animation(.spring(response: 0.35, dampingFraction: 0.7), value: currentStageIndex)
                     }
                 }
-                .padding(.horizontal)
-                .padding(.top, 16)
+                .padding(.top, 20)
                 
                 Spacer()
                 
                 if isFinished {
-                    VStack(spacing: 24) {
-                        Image(systemName: "checkmark.seal.fill")
-                            .font(.system(size: 80))
-                            .foregroundColor(.nurGold)
+                    VStack(spacing: 20) {
+                        ZStack {
+                            Circle()
+                                .fill(Color.nurGold.opacity(0.15))
+                                .frame(width: 100, height: 100)
+                            Image(systemName: "checkmark.seal.fill")
+                                .font(.system(size: 54))
+                                .foregroundColor(.nurGold)
+                        }
+                        
                         Text(localization.localizedString("tasbih_finish"))
-                            .nurFont(28, weight: .bold)
+                            .nurFont(26, weight: .bold)
                             .foregroundColor(Color(hex: "1A1A2E"))
                         
                         Button(action: { router.pop() }) {
                             Text(localization.localizedString("general.done"))
-                                .nurFont(18, weight: .bold)
-                                .foregroundColor(.black)
-                                .padding(.horizontal, 40)
-                                .padding(.vertical, 14)
+                                .nurFont(16, weight: .bold)
+                                .foregroundColor(Color(hex: "1A1A2E"))
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 52)
                                 .background(Color.nurGold)
-                                .cornerRadius(20)
+                                .cornerRadius(16)
+                                .shadow(color: Color.nurGold.opacity(0.3), radius: 8, y: 3)
                         }
-                        
-                        Button(action: {
-                            router.pop()
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                router.pushTo(
-                                    view: MainNavigationView.builder.makeView(
-                                        AddDhikrView(vm: DhikrViewModel()),
-                                        withNavigationTitle: localization.localizedString("dhikr.addNew"),
-                                        isShowRightButton: false
-                                    )
-                                )
-                            }
-                        }) {
-                            Text("Özel Zikir Ekle")
-                                .nurFont(14, weight: .bold)
-                                .foregroundColor(.nurGold.opacity(0.8))
-                                .underline()
-                        }
-                        .padding(.top, 8)
+                        .buttonStyle(BouncyButtonStyle())
+                        .padding(.horizontal, 40)
+                        .padding(.top, 12)
                     }
                     .transition(.scale.combined(with: .opacity))
                 } else {
-                    VStack(spacing: 12) {
+                    VStack(spacing: 8) {
                         Text(stages[currentStageIndex].arabic)
-                            .font(.custom("Traditional Arabic", size: 60))
-                            .foregroundColor(Color(hex: "1A1A2E"))
-                            .shadow(color: stages[currentStageIndex].color.opacity(0.5), radius: 10)
+                            .font(.custom("ScheherazadeNew-Bold", size: 44))
+                            .foregroundColor(Color(hex: "2C1E11"))
                         
                         Text(localization.localizedString(stages[currentStageIndex].nameKey))
-                            .nurFont(22, weight: .medium)
-                            .foregroundColor(Color(hex: "1A1A2E").opacity(0.7))
+                            .nurFont(20, weight: .bold)
+                            .foregroundColor(Color(hex: "1A1A2E").opacity(0.75))
                     }
                     
-                    // Counter Ring
-                    ZStack {
-                        Circle()
-                            .stroke(ColorColor(hex: "1A1A2E").opacity(0.05), lineWidth: 15)
-                        Circle()
-                            .trim(from: 0, to: CGFloat(currentCount) / 33.0)
-                            .stroke(stages[currentStageIndex].color, style: StrokeStyle(lineWidth: 15, lineCap: .round))
-                            .rotationEffect(.degrees(-90))
-                            .animation(.spring(), value: currentCount)
-                        
-                        Text("\(currentCount)")
-                            .nurFont(64, weight: .bold)
-                            .foregroundColor(Color(hex: "1A1A2E"))
+                    // Counter Ring (Apple VIP Inset Style)
+                    Button(action: increment) {
+                        ZStack {
+                            Circle()
+                                .stroke(Color.black.opacity(0.04), lineWidth: 14)
+                            
+                            Circle()
+                                .trim(from: 0, to: CGFloat(currentCount) / 33.0)
+                                .stroke(
+                                    stages[currentStageIndex].color, 
+                                    style: StrokeStyle(lineWidth: 14, lineCap: .round)
+                                )
+                                .rotationEffect(.degrees(-90))
+                                .animation(.spring(response: 0.3, dampingFraction: 0.6), value: currentCount)
+                            
+                            VStack(spacing: 4) {
+                                Text("\(currentCount)")
+                                    .nurFont(68, weight: .heavy, design: .rounded)
+                                    .foregroundColor(Color(hex: "1A1A2E"))
+                                    .contentTransition(.numericText())
+                                
+                                Text("33")
+                                    .nurFont(13, weight: .bold)
+                                    .foregroundColor(Color(hex: "1A1A2E").opacity(0.35))
+                            }
+                        }
+                        .frame(width: 240, height: 240)
+                        .background(Color.white)
+                        .clipShape(Circle())
+                        .overlay(
+                            Circle()
+                                .stroke(Color(hex: "1A1A2E").opacity(0.06), lineWidth: 1)
+                        )
+                        .shadow(color: Color.black.opacity(0.04), radius: 14, x: 0, y: 4)
                     }
-                    .frame(width: 240, height: 240)
-                    .contentShape(Circle())
-                    .onTapGesture {
-                        increment()
-                    }
+                    .buttonStyle(BouncyButtonStyle())
                     
                     if currentStageIndex < 2 {
                         let nextKey = stages[currentStageIndex+1].nameKey
                         Text(String(format: localization.localizedString("tasbih_next"), localization.localizedString(nextKey)))
-                            .nurFont(14)
-                            .foregroundColor(Color(hex: "1A1A2E").opacity(0.4))
+                            .nurFont(13)
+                            .foregroundColor(Color(hex: "1A1A2E").opacity(0.45))
                     }
                 }
                 
                 Spacer()
-                
-                Text(localization.localizedString("dhikr.addHint")) // Or similar info
-                    .nurFont(12)
-                    .foregroundColor(Color(hex: "1A1A2E").opacity(0.2))
-                    .padding(.bottom)
             }
+            .padding(.horizontal, 24)
         }
     }
     
     private func increment() {
-        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+        HapticManager.shared.dhikrCount()
         
-        withAnimation {
+        withAnimation(.spring(response: 0.25, dampingFraction: 0.6)) {
             if currentCount < 32 {
                 currentCount += 1
             } else {
                 // Stage transition
                 if currentStageIndex < 2 {
-                    UISelectionFeedbackGenerator().selectionChanged()
+                    HapticManager.shared.selectionChanged()
                     currentStageIndex += 1
                     currentCount = 0
                 } else {
                     // Final finish
-                    UINotificationFeedbackGenerator().notificationOccurred(.success)
+                    HapticManager.shared.dhikrDone()
                     isFinished = true
                 }
             }
         }
     }
+}
+
+#Preview {
+    TasbihModeView()
+        .environmentObject(LocalizationManager.shared)
+        .environmentObject(AppRouter.shared)
 }

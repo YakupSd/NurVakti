@@ -11,16 +11,13 @@ struct HowToPrayView: View {
     var body: some View {
         ZStack {
             // ── Background ──
-            LinearGradient(
-                colors: [.prayerBgTop, .prayerBgBot],
-                startPoint: .top,
-                endPoint: .bottom
-            ).ignoresSafeArea()
+            Color(hex: "F8F6F0").ignoresSafeArea()
             
             VStack(spacing: 0) {
                 // ── Progress Indicators ──
                 progressIndicatorView
                     .padding(.top, 16)
+                    .padding(.horizontal, 20)
                 
                 // ── Paged Content ──
                 TabView(selection: $currentStepIndex) {
@@ -33,150 +30,90 @@ struct HowToPrayView: View {
                 
                 // ── Navigation Controls ──
                 navigationControls
-                    .padding(.bottom, 34)
+                    .padding(.horizontal, 20)
+                    .padding(.bottom, 24)
             }
-        }
-        .onAppear {
-            withAnimation(.easeOut(duration: 0.4)) {
-                // Entrance animation trigger if needed
-            }
-        }
-    }
-    
-    // MARK: - Header Component
-    private var headerView: some View {
-        HStack {
-            // Back Button
-            Button(action: { dismiss() }) {
-                Image(systemName: "chevron.left")
-                    .font(.system(size: 18, weight: .bold))
-                    .foregroundColor(Color(hex: "1A1A2E"))
-                    .frame(width: 44, height: 44)
-                    .background(
-                        Circle()
-                            .stroke(
-                                LinearGradient(colors: [.prayerGold, .prayerOrange], startPoint: .top, endPoint: .bottom),
-                                lineWidth: 2
-                            )
-                    )
-            }
-            
-            Spacer()
-            
-            // Title
-            Text("Namaz Nasıl Kılınır?")
-                .font(.system(size: 22, weight: .bold))
-                .foregroundColor(Color(hex: "1A1A2E"))
-            
-            Spacer()
-            
-            // Counter
-            Text("\(currentStepIndex + 1)/\(steps.count)")
-                .font(.system(size: 18, weight: .semibold))
-                .foregroundColor(.prayerGold)
         }
     }
     
     // MARK: - Progress Indicators Component
     private var progressIndicatorView: some View {
-        HStack(spacing: 8) {
+        HStack(spacing: 6) {
             ForEach(0..<steps.count, id: \.self) { index in
-                RoundedRectangle(cornerRadius: 3)
-                    .fill(progressColor(for: index))
-                    .frame(width: 40, height: 6)
-                    .overlay(
-                        Group {
-                            if index < currentStepIndex {
-                                RoundedRectangle(cornerRadius: 3)
-                                    .stroke(Color.prayerGold.opacity(0.5), lineWidth: 1)
-                                    .blur(radius: 2)
-                            }
-                        }
-                    )
-                    .modifier(ProgressAnimationModifier(isActive: index == currentStepIndex))
+                Capsule()
+                    .fill(index <= currentStepIndex ? Color.nurGold : Color(hex: "1A1A2E").opacity(0.08))
+                    .frame(height: 5)
+                    .animation(.spring(response: 0.35, dampingFraction: 0.7), value: currentStepIndex)
             }
         }
     }
     
-    private func progressColor(for index: Int) -> AnyShapeStyle {
-        if index < currentStepIndex {
-            return AnyShapeStyle(LinearGradient(colors: [.prayerGold, .prayerOrange], startPoint: .leading, endPoint: .trailing))
-        } else if index == currentStepIndex {
-            return AnyShapeStyle(Color.prayerGold)
-        } else {
-            return AnyShapeStyle(Color.prayerBarPending.opacity(0.3))
-        }
-    }
-    
-    // MARK: - Navigation Controls
+    // MARK: - Navigation Controls Component
     private var navigationControls: some View {
         HStack(spacing: 16) {
-            // Circular Back Button
-            Button(action: prevStep) {
-                Image(systemName: "arrow.left")
-                    .font(.system(size: 24))
-                    .foregroundColor(Color(hex: "1A1A2E"))
-                    .frame(width: 56, height: 56)
-                    .background(Color.prayerCard)
-                    .clipShape(Circle())
-                    .overlay(
-                        Circle().stroke(Color.prayerBarPending, lineWidth: 2)
-                    )
+            // Previous Button
+            if currentStepIndex > 0 {
+                Button(action: {
+                    HapticManager.shared.light()
+                    withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
+                        currentStepIndex -= 1
+                    }
+                }) {
+                    Image(systemName: "arrow.left")
+                        .font(.system(size: 16, weight: .bold))
+                        .foregroundColor(Color(hex: "1A1A2E"))
+                        .frame(width: 52, height: 52)
+                        .background(Color.white)
+                        .cornerRadius(16)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 16)
+                                .stroke(Color(hex: "1A1A2E").opacity(0.08), lineWidth: 1)
+                        )
+                        .shadow(color: Color.black.opacity(0.03), radius: 6, y: 2)
+                }
+                .buttonStyle(BouncyButtonStyle())
             }
-            .buttonStyle(ScaleButtonStyle(scale: 0.95))
-            .opacity(currentStepIndex > 0 ? 1 : 0.5)
-            .disabled(currentStepIndex == 0)
             
             // Next / Finish Button
-            Button(action: nextStep) {
-                Text(currentStepIndex == steps.count - 1 ? "Bitir" : "Sonraki")
-                    .font(.system(size: 18, weight: .bold))
-                    .foregroundColor(.prayerDarkText)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 56)
-                    .background(
-                        LinearGradient(colors: [.prayerGold, .prayerOrange], startPoint: .leading, endPoint: .trailing)
+            Button(action: {
+                if currentStepIndex < steps.count - 1 {
+                    HapticManager.shared.light()
+                    withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
+                        currentStepIndex += 1
+                    }
+                } else {
+                    HapticManager.shared.success()
+                    dismiss()
+                }
+            }) {
+                HStack(spacing: 8) {
+                    Text(currentStepIndex < steps.count - 1 
+                         ? localization.localizedString("general.next") 
+                         : localization.localizedString("general.finish"))
+                        .nurFont(15, weight: .bold)
+                    
+                    Image(systemName: currentStepIndex < steps.count - 1 ? "arrow.right" : "checkmark")
+                        .font(.system(size: 14, weight: .bold))
+                }
+                .foregroundColor(Color(hex: "1A1A2E"))
+                .frame(maxWidth: .infinity)
+                .frame(height: 52)
+                .background(
+                    LinearGradient(
+                        colors: [Color(hex: "#D4AF37"), Color(hex: "#C9A84C")],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
                     )
-                    .cornerRadius(16)
-                    .shadow(color: .prayerGold.opacity(0.4), radius: 12, x: 0, y: 4)
+                )
+                .cornerRadius(16)
+                .shadow(color: Color.nurGold.opacity(0.3), radius: 8, y: 3)
             }
-            .buttonStyle(ScaleButtonStyle(scale: 0.95))
-        }
-        .padding(.horizontal, 24)
-    }
-    
-    // MARK: - Actions
-    private func nextStep() {
-        if currentStepIndex < steps.count - 1 {
-            withAnimation(.easeInOut(duration: 0.6)) {
-                currentStepIndex += 1
-            }
-            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-        } else {
-            UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
-            dismiss()
-        }
-    }
-    
-    private func prevStep() {
-        if currentStepIndex > 0 {
-            withAnimation(.easeInOut(duration: 0.6)) {
-                currentStepIndex -= 1
-            }
-            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+            .buttonStyle(BouncyButtonStyle())
         }
     }
 }
 
-// MARK: - Helper Modifiers
-struct ProgressAnimationModifier: ViewModifier {
-    let isActive: Bool
-    func body(content: Content) -> some View {
-        if isActive {
-            content.pulseAnimation()
-        } else {
-            content
-        }
-    }
+#Preview {
+    HowToPrayView()
+        .environmentObject(LocalizationManager.shared)
 }
-

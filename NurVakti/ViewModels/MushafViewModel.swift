@@ -6,6 +6,7 @@ class MushafViewModel: ObservableObject {
     @Published var pages: [MushafPageModel] = []
     @Published var currentPageIndex: Int = 0
     @Published var isLoading: Bool = false
+    @Published var loadError: Bool = false
     @Published var pageNumber: Int?
     
     let surah: SurahInfo?
@@ -29,10 +30,12 @@ class MushafViewModel: ObservableObject {
             DispatchQueue.main.async {
                 self.processAyahs(response.data.ayahs, asSinglePage: true, forcedPageNumber: page)
                 self.isLoading = false
+                self.loadError = false
             }
         } onFailure: { _ in
             DispatchQueue.main.async {
                 self.isLoading = false
+                self.loadError = true
             }
         }
     }
@@ -124,13 +127,15 @@ class MushafViewModel: ObservableObject {
     
     private func updatePageNumber(_ newPage: Int) {
         self.pageNumber = newPage
-        let progress = HatimProgress(currentPage: newPage, completedCount: 0, lastUpdated: Date())
+        let existing = HatimProgress.load()
+        let progress = HatimProgress(currentPage: newPage, completedCount: existing.completedCount, lastUpdated: Date())
         progress.save()
     }
     
     private func saveHatimProgressIfNeeded() {
         if let pn = pageNumber {
-            let progress = HatimProgress(currentPage: pn, completedCount: 0, lastUpdated: Date())
+            let existing = HatimProgress.load()
+            let progress = HatimProgress(currentPage: pn, completedCount: existing.completedCount, lastUpdated: Date())
             progress.save()
         }
     }
@@ -142,10 +147,12 @@ class MushafViewModel: ObservableObject {
                 self.processAyahs(response.data.ayahs)
                 self.currentPageIndex = 0
                 self.isLoading = false
+                self.loadError = false
             }
         } onFailure: { _ in
             DispatchQueue.main.async {
                 self.isLoading = false
+                self.loadError = true
             }
         }
     }
@@ -172,10 +179,12 @@ class MushafViewModel: ObservableObject {
             DispatchQueue.main.async {
                 self.processAyahs(response.data.ayahs)
                 self.isLoading = false
+                self.loadError = false
             }
         } onFailure: { _ in
             DispatchQueue.main.async {
                 self.isLoading = false
+                self.loadError = true
             }
         }
     }

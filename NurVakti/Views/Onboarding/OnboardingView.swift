@@ -10,30 +10,69 @@ struct OnboardingView: View {
 
     var body: some View {
         ZStack {
-            // Ortak Arka Plan
+            // Background — Warm Ivory & Subtle Gold Ambient Glow
             LinearGradient(
-                colors: [Color(hex: "#0D1B2A"), Color(hex: "#1a2a4a")],
-                startPoint: .top, endPoint: .bottom
+                colors: [
+                    Color(hex: "FCFAF7"),
+                    Color(hex: "F8F4EC"),
+                    Color(hex: "F2ECE0")
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
             )
             .ignoresSafeArea()
 
-            StarFieldView(opacity: 0.6)
+            // Ambient background lighting
+            GeometryReader { proxy in
+                ZStack {
+                    Circle()
+                        .fill(Color.nurGold.opacity(0.12))
+                        .frame(width: 280, height: 280)
+                        .blur(radius: 60)
+                        .offset(x: proxy.size.width * 0.45, y: -proxy.size.height * 0.1)
+
+                    Circle()
+                        .fill(Color(hex: "5B8FB9").opacity(0.08))
+                        .frame(width: 240, height: 240)
+                        .blur(radius: 50)
+                        .offset(x: -proxy.size.width * 0.4, y: proxy.size.height * 0.35)
+                }
+            }
+            .allowsHitTesting(false)
 
             VStack(spacing: 0) {
-                // ─── Page Indicator ───
+                // ─── Top Progress Indicator ───
                 HStack(spacing: 8) {
                     ForEach(0..<3) { index in
                         Capsule()
-                            .fill(vm.currentPage == index ? Color.nurGold : ColorColor(hex: "1A1A2E").opacity(0.25))
-                            .frame(width: vm.currentPage == index ? 28 : 8, height: 8)
-                            .animation(.spring(response: 0.4), value: vm.currentPage)
+                            .fill(
+                                vm.currentPage == index
+                                    ? LinearGradient(
+                                        colors: [Color.nurGoldLight, Color.nurGold, Color(hex: "A37719")],
+                                        startPoint: .leading,
+                                        endPoint: .trailing
+                                    )
+                                    : LinearGradient(
+                                        colors: [Color(hex: "1A1A2E").opacity(0.1), Color(hex: "1A1A2E").opacity(0.1)],
+                                        startPoint: .leading,
+                                        endPoint: .trailing
+                                    )
+                            )
+                            .frame(width: vm.currentPage == index ? 32 : 8, height: 6)
+                            .shadow(
+                                color: vm.currentPage == index ? Color.nurGold.opacity(0.4) : Color.clear,
+                                radius: 4,
+                                y: 1
+                            )
+                            .animation(.spring(response: 0.4, dampingFraction: 0.7), value: vm.currentPage)
                     }
                 }
-                .padding(.top, 60)
+                .padding(.top, 24)
+                .padding(.bottom, 12)
 
-                Spacer()
+                Spacer(minLength: 12)
 
-                // ─── Aktif Sayfa ───
+                // ─── Active Page ───
                 Group {
                     switch vm.currentPage {
                     case 0: OnboardingLanguagePage(vm: vm)
@@ -47,19 +86,38 @@ struct OnboardingView: View {
                 ))
                 .id(vm.currentPage)
 
-                Spacer()
+                Spacer(minLength: 12)
 
-                // ─── Geri Butonu ───
+                // ─── Bottom Back Button ───
                 if vm.currentPage > 0 {
-                    Button(action: vm.goBack) {
+                    Button(action: {
+                        HapticManager.shared.light()
+                        vm.goBack()
+                    }) {
                         HStack(spacing: 6) {
                             Image(systemName: "chevron.left")
+                                .font(.system(size: 13, weight: .semibold))
                             Text(localization.localizedString("onboarding.back"))
+                                .nurFont(14, weight: .medium)
                         }
-                        .font(.subheadline)
-                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.5))
+                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.55))
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 8)
+                        .background(
+                            Capsule()
+                                .fill(Color.white.opacity(0.6))
+                                .overlay(
+                                    Capsule()
+                                        .stroke(Color(hex: "1A1A2E").opacity(0.06), lineWidth: 1)
+                                )
+                        )
                     }
-                    .padding(.bottom, 8)
+                    .padding(.bottom, 16)
+                } else {
+                    // Placeholder for vertical alignment stability
+                    Color.clear
+                        .frame(height: 36)
+                        .padding(.bottom, 16)
                 }
             }
         }
@@ -82,62 +140,161 @@ struct OnboardingLanguagePage: View {
     ]
 
     var body: some View {
-        VStack(spacing: 40) {
-            // İkon
-            VStack(spacing: 20) {
-                Image(systemName: "globe.europe.africa.fill")
-                    .font(.system(size: 72))
-                    .foregroundStyle(
-                        LinearGradient(colors: [.nurGold, .nurGoldLight], startPoint: .top, endPoint: .bottom)
-                    )
+        VStack(spacing: 24) {
+            // Hero Badge
+            VStack(spacing: 14) {
+                ZStack {
+                    // Outer Ring
+                    Circle()
+                        .stroke(
+                            LinearGradient(
+                                colors: [Color.nurGold.opacity(0.4), Color.nurGold.opacity(0.05)],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            ),
+                            lineWidth: 1.5
+                        )
+                        .frame(width: 96, height: 96)
 
-                VStack(spacing: 8) {
+                    // Inner Soft Glow
+                    Circle()
+                        .fill(
+                            LinearGradient(
+                                colors: [Color.white, Color(hex: "FAF3E3")],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                        .frame(width: 80, height: 80)
+                        .shadow(color: Color.nurGold.opacity(0.2), radius: 14, y: 6)
+
+                    Image(systemName: "globe.europe.africa.fill")
+                        .font(.system(size: 38))
+                        .foregroundStyle(
+                            LinearGradient(
+                                colors: [Color.nurGoldLight, Color.nurGold, Color(hex: "A37719")],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                }
+
+                VStack(spacing: 6) {
                     Text(localization.localizedString("onboarding.language.title"))
-                        .font(.system(size: 32, weight: .bold))
+                        .nurFont(26, weight: .bold)
                         .foregroundColor(Color(hex: "1A1A2E"))
+                        .multilineTextAlignment(.center)
+
                     Text(localization.localizedString("onboarding.language.subtitle"))
-                        .font(.subheadline)
-                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.5))
+                        .nurFont(14)
+                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.55))
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, 20)
                 }
             }
 
-            // Dil Listesi
-            VStack(spacing: 12) {
+            // Language Options
+            VStack(spacing: 10) {
                 ForEach(languages, id: \.0) { code, flag, name in
-                    Button(action: { vm.selectLanguage(code) }) {
-                        HStack(spacing: 16) {
-                            Text(flag).font(.title)
+                    let isSelected = vm.selectedLanguage == code
+                    Button(action: {
+                        HapticManager.shared.selectionChanged()
+                        vm.selectLanguage(code)
+                    }) {
+                        HStack(spacing: 14) {
+                            ZStack {
+                                Circle()
+                                    .fill(isSelected ? Color.nurGold.opacity(0.12) : Color(hex: "1A1A2E").opacity(0.04))
+                                    .frame(width: 36, height: 36)
+                                Text(flag)
+                                    .font(.system(size: 20))
+                            }
+
                             Text(name)
-                                .font(.system(size: 18, weight: .semibold))
+                                .nurFont(16, weight: isSelected ? .bold : .medium)
                                 .foregroundColor(Color(hex: "1A1A2E"))
+
                             Spacer()
-                            if vm.selectedLanguage == code {
-                                Image(systemName: "checkmark.circle.fill")
-                                    .foregroundColor(.nurGold)
-                                    .font(.title2)
+
+                            if isSelected {
+                                ZStack {
+                                    Circle()
+                                        .fill(Color.nurGold)
+                                        .frame(width: 22, height: 22)
+                                    Image(systemName: "checkmark")
+                                        .font(.system(size: 11, weight: .bold))
+                                        .foregroundColor(.white)
+                                }
+                                .transition(.scale.combined(with: .opacity))
                             }
                         }
-                        .padding(.horizontal, 20)
-                        .frame(height: 60)
-                        .background(vm.selectedLanguage == code
-                                    ? Color.nurGold.opacity(0.15)
-                                    : ColorColor(hex: "1A1A2E").opacity(0.07))
-                        .cornerRadius(16)
+                        .padding(.horizontal, 16)
+                        .frame(height: 54)
+                        .background(isSelected ? Color.white : Color.white.opacity(0.85))
+                        .cornerRadius(18)
                         .overlay(
-                            RoundedRectangle(cornerRadius: 16)
-                                .stroke(vm.selectedLanguage == code ? Color.nurGold : Color.clear, lineWidth: 1.5)
+                            RoundedRectangle(cornerRadius: 18)
+                                .stroke(
+                                    isSelected
+                                        ? LinearGradient(
+                                            colors: [Color.nurGold, Color.nurGoldLight],
+                                            startPoint: .topLeading,
+                                            endPoint: .bottomTrailing
+                                        )
+                                        : LinearGradient(
+                                            colors: [Color(hex: "1A1A2E").opacity(0.06), Color(hex: "1A1A2E").opacity(0.04)],
+                                            startPoint: .top,
+                                            endPoint: .bottom
+                                        ),
+                                    lineWidth: isSelected ? 1.8 : 1
+                                )
+                        )
+                        .shadow(
+                            color: isSelected ? Color.nurGold.opacity(0.15) : Color(hex: "1A1A2E").opacity(0.03),
+                            radius: isSelected ? 8 : 4,
+                            y: isSelected ? 3 : 2
                         )
                     }
-                    .accessibilityLabel(name)
-                    .accessibilityAddTraits(vm.selectedLanguage == code ? [.isSelected] : [])
+                    .buttonStyle(CardPressableButtonStyle(scale: 0.98))
                 }
             }
             .padding(.horizontal, 24)
 
-            // İleri Butonu
-            NurButton(title: localization.localizedString("onboarding.next"), icon: "arrow.right", style: .primary, fontSize: .large) {
+            // Continue Button
+            Button(action: {
+                HapticManager.shared.tap()
                 vm.goNext()
+            }) {
+                HStack(spacing: 8) {
+                    Text(localization.localizedString("general.continue"))
+                        .nurFont(16, weight: .bold)
+                        .foregroundColor(Color(hex: "1A1A2E"))
+
+                    Image(systemName: "arrow.right")
+                        .font(.system(size: 14, weight: .bold))
+                        .foregroundColor(Color(hex: "1A1A2E"))
+                }
+                .frame(maxWidth: .infinity)
+                .frame(height: 54)
+                .background(
+                    LinearGradient(
+                        colors: [
+                            Color(hex: "F2D679"),
+                            Color.nurGold,
+                            Color(hex: "C29B27")
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+                .cornerRadius(18)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 18)
+                        .stroke(Color.white.opacity(0.4), lineWidth: 1)
+                )
+                .shadow(color: Color.nurGold.opacity(0.35), radius: 12, y: 5)
             }
+            .buttonStyle(BouncyButtonStyle())
             .padding(.horizontal, 24)
         }
     }
@@ -151,70 +308,168 @@ struct OnboardingLocationPage: View {
     @EnvironmentObject var localization: LocalizationManager
 
     var body: some View {
-        VStack(spacing: 44) {
-            // İkon
-            VStack(spacing: 20) {
+        VStack(spacing: 24) {
+            // Hero Badge
+            VStack(spacing: 14) {
                 ZStack {
+                    // Outer Ring
                     Circle()
-                        .fill(Color.nurGold.opacity(0.12))
-                        .frame(width: 140, height: 140)
-                    Image(systemName: "location.circle.fill")
-                        .font(.system(size: 72))
+                        .stroke(
+                            LinearGradient(
+                                colors: [Color(hex: "3B82F6").opacity(0.35), Color(hex: "3B82F6").opacity(0.05)],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            ),
+                            lineWidth: 1.5
+                        )
+                        .frame(width: 96, height: 96)
+
+                    // Inner Soft Glow
+                    Circle()
+                        .fill(
+                            LinearGradient(
+                                colors: [Color.white, Color(hex: "EFF6FF")],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                        .frame(width: 80, height: 80)
+                        .shadow(color: Color(hex: "3B82F6").opacity(0.18), radius: 14, y: 6)
+
+                    Image(systemName: "location.north.circle.fill")
+                        .font(.system(size: 38))
                         .foregroundStyle(
-                            LinearGradient(colors: [.nurGold, .nurGoldLight], startPoint: .top, endPoint: .bottom)
+                            LinearGradient(
+                                colors: [Color(hex: "60A5FA"), Color(hex: "2563EB")],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
                         )
                 }
 
-                VStack(spacing: 10) {
+                VStack(spacing: 6) {
                     Text(localization.localizedString("onboarding.location.title"))
-                        .font(.system(size: 28, weight: .bold))
+                        .nurFont(26, weight: .bold)
                         .foregroundColor(Color(hex: "1A1A2E"))
                         .multilineTextAlignment(.center)
 
-                    Text(localization.localizedString("onboarding.location.body"))
-                        .font(.body)
-                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.65))
+                    Text(localization.localizedString("onboarding.location.subtitle"))
+                        .nurFont(14)
+                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.55))
                         .multilineTextAlignment(.center)
-                        .padding(.horizontal, 8)
+                        .lineSpacing(3)
+                        .padding(.horizontal, 24)
                 }
             }
 
-            // Özellik Maddeleri
-            VStack(spacing: 16) {
-                featureRow(icon: "moon.stars", text: localization.localizedString("onboarding.feature.prayerTimes"))
-                featureRow(icon: "arrow.triangle.2.circlepath", text: localization.localizedString("onboarding.feature.autoUpdate"))
-                featureRow(icon: "location",   text: localization.localizedString("onboarding.feature.noUpload"))
+            // Benefits Inset Card
+            VStack(spacing: 14) {
+                benefitRow(
+                    icon: "clock.badge.checkmark.fill",
+                    iconColor: Color.nurGold,
+                    bgColor: Color.nurGold.opacity(0.12),
+                    text: localization.localizedString("onboarding.location.benefit1")
+                )
+
+                Divider()
+                    .background(Color(hex: "1A1A2E").opacity(0.06))
+
+                benefitRow(
+                    icon: "safari.fill",
+                    iconColor: Color(hex: "2563EB"),
+                    bgColor: Color(hex: "3B82F6").opacity(0.12),
+                    text: localization.localizedString("onboarding.location.benefit2")
+                )
             }
-            .padding(.horizontal, 28)
+            .padding(18)
+            .background(Color.white)
+            .cornerRadius(22)
+            .overlay(
+                RoundedRectangle(cornerRadius: 22)
+                    .stroke(
+                        LinearGradient(
+                            colors: [Color.nurGold.opacity(0.2), Color(hex: "1A1A2E").opacity(0.05)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        ),
+                        lineWidth: 1
+                    )
+            )
+            .shadow(color: Color(hex: "1A1A2E").opacity(0.04), radius: 12, y: 4)
+            .padding(.horizontal, 24)
 
-            // İzin / Atla Butonları
-            VStack(spacing: 12) {
-                if vm.isRequestingLocation {
-                    ProgressView().tint(Color(hex: "C9A84C"))
-                } else {
-                    NurButton(title: localization.localizedString("onboarding.location.allow"),
-                              icon: "location.fill",
-                              style: .primary, fontSize: .large) {
-                        Task { await vm.requestLocation() }
+            // Action Buttons
+            VStack(spacing: 10) {
+                Button(action: {
+                    HapticManager.shared.tap()
+                    Task { await vm.requestLocation() }
+                }) {
+                    HStack(spacing: 8) {
+                        if vm.isRequestingLocation {
+                            ProgressView()
+                                .tint(Color(hex: "1A1A2E"))
+                        } else {
+                            Image(systemName: "location.fill")
+                                .font(.system(size: 14, weight: .bold))
+                                .foregroundColor(Color(hex: "1A1A2E"))
+                            Text(localization.localizedString("onboarding.location.button"))
+                                .nurFont(16, weight: .bold)
+                                .foregroundColor(Color(hex: "1A1A2E"))
+                        }
                     }
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 54)
+                    .background(
+                        LinearGradient(
+                            colors: [
+                                Color(hex: "F2D679"),
+                                Color.nurGold,
+                                Color(hex: "C29B27")
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .cornerRadius(18)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 18)
+                            .stroke(Color.white.opacity(0.4), lineWidth: 1)
+                    )
+                    .shadow(color: Color.nurGold.opacity(0.35), radius: 12, y: 5)
+                }
+                .buttonStyle(BouncyButtonStyle())
+                .disabled(vm.isRequestingLocation)
 
-                    Button(localization.localizedString("onboarding.location.skip")) { vm.skipLocation() }
-                        .font(.subheadline)
-                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.45))
+                Button(action: {
+                    HapticManager.shared.light()
+                    vm.skipLocation()
+                }) {
+                    Text(localization.localizedString("onboarding.skip"))
+                        .nurFont(14, weight: .medium)
+                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.5))
+                        .frame(height: 34)
                 }
             }
             .padding(.horizontal, 24)
         }
     }
 
-    private func featureRow(icon: String, text: String) -> some View {
+    private func benefitRow(icon: String, iconColor: Color, bgColor: Color, text: String) -> some View {
         HStack(spacing: 14) {
-            Image(systemName: icon)
-                .frame(width: 32, height: 32)
-                .foregroundColor(.nurGold)
+            ZStack {
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(bgColor)
+                    .frame(width: 38, height: 38)
+                Image(systemName: icon)
+                    .font(.system(size: 17, weight: .semibold))
+                    .foregroundColor(iconColor)
+            }
+
             Text(text)
-                .font(.subheadline)
-                .foregroundColor(Color(hex: "1A1A2E").opacity(0.8))
+                .nurFont(14, weight: .medium)
+                .foregroundColor(Color(hex: "1A1A2E").opacity(0.85))
+                .fixedSize(horizontal: false, vertical: true)
+
             Spacer()
         }
     }
@@ -228,70 +483,168 @@ struct OnboardingNotificationPage: View {
     @EnvironmentObject var localization: LocalizationManager
 
     var body: some View {
-        VStack(spacing: 44) {
-            // İkon
-            VStack(spacing: 20) {
+        VStack(spacing: 24) {
+            // Hero Badge
+            VStack(spacing: 14) {
                 ZStack {
+                    // Outer Ring
                     Circle()
-                        .fill(Color.nurGold.opacity(0.12))
-                        .frame(width: 140, height: 140)
+                        .stroke(
+                            LinearGradient(
+                                colors: [Color(hex: "F59E0B").opacity(0.35), Color(hex: "F59E0B").opacity(0.05)],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            ),
+                            lineWidth: 1.5
+                        )
+                        .frame(width: 96, height: 96)
+
+                    // Inner Soft Glow
+                    Circle()
+                        .fill(
+                            LinearGradient(
+                                colors: [Color.white, Color(hex: "FFFBEB")],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                        .frame(width: 80, height: 80)
+                        .shadow(color: Color(hex: "F59E0B").opacity(0.18), radius: 14, y: 6)
+
                     Image(systemName: "bell.badge.fill")
-                        .font(.system(size: 68))
+                        .font(.system(size: 38))
                         .foregroundStyle(
-                            LinearGradient(colors: [.nurGold, .nurGoldLight], startPoint: .top, endPoint: .bottom)
+                            LinearGradient(
+                                colors: [Color(hex: "FBBF24"), Color(hex: "D97706")],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
                         )
                 }
 
-                VStack(spacing: 10) {
-                    Text(localization.localizedString("onboarding.notif.title"))
-                        .font(.system(size: 28, weight: .bold))
+                VStack(spacing: 6) {
+                    Text(localization.localizedString("onboarding.notification.title"))
+                        .nurFont(26, weight: .bold)
                         .foregroundColor(Color(hex: "1A1A2E"))
                         .multilineTextAlignment(.center)
 
-                    Text(localization.localizedString("onboarding.notif.body"))
-                        .font(.body)
-                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.65))
+                    Text(localization.localizedString("onboarding.notification.subtitle"))
+                        .nurFont(14)
+                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.55))
                         .multilineTextAlignment(.center)
-                        .padding(.horizontal, 8)
+                        .lineSpacing(3)
+                        .padding(.horizontal, 24)
                 }
             }
 
-            // Özellik Maddeleri
-            VStack(spacing: 16) {
-                featureRow(icon: "bell",         text: localization.localizedString("onboarding.feature.customAlert"))
-                featureRow(icon: "speaker.wave.2", text: localization.localizedString("onboarding.feature.adhan"))
-                featureRow(icon: "gearshape",    text: localization.localizedString("onboarding.feature.customEach"))
+            // Benefits Inset Card
+            VStack(spacing: 14) {
+                benefitRow(
+                    icon: "speaker.wave.2.fill",
+                    iconColor: Color(hex: "D97706"),
+                    bgColor: Color(hex: "F59E0B").opacity(0.12),
+                    text: localization.localizedString("onboarding.notification.benefit1")
+                )
+
+                Divider()
+                    .background(Color(hex: "1A1A2E").opacity(0.06))
+
+                benefitRow(
+                    icon: "timer",
+                    iconColor: Color.nurGold,
+                    bgColor: Color.nurGold.opacity(0.12),
+                    text: localization.localizedString("onboarding.notification.benefit2")
+                )
             }
-            .padding(.horizontal, 28)
+            .padding(18)
+            .background(Color.white)
+            .cornerRadius(22)
+            .overlay(
+                RoundedRectangle(cornerRadius: 22)
+                    .stroke(
+                        LinearGradient(
+                            colors: [Color.nurGold.opacity(0.2), Color(hex: "1A1A2E").opacity(0.05)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        ),
+                        lineWidth: 1
+                    )
+            )
+            .shadow(color: Color(hex: "1A1A2E").opacity(0.04), radius: 12, y: 4)
+            .padding(.horizontal, 24)
 
-            // İzin / Atla
-            VStack(spacing: 12) {
-                if vm.isRequestingNotif {
-                    ProgressView().tint(Color(hex: "C9A84C"))
-                } else {
-                    NurButton(title: localization.localizedString("onboarding.notif.allow"),
-                              icon: "bell.fill",
-                              style: .primary, fontSize: .large) {
-                        Task { await vm.requestNotification() }
+            // Action Buttons
+            VStack(spacing: 10) {
+                Button(action: {
+                    HapticManager.shared.success()
+                    Task { await vm.requestNotification() }
+                }) {
+                    HStack(spacing: 8) {
+                        if vm.isRequestingNotif {
+                            ProgressView()
+                                .tint(Color(hex: "1A1A2E"))
+                        } else {
+                            Image(systemName: "bell.fill")
+                                .font(.system(size: 14, weight: .bold))
+                                .foregroundColor(Color(hex: "1A1A2E"))
+                            Text(localization.localizedString("onboarding.notification.button"))
+                                .nurFont(16, weight: .bold)
+                                .foregroundColor(Color(hex: "1A1A2E"))
+                        }
                     }
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 54)
+                    .background(
+                        LinearGradient(
+                            colors: [
+                                Color(hex: "F2D679"),
+                                Color.nurGold,
+                                Color(hex: "C29B27")
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .cornerRadius(18)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 18)
+                            .stroke(Color.white.opacity(0.4), lineWidth: 1)
+                    )
+                    .shadow(color: Color.nurGold.opacity(0.35), radius: 12, y: 5)
+                }
+                .buttonStyle(BouncyButtonStyle())
+                .disabled(vm.isRequestingNotif)
 
-                    Button(localization.localizedString("onboarding.notif.skip")) { vm.skipNotification() }
-                        .font(.subheadline)
-                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.45))
+                Button(action: {
+                    HapticManager.shared.light()
+                    vm.skipNotification()
+                }) {
+                    Text(localization.localizedString("onboarding.skip"))
+                        .nurFont(14, weight: .medium)
+                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.5))
+                        .frame(height: 34)
                 }
             }
             .padding(.horizontal, 24)
         }
     }
 
-    private func featureRow(icon: String, text: String) -> some View {
+    private func benefitRow(icon: String, iconColor: Color, bgColor: Color, text: String) -> some View {
         HStack(spacing: 14) {
-            Image(systemName: icon)
-                .frame(width: 32, height: 32)
-                .foregroundColor(.nurGold)
+            ZStack {
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(bgColor)
+                    .frame(width: 38, height: 38)
+                Image(systemName: icon)
+                    .font(.system(size: 17, weight: .semibold))
+                    .foregroundColor(iconColor)
+            }
+
             Text(text)
-                .font(.subheadline)
-                .foregroundColor(Color(hex: "1A1A2E").opacity(0.8))
+                .nurFont(14, weight: .medium)
+                .foregroundColor(Color(hex: "1A1A2E").opacity(0.85))
+                .fixedSize(horizontal: false, vertical: true)
+
             Spacer()
         }
     }
@@ -300,4 +653,5 @@ struct OnboardingNotificationPage: View {
 #Preview {
     OnboardingView()
         .environmentObject(LocalizationManager.shared)
+        .environmentObject(PersistenceService.shared)
 }

@@ -17,7 +17,7 @@ struct MushafPageView: View {
                     SurahHeaderView(
                         surahId: page.surahNumber,
                         surahName: page.surahName,
-                        ayahCount: page.ayahs.count,
+                        ayahCount: 0, // Sayfa bazlı doğru toplam bilinmiyor, header'da gösterilmez
                         isMakki: page.isMakki
                     )
                     .padding(.top, 20)
@@ -25,7 +25,7 @@ struct MushafPageView: View {
                     BesmeleView()
                 }
                 
-                // Body (Text Content)
+                // Body (Text Content) — Zoom sadece buraya uygulanır
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 32) {
                         // Concatenate all ayahs into one flow for Mushaf feel
@@ -43,10 +43,19 @@ struct MushafPageView: View {
                         .frame(maxWidth: .infinity)
                     }
                 }
+                .gesture(
+                    MagnificationGesture()
+                        .onChanged { value in
+                            zoomScale = min(2.5, max(0.8, value.magnitude))
+                        }
+                        .onEnded { _ in
+                            withAnimation { zoomScale = 1.0 }
+                        }
+                )
                 
-                // Footer (Page Info)
+                // Footer (Page Info) — Zoom'dan etkilenmez
                 HStack {
-                    Text("\(page.pageNumber). Sayfa")
+                    Text("\(page.pageNumber). \(LocalizationManager.shared.localizedString("quran.page"))")
                     Spacer()
                     Text(page.surahName)
                 }
@@ -56,16 +65,6 @@ struct MushafPageView: View {
                 .padding(.bottom, 25)
                 .background(Color.mushafBackground)
             }
-            .scaleEffect(zoomScale)
-            .gesture(
-                MagnificationGesture()
-                    .onChanged { value in
-                        zoomScale = value.magnitude
-                    }
-                    .onEnded { _ in
-                        withAnimation { zoomScale = 1.0 }
-                    }
-            )
             
             // Decorative Double Border
             RoundedRectangle(cornerRadius: 16)

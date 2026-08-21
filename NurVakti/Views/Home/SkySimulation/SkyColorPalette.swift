@@ -12,25 +12,25 @@ struct SkyColorPalette {
         case .deepNight:
             return SkyGradient(top: Color(hex: "#010816"), horizon: Color(hex: "#051226"))
         case .preDawn:
-            return SkyGradient(top: Color(hex: "#051226"), horizon: Color(hex: "#1A2A44"))
+            return SkyGradient(top: Color(hex: "#0A1628"), horizon: Color(hex: "#2A3A5A"))
         case .dawn:
-            return SkyGradient(top: Color(hex: "#1A2A44"), horizon: Color(hex: "#FF6B35"))
+            return SkyGradient(top: Color(hex: "#1E3456"), horizon: Color(hex: "#E8824C"))
         case .sunrise:
-            return SkyGradient(top: Color(hex: "#1B6CA8"), horizon: Color(hex: "#FFA040"))
+            return SkyGradient(top: Color(hex: "#3A8AC4"), horizon: Color(hex: "#FFBA6B"))
         case .morning:
-            return SkyGradient(top: Color(hex: "#4099FF"), horizon: Color(hex: "#AADDFF"))
+            return SkyGradient(top: Color(hex: "#4BABF4"), horizon: Color(hex: "#C8E4FF"))
         case .midday:
-            return SkyGradient(top: Color(hex: "#1E88E5"), horizon: Color(hex: "#90CAF9"))
+            return SkyGradient(top: Color(hex: "#3DA5F5"), horizon: Color(hex: "#B8DCFF"))
         case .afternoon:
-            return SkyGradient(top: Color(hex: "#42A5F5"), horizon: Color(hex: "#FFCC80"))
+            return SkyGradient(top: Color(hex: "#4AABF0"), horizon: Color(hex: "#E8D4A8"))
         case .lateAfternoon:
-            return SkyGradient(top: Color(hex: "#5C6BC0"), horizon: Color(hex: "#FFAB40"))
+            return SkyGradient(top: Color(hex: "#5070B8"), horizon: Color(hex: "#F0A850"))
         case .sunset:
-            return SkyGradient(top: Color(hex: "#283593"), horizon: Color(hex: "#FF3D00"))
+            return SkyGradient(top: Color(hex: "#2A3870"), horizon: Color(hex: "#E84820"))
         case .dusk:
-            return SkyGradient(top: Color(hex: "#1A237E"), horizon: Color(hex: "#6A1B9A"))
+            return SkyGradient(top: Color(hex: "#161850"), horizon: Color(hex: "#5A1878"))
         case .earlyNight:
-            return SkyGradient(top: Color(hex: "#0D1117"), horizon: Color(hex: "#1A237E"))
+            return SkyGradient(top: Color(hex: "#0D1117"), horizon: Color(hex: "#161850"))
         case .night:
             return SkyGradient(top: Color(hex: "#02060C"), horizon: Color(hex: "#0C1425"))
         }

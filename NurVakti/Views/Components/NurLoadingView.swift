@@ -32,7 +32,7 @@ struct NurLoadingView: View {
                             .scaleEffect(pulseScale)
                         
                         // Icon
-                        Image(systemName: "location.north.line.fill") // Qibla Compass feel
+                        Image(systemName: "location.north.line.fill")
                             .font(.system(size: 24, weight: .semibold))
                             .foregroundColor(.nurGold)
                             .rotationEffect(.degrees(rotation))
@@ -46,7 +46,7 @@ struct NurLoadingView: View {
                         .kerning(4)
                         .foregroundColor(.nurGold.opacity(0.8))
                     
-                    Text("Lütfen Bekleyin...")
+                    Text(LocalizationManager.shared.localizedString("general.pleaseWait"))
                         .font(.system(size: 11, weight: .light))
                         .foregroundColor(Color(hex: "1A1A2E").opacity(0.6))
                         .italic()
@@ -82,7 +82,7 @@ struct BeadView: View {
     
     var body: some View {
         Circle()
-            .fill(isActive ? Color.nurGold : ColorColor(hex: "1A1A2E").opacity(0.2))
+            .fill(isActive ? Color.nurGold : Color(hex: "1A1A2E").opacity(0.2))
             .frame(width: isActive ? 8 : 4, height: isActive ? 8 : 4)
             .offset(y: -60) // Radius of the tasbih ring
             .shadow(color: isActive ? .nurGold.opacity(0.6) : .clear, radius: 4)

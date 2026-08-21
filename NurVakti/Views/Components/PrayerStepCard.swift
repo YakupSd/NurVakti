@@ -32,7 +32,7 @@ struct PrayerStepCard: View {
                     ZStack {
                         // Fallback background
                         RoundedRectangle(cornerRadius: 12)
-                            .fill(ColorColor(hex: "1A1A2E").opacity(0.05))
+                            .fill(Color(hex: "1A1A2E").opacity(0.05))
                         
                         Image(systemName: "figure.pray")
                             .font(.system(size: 40))
@@ -48,18 +48,18 @@ struct PrayerStepCard: View {
                     .cornerRadius(12)
                     .overlay(
                         RoundedRectangle(cornerRadius: 12)
-                            .stroke(ColorColor(hex: "1A1A2E").opacity(0.1), lineWidth: 1)
+                            .stroke(Color(hex: "1A1A2E").opacity(0.1), lineWidth: 1)
                     )
                     .padding(.top, 8)
                 }
             }
         }
         .padding(24)
-        .background(ColorColor(hex: "1A1A2E").opacity(0.05))
+        .background(Color(hex: "1A1A2E").opacity(0.05))
         .cornerRadius(24)
         .overlay(
             RoundedRectangle(cornerRadius: 24)
-                .stroke(ColorColor(hex: "1A1A2E").opacity(0.1), lineWidth: 1)
+                .stroke(Color(hex: "1A1A2E").opacity(0.1), lineWidth: 1)
         )
     }
 }

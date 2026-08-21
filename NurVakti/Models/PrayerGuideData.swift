@@ -21,7 +21,7 @@ struct PrayerGuideData {
         return [
             PrayerStep(
                 id: "step_niyet",
-                imageName: "Niyet1",
+                imageName: "Niyet1_v2",
                 titles: ["tr": "Niyet", "en": "Intention"],
                 descriptions: [
                     "tr": "Kılınacak namaza niyet etmek (Örn: Niyet ettim Allah rızası için bugünkü öğle namazının sünnetini kılmaya).",
@@ -30,7 +30,7 @@ struct PrayerGuideData {
             ),
             PrayerStep(
                 id: "step_tekbir",
-                imageName: "Tekbir",
+                imageName: "Tekbir_v2",
                 titles: ["tr": "İftitah Tekbiri", "en": "Takbir al-Ihram"],
                 descriptions: [
                     "tr": "'Allâhu Ekber' diyerek namaza başlamak.",
@@ -39,7 +39,7 @@ struct PrayerGuideData {
             ),
             PrayerStep(
                 id: "step_kiyam",
-                imageName: "Kiyam",
+                imageName: "Kiyam_v2",
                 titles: ["tr": "Kıyam", "en": "Qiyam"],
                 descriptions: [
                     "tr": "Ayakta durmak ve Kur'an okumak (Fatiha ve ek sure).",
@@ -48,7 +48,7 @@ struct PrayerGuideData {
             ),
             PrayerStep(
                 id: "step_ruku",
-                imageName: "Ruku",
+                imageName: "Ruku_v2",
                 titles: ["tr": "Rükû", "en": "Ruku"],
                 descriptions: [
                     "tr": "Elleri dizlere koyarak eğilmek ve 'Sübhâne Rabbiyel Azîm' demek.",
@@ -57,7 +57,7 @@ struct PrayerGuideData {
             ),
             PrayerStep(
                 id: "step_secde",
-                imageName: "Secde",
+                imageName: "Secde_v2",
                 titles: ["tr": "Secde", "en": "Sujud"],
                 descriptions: [
                     "tr": "Alın, burun, eller, dizler ve ayaklar yere değecek şekilde yere kapanmak ve 'Sübhâne Rabbiyel Â'lâ' demek.",
@@ -66,7 +66,7 @@ struct PrayerGuideData {
             ),
             PrayerStep(
                 id: "step_oturus",
-                imageName: "KadeiAhire",
+                imageName: "KadeiAhire_v2",
                 titles: ["tr": "Ka'de-i Ahîre", "en": "Final Sitting"],
                 descriptions: [
                     "tr": "Son rekatta oturup Ettehiyyatü, Salli-Barik ve Rabbena dualarını okumak.",
@@ -75,7 +75,7 @@ struct PrayerGuideData {
             ),
             PrayerStep(
                 id: "step_selam",
-                imageName: "Selam",
+                imageName: "Selam_v2",
                 titles: ["tr": "Selam", "en": "Taslim"],
                 descriptions: [
                     "tr": "'Esselâmu aleykum ve rahmetullâh' diyerek önce sağa, sonra sola selam vermek.",
@@ -352,19 +352,19 @@ struct PrayerGuideData {
         return [
             PrayerStep(
                 id: "step_eid_niyet",
-                imageName: "Niyet1",
+                imageName: "Niyet1_v2",
                 titles: ["tr": "Niyet ve Tekbir", "en": "Intention & Takbir"],
                 descriptions: ["tr": "Niyet ettim Allah rızası için Bayram namazını kılmaya, uydum hazır olan imama.", "en": "Make intention for Eid prayer behind the Imam."]
             ),
             PrayerStep(
                 id: "step_eid_takbirs_1",
-                imageName: "Tekbir",
+                imageName: "Tekbir_v2",
                 titles: ["tr": "Ekstra Tekbirler (1. Rekat)", "en": "Extra Takbirs"],
                 descriptions: ["tr": "Sübhaneke'den sonra imamla birlikte eller kulaklara kaldırılarak 3 kez tekbir alınır. İlk ikisinde eller yana salınır, üçüncüsünde bağlanır.", "en": "After Subhanaka, raise hands 3 times with the Imam..."]
             ),
             PrayerStep(
                 id: "step_eid_takbirs_2",
-                imageName: "Tekbir",
+                imageName: "Tekbir_v2",
                 titles: ["tr": "Ekstra Tekbirler (2. Rekat)", "en": "Extra Takbirs (2nd Raka)"],
                 descriptions: ["tr": "Rükuya gitmeden önce yine 3 kez eller kaldırılarak tekbir alınır ve eller yana salınır. Dördüncü tekbirle rükuya gidilir.", "en": "Before Ruku, perform 3 extra takbirs..."]
             )

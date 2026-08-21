@@ -6,6 +6,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
 
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
+        UIWindow.appearance().backgroundColor = UIColor(red: 248/255, green: 246/255, blue: 240/255, alpha: 1.0)
         UNUserNotificationCenter.current().delegate = self
         checkNotificationStatus()
         // ── Background Refresh ─────────────────────────────────────

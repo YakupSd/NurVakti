@@ -49,7 +49,7 @@ public enum PrayerName: String, CaseIterable, Codable {
     
     public var arabicName: String {
         switch self {
-        case .imsak:   return "إمساak"
+        case .imsak:   return "الإمساك"
         case .fajr:    return "الفجر"
         case .sunrise: return "الشروق"
         case .dhuhr:   return "الظهر"

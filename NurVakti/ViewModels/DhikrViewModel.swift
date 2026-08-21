@@ -175,9 +175,11 @@ final class DhikrViewModel: ObservableObject {
         // Active item artır
         activeItem.increment()
         
-        // Haptic feedback
+        // Haptic feedback — her dokunuşta hafif titreşim (tesbih hissi)
         if activeItem.isCompleted && activeItem.currentCount == activeItem.targetCount {
             HapticManager.shared.dhikrDone()
+        } else {
+            HapticManager.shared.light()
         }
         
         saveItems()
@@ -251,7 +253,39 @@ final class DhikrViewModel: ObservableObject {
         WidgetCenter.shared.reloadAllTimelines()
     }
     
+    // MARK: - Günlük Sıfırlama
+    /// Uygulama her açıldığında çağrılır.
+    /// Eğer son sıfırlama bugün değilse, tüm dhikrlerin günlük sayılarını sıfırlar.
+    func resetDailyIfNeeded() {
+        let key = "dhikr_last_reset_date"
+        let lastReset = UserDefaults.standard.object(forKey: key) as? Date
+        let today = Calendar.current.startOfDay(for: Date())
+        
+        guard lastReset == nil || lastReset! < today else { return }
+        
+        // Sıfırla: currentCount = 0, dailyCompletions güncelle
+        for i in dhikrItems.indices {
+            if dhikrItems[i].currentCount > 0 {
+                // Bugünkü tamamlanma sayısını güncelle
+                dhikrItems[i].dailyCompletions += 1
+                dhikrItems[i].currentCount = 0
+            }
+        }
+        
+        // Aktif item'ı da sıfırla
+        if activeItem.currentCount > 0 {
+            activeItem.dailyCompletions += 1
+            activeItem.currentCount = 0
+        }
+        
+        UserDefaults.standard.set(today, forKey: key)
+        persistService.saveDhikr(dhikrItems)
+        WidgetCenter.shared.reloadAllTimelines()
+        print("DhikrViewModel: 🔄 Günlük sıfırlama yapıldı.")
+    }
+    
     func languageDidChange(_ code: LanguageCode) {
         // Gerekli metin güncellemeleri
     }
 }
+

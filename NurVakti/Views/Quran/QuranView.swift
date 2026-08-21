@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct QuranView: View {
-    @StateObject var vm = QuranViewModel()
+    @StateObject var vm = QuranViewModel.shared
     @EnvironmentObject var localization: LocalizationManager
     @EnvironmentObject var router: AppRouter
     
@@ -212,17 +212,17 @@ struct QuranView: View {
                                 .clipShape(Circle())
                             
                             VStack(alignment: .leading, spacing: 4) {
-                                Text("Arapça + Meal")
+                                Text(localization.localizedString("quran.arabicAndMeal"))
                                     .nurFont(16, weight: .bold)
                                     .foregroundColor(Color(hex: "1A1A2E"))
-                                Text("Ayet ayet okuma ve meal takibi")
+                                Text(localization.localizedString("quran.arabicAndMealDesc"))
                                     .nurFont(12)
                                     .foregroundColor(Color(hex: "1A1A2E").opacity(0.5))
                             }
                             
                             Spacer()
                             
-                            Text("Önerilen")
+                            Text(localization.localizedString("quran.recommended"))
                                 .nurFont(10, weight: .bold)
                                 .foregroundColor(Color(hex: "C9A84C"))
                                 .padding(.horizontal, 10)
@@ -263,10 +263,10 @@ struct QuranView: View {
                                 .clipShape(Circle())
                             
                             VStack(alignment: .leading, spacing: 4) {
-                                Text("Mushaf")
+                                Text(localization.localizedString("quran.mushaf"))
                                     .nurFont(16, weight: .bold)
                                     .foregroundColor(Color(hex: "1A1A2E"))
-                                Text("Geleneksel sayfa görünümü")
+                                Text(localization.localizedString("quran.mushafDesc"))
                                     .nurFont(12)
                                     .foregroundColor(Color(hex: "1A1A2E").opacity(0.5))
                             }

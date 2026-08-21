@@ -75,7 +75,7 @@ struct SpecialPrayersView: View {
                     // Eid Prayer Guidance (if relevant)
                     if currentMonth == .ramadan || currentMonth == .shawwal || currentMonth == .dhuAlHijjah {
                         VStack(alignment: .leading, spacing: 16) {
-                            Divider().background(ColorColor(hex: "1A1A2E").opacity(0.1))
+                            Divider().background(Color(hex: "1A1A2E").opacity(0.1))
                                 .padding(.vertical, 10)
                             
                             Text(localization.localizedString("prayerGuide.howToEidPrayer"))

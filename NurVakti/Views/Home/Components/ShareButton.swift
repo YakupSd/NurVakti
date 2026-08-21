@@ -16,17 +16,14 @@ struct ShareButton: View {
                 Image(systemName: "square.and.arrow.up")
                     .font(.system(size: 10))
                 Text(localization.localizedString("general.share"))
-                    .font(.system(size: 9, weight: .medium))
+                    .font(.system(size: 9, weight: .bold))
             }
-            .foregroundColor(.nurGold)
-            .padding(.horizontal, 8)
-            .padding(.vertical, 4)
-            .background(Color.nurGold.opacity(0.12))
+            .foregroundColor(.black)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 5)
+            .background(Color.nurGold)
             .cornerRadius(8)
-            .overlay(
-                RoundedRectangle(cornerRadius: 8)
-                    .strokeBorder(Color.nurGold.opacity(0.3), lineWidth: 1)
-            )
+            .shadow(color: Color.nurGold.opacity(0.2), radius: 4, y: 1)
         }
     }
     
@@ -55,42 +52,52 @@ struct ShareButton: View {
     private func renderShareCard() -> UIImage? {
         let cardView = VStack(spacing: 16) {
             HStack {
-                Text("NurVakti 🕌")
-                    .font(.system(size: 14, weight: .bold))
-                    .foregroundColor(Color(hex: "#D4AF37"))
+                HStack(spacing: 6) {
+                    Image(systemName: "sparkles")
+                        .foregroundColor(.nurGold)
+                    Text("NurVakti")
+                        .font(.system(size: 15, weight: .bold))
+                        .foregroundColor(.white)
+                }
                 Spacer()
             }
             
             if let ar = arabicText, !ar.isEmpty {
                 Text(ar)
-                    .font(.system(size: 20, weight: .medium, design: .serif))
+                    .font(.custom("KFGQPCUthmanicScriptHAFS", size: 22))
                     .multilineTextAlignment(.center)
-                    .foregroundColor(Color(hex: "1A1A2E"))
+                    .foregroundColor(.white)
                     .padding(.horizontal)
             }
             
             Text(text)
-                .font(.system(size: 14, weight: .regular))
+                .font(.system(size: 14, weight: .medium, design: .serif))
+                .italic()
                 .multilineTextAlignment(.center)
-                .foregroundColor(Color(hex: "1A1A2E").opacity(0.9))
+                .foregroundColor(Color.white.opacity(0.92))
+                .lineSpacing(4)
                 .padding(.horizontal)
             
             HStack {
                 Spacer()
                 Text("nurvakti.app")
-                    .font(.system(size: 10, weight: .medium))
-                    .foregroundColor(Color(hex: "#D4AF37").opacity(0.7))
+                    .font(.system(size: 11, weight: .semibold))
+                    .foregroundColor(.nurGold)
             }
         }
         .padding(24)
         .frame(width: 320)
         .background(
-            LinearGradient(colors: [Color(hex: "#0D1B2A"), Color(hex: "#1B263B")], startPoint: .topLeading, endPoint: .bottomTrailing)
+            LinearGradient(
+                colors: [Color(hex: "#0E1626"), Color(hex: "#050811")],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
         )
-        .cornerRadius(16)
+        .cornerRadius(20)
         .overlay(
-            RoundedRectangle(cornerRadius: 16)
-                .stroke(Color(hex: "#D4AF37").opacity(0.3), lineWidth: 1)
+            RoundedRectangle(cornerRadius: 20)
+                .stroke(Color.nurGold.opacity(0.4), lineWidth: 1.2)
         )
         
         let renderer = ImageRenderer(content: cardView)

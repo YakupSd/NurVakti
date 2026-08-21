@@ -1,5 +1,33 @@
 import SwiftUI
 
+// MARK: - NurTheme
+public struct NurTheme {
+    // MARK: - Arka Plan Renkleri
+    public static let background = Color(hex: "F8F6F0")
+    public static let cardBackground = Color.white
+    public static let secondaryBackground = Color(hex: "F0EDE6")
+    
+    // MARK: - Metin Renkleri
+    public static let textPrimary = Color(hex: "1A1A2E")
+    public static let textSecondary = Color(hex: "1A1A2E").opacity(0.55)
+    public static let textTertiary = Color(hex: "1A1A2E").opacity(0.35)
+    public static let textArabic = Color(hex: "2C1E11")
+    
+    // MARK: - Aksan Renkleri
+    public static let gold = Color(hex: "C9A84C")
+    public static let goldLight = Color(hex: "C9A84C").opacity(0.12)
+    public static let green = Color(hex: "2D8B56")
+    public static let greenLight = Color(hex: "2D8B56").opacity(0.1)
+    
+    // MARK: - Ayırıcılar / Kenarlıklar
+    public static let separator = Color(hex: "1A1A2E").opacity(0.08)
+    public static let border = Color(hex: "1A1A2E").opacity(0.06)
+    
+    // MARK: - Gölge
+    public static let cardShadow = Color.black.opacity(0.04)
+    public static let cardShadowRadius: CGFloat = 8
+}
+
 // MARK: - App Colors
 extension Color {
     public static let nurGold       = Color(hex: "#C9A84C")
@@ -62,13 +90,13 @@ struct NurCardModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .padding()
-            .background(BlurView(style: .systemUltraThinMaterialDark))
+            .background(Color.white)
             .cornerRadius(20)
             .overlay(
                 RoundedRectangle(cornerRadius: 20)
-                    .stroke(Color.white.opacity(0.1), lineWidth: 0.5)
+                    .stroke(NurTheme.border, lineWidth: 0.5)
             )
-            .shadow(color: .black.opacity(0.2), radius: 10, x: 0, y: 5)
+            .shadow(color: NurTheme.cardShadow, radius: NurTheme.cardShadowRadius, x: 0, y: 4)
     }
 }
 
@@ -77,7 +105,7 @@ struct NurTitleModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .font(size.titleFont)
-            .foregroundColor(.white)
+            .foregroundColor(NurTheme.textPrimary)
     }
 }
 
@@ -86,7 +114,7 @@ struct NurBodyModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .font(size.bodyFont)
-            .foregroundColor(.white.opacity(0.9))
+            .foregroundColor(NurTheme.textSecondary)
     }
 }
 
@@ -135,10 +163,66 @@ extension FontSize {
 }
 
 // MARK: - Blur View Helper
-private struct BlurView: UIViewRepresentable {
-    let style: UIBlurEffect.Style
-    func makeUIView(context: Context) -> UIVisualEffectView {
+public struct BlurView: UIViewRepresentable {
+    public let style: UIBlurEffect.Style
+    public init(style: UIBlurEffect.Style = .systemUltraThinMaterialLight) {
+        self.style = style
+    }
+    public func makeUIView(context: Context) -> UIVisualEffectView {
         UIVisualEffectView(effect: UIBlurEffect(style: style))
     }
-    func updateUIView(_ uiView: UIVisualEffectView, context: Context) {}
+    public func updateUIView(_ uiView: UIVisualEffectView, context: Context) {}
 }
+
+// MARK: - Ivan Vorobei VIP Button & Card Press Styles
+public struct CardPressableButtonStyle: ButtonStyle {
+    public let scale: CGFloat
+    public let opacity: CGFloat
+    
+    public init(scale: CGFloat = 0.97, opacity: CGFloat = 0.92) {
+        self.scale = scale
+        self.opacity = opacity
+    }
+    
+    public func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed ? scale : 1.0)
+            .opacity(configuration.isPressed ? opacity : 1.0)
+            .animation(.spring(response: 0.32, dampingFraction: 0.72, blendDuration: 0), value: configuration.isPressed)
+    }
+}
+
+public struct BouncyButtonStyle: ButtonStyle {
+    public init() {}
+    public func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed ? 0.94 : 1.0)
+            .animation(.spring(response: 0.28, dampingFraction: 0.65, blendDuration: 0), value: configuration.isPressed)
+    }
+}
+
+// MARK: - Standard VIP Form & Container Modifiers
+public struct NurFormSectionModifier: ViewModifier {
+    public func body(content: Content) -> some View {
+        content
+            .padding(16)
+            .background(Color.white)
+            .cornerRadius(20)
+            .overlay(
+                RoundedRectangle(cornerRadius: 20)
+                    .stroke(NurTheme.border, lineWidth: 1)
+            )
+            .shadow(color: Color.black.opacity(0.03), radius: 10, x: 0, y: 3)
+    }
+}
+
+extension View {
+    public func nurCardPressable(scale: CGFloat = 0.97) -> some View {
+        self.buttonStyle(CardPressableButtonStyle(scale: scale))
+    }
+    
+    public func nurFormSectionStyle() -> some View {
+        self.modifier(NurFormSectionModifier())
+    }
+}
+

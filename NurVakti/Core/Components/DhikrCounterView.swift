@@ -7,103 +7,113 @@ struct DhikrCounterView: View {
     let onComplete: () -> Void
     
     @State private var isAnimating = false
-    @State private var dragOffset: CGSize = .zero
+    @State private var ringPulse = false
     
     var body: some View {
-        VStack(spacing: 30) {
+        VStack(spacing: 28) {
             ZStack {
-                // Outer Glow / Shadow (Enhanced Nur)
+                // Outer Ambient Warm Glow
                 Circle()
                     .fill(
-                        AngularGradient(colors: [.nurGold.opacity(0.35), .clear, .nurGold.opacity(0.2), .clear, .nurGold.opacity(0.35)], center: .center)
+                        RadialGradient(
+                            colors: [Color.nurGold.opacity(0.18), Color.clear],
+                            center: .center,
+                            startRadius: 60,
+                            endRadius: 160
+                        )
                     )
-                    .rotationEffect(.degrees(isAnimating ? 360 : 0))
-                    .blur(radius: 25)
-                    .scaleEffect(isAnimating ? 1.2 : 1.0)
-                    .animation(.linear(duration: 8).repeatForever(autoreverses: false), value: isAnimating)
+                    .frame(width: 320, height: 320)
+                    .scaleEffect(isAnimating ? 1.08 : 1.0)
+                    .animation(.spring(response: 0.3, dampingFraction: 0.6), value: isAnimating)
                 
-                // Main Jewel Body (Glassmorphism)
+                // Track Background
                 Circle()
-                    .fill(.ultraThinMaterial)
-                    .overlay(
-                        Circle()
-                            .stroke(
-                                LinearGradient(colors: [Color(hex: "1A1A2E").opacity(0.5), .clear, .nurGold.opacity(0.3)], startPoint: .topLeading, endPoint: .bottomTrailing),
-                                lineWidth: 2
-                            )
-                    )
-                    .shadow(color: .black.opacity(0.3), radius: 20, x: 0, y: 10)
+                    .stroke(Color.black.opacity(0.04), lineWidth: 14)
+                    .frame(width: 270, height: 270)
                 
-                // Progress Ring (Gold)
+                // Progress Arc (Gold Luxury Gradient)
                 Circle()
                     .trim(from: 0, to: item.progress)
                     .stroke(
-                        LinearGradient(colors: [Color(hex: "D4AF37"), Color(hex: "FFDF00"), Color(hex: "B8860B")], startPoint: .topLeading, endPoint: .bottomTrailing),
-                        style: StrokeStyle(lineWidth: 12, lineCap: .round)
+                        LinearGradient(
+                            colors: [Color(hex: "#D4AF37"), Color(hex: "#C9A84C"), Color(hex: "#B8860B")],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        ),
+                        style: StrokeStyle(lineWidth: 14, lineCap: .round)
                     )
                     .rotationEffect(.degrees(-90))
-                    .padding(6)
-                    .animation(.spring(response: 0.4, dampingFraction: 0.6), value: item.currentCount)
+                    .frame(width: 270, height: 270)
+                    .animation(.spring(response: 0.35, dampingFraction: 0.7), value: item.currentCount)
                 
-                // Tap Area & Content
+                // Central Interactive Pearl Card
                 Button(action: increment) {
-                    VStack(spacing: 12) {
+                    VStack(spacing: 8) {
+                        // Arabic Text
                         Text(item.arabicText)
-                            .nurFont(24, weight: .bold)
-                            .minimumScaleFactor(0.5)
+                            .font(.custom("ScheherazadeNew-Bold", size: 26))
+                            .minimumScaleFactor(0.6)
                             .multilineTextAlignment(.center)
-                            .padding(.horizontal, 40)
-                            .foregroundColor(Color(hex: "1A1A2E"))
+                            .padding(.horizontal, 24)
+                            .foregroundColor(Color(hex: "2C1E11"))
+                            .frame(height: 38)
                         
+                        // Counter Number
                         Text(String(item.currentCount))
-                            .nurFont(90, weight: .heavy, design: .rounded)
-                            .foregroundColor(.nurGold)
+                            .nurFont(78, weight: .heavy, design: .rounded)
+                            .foregroundColor(Color(hex: "1A1A2E"))
                             .contentTransition(.numericText())
-                            .scaleEffect(isAnimating ? 1.25 : 1.0)
-                            .shadow(color: .nurGold.opacity(0.5), radius: isAnimating ? 15 : 5)
+                            .scaleEffect(isAnimating ? 1.12 : 1.0)
+                            .shadow(color: Color.nurGold.opacity(isAnimating ? 0.3 : 0), radius: 8)
                         
+                        // Target Badge
                         HStack(spacing: 4) {
                             Text(String(item.targetCount))
-                                .nurFont(16, weight: .medium)
-                            Text("HEDEF")
-                                .nurFont(10, weight: .bold)
+                                .nurFont(14, weight: .bold, design: .rounded)
+                            Text(LocalizationManager.shared.localizedString("dhikr.target").uppercased())
+                                .nurFont(9, weight: .bold)
+                                .kerning(1.0)
                         }
-                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.5))
-                        .padding(.horizontal, 16)
+                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.6))
+                        .padding(.horizontal, 14)
                         .padding(.vertical, 4)
-                        .background(ColorColor(hex: "1A1A2E").opacity(0.1))
-                        .cornerRadius(20)
+                        .background(Color(hex: "1A1A2E").opacity(0.05))
+                        .cornerRadius(12)
                     }
-                    .frame(width: 300, height: 300)
-                    .contentShape(Circle())
+                    .frame(width: 236, height: 236)
+                    .background(Color.white)
+                    .clipShape(Circle())
+                    .overlay(
+                        Circle()
+                            .stroke(Color(hex: "1A1A2E").opacity(0.06), lineWidth: 1)
+                    )
+                    .shadow(color: Color.black.opacity(0.06), radius: 16, x: 0, y: 6)
                 }
-                .buttonStyle(CounterButtonStyle())
+                .buttonStyle(BouncyButtonStyle())
             }
             .frame(width: 320, height: 320)
             
-            // Bottom Controls
-            HStack(spacing: 40) {
-                // Add / Subtract (Maybe just reset for now as per original)
+            // Bottom Action Controls (Ivan Vorobei Inset Capsule Buttons)
+            HStack(spacing: 24) {
                 Button(action: reset) {
-                    VStack(spacing: 6) {
+                    HStack(spacing: 6) {
                         Image(systemName: "arrow.counterclockwise")
-                            .font(.system(size: 20, weight: .bold))
-                        Text("Sıfırla")
+                            .font(.system(size: 13, weight: .bold))
+                        Text(LocalizationManager.shared.localizedString("dhikr.reset"))
                             .nurFont(12, weight: .bold)
                     }
-                    .foregroundColor(Color(hex: "1A1A2E").opacity(0.6))
+                    .foregroundColor(Color(hex: "1A1A2E").opacity(0.7))
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 10)
+                    .background(Color.white)
+                    .cornerRadius(16)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 16)
+                            .stroke(Color(hex: "1A1A2E").opacity(0.08), lineWidth: 1)
+                    )
+                    .shadow(color: Color.black.opacity(0.02), radius: 4, y: 2)
                 }
-                
-                // Settings for this Dhikr
-                Button(action: { /* Future: Edit Target */ }) {
-                    VStack(spacing: 6) {
-                        Image(systemName: "slider.horizontal.3")
-                            .font(.system(size: 20, weight: .bold))
-                        Text("Düzenle")
-                            .nurFont(12, weight: .bold)
-                    }
-                    .foregroundColor(Color(hex: "1A1A2E").opacity(0.6))
-                }
+                .buttonStyle(BouncyButtonStyle())
             }
         }
     }
@@ -118,8 +128,8 @@ struct DhikrCounterView: View {
             isAnimating = true
         }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            withAnimation(.easeOut(duration: 0.3)) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.12) {
+            withAnimation(.easeOut(duration: 0.25)) {
                 isAnimating = false
             }
         }
@@ -132,25 +142,17 @@ struct DhikrCounterView: View {
 
     private func reset() {
         HapticManager.shared.warning()
-        withAnimation {
+        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
             item.reset()
         }
     }
 }
 
-struct CounterButtonStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .scaleEffect(configuration.isPressed ? 0.96 : 1.0)
-            .animation(.interactiveSpring(), value: configuration.isPressed)
-    }
-}
-
 #Preview {
-    @Previewable @State var item = DhikrItem(id: UUID(), type: .subhanallah, arabicText: "سبحان الله", transliterationTR: "", meanings: [:], targetCount: 33, currentCount: 10, isCustom: false, vibrateOnCount: true, dailyCompletions: 0, totalCompletions: 0)
+    @Previewable @State var item = DhikrItem(id: UUID(), type: .subhanallah, arabicText: "سُبْحَانَ اللَّهِ", transliterationTR: "", meanings: [:], targetCount: 33, currentCount: 12, isCustom: false, vibrateOnCount: true, dailyCompletions: 1, totalCompletions: 34)
     
     ZStack {
-        Color(hex: "0D1B2A").ignoresSafeArea()
+        Color(hex: "F8F6F0").ignoresSafeArea()
         DhikrCounterView(item: $item, language: .tr, fontSize: .large) {}
     }
 }

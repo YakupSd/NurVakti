@@ -101,7 +101,7 @@ final class OnboardingViewModel: ObservableObject {
     }
 
     // MARK: - Tamamla
-    private func finishOnboarding() {
+    func finishOnboarding() {
         var settings = PersistenceService.shared.settings
         settings.language = selectedLanguage
         settings.hasCompletedOnboarding = true

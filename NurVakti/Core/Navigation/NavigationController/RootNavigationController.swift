@@ -42,15 +42,12 @@ struct RootNavigationController<RootView: View>: UIViewControllerRepresentable {
         )
         nav.setViewControllers([vc], animated: false)
         vc.navigationController?.delegate = context.coordinator
-        vc.view.backgroundColor = .white
+        let warmBg = UIColor(red: 248/255, green: 246/255, blue: 240/255, alpha: 1.0)
+        vc.view.backgroundColor = warmBg
+        nav.view.backgroundColor = warmBg
         
-        // Button & Title Shadow
-        vc.navigationController?.navigationBar.layer.shadowColor = UIColor.black.cgColor
-        vc.navigationController?.navigationBar.layer.shadowOffset = CGSize(width: 0.0, height: 4.0)
-        vc.navigationController?.navigationBar.layer.shadowRadius = 4.0
-        vc.navigationController?.navigationBar.layer.shadowOpacity = 0.3
-        vc.navigationController?.navigationBar.layer.masksToBounds = false
-
+        // Clean navigation bar appearance
+        vc.navigationController?.navigationBar.layer.shadowOpacity = 0.0
         
         return nav
     }
@@ -69,13 +66,15 @@ struct RootNavigationController<RootView: View>: UIViewControllerRepresentable {
             self.parent = parent
         }
         func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
-            //viewController.title = ""
             navigationController.view.frame = UIScreen.main.bounds
             navigationController.navigationBar.isTranslucent = true
-            navigationController.view.backgroundColor = .clear
+            navigationController.view.backgroundColor = UIColor(red: 248/255, green: 246/255, blue: 240/255, alpha: 1.0)
             UIApplication.shared.statusBarUIView?.backgroundColor = UIColor.clear
-            navigationController.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
-            navigationController.navigationBar.tintColor = UIColor.white
+            navigationController.navigationBar.titleTextAttributes = [
+                NSAttributedString.Key.foregroundColor: UIColor(red: 26/255, green: 26/255, blue: 46/255, alpha: 1.0),
+                NSAttributedString.Key.font: UIFont.setCustomUIFont(name: .InterBold, size: 18)
+            ]
+            navigationController.navigationBar.tintColor = UIColor(red: 26/255, green: 26/255, blue: 46/255, alpha: 0.85)
         }
     }
 }

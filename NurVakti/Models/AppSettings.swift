@@ -34,11 +34,12 @@ public enum Madhab: String, Codable, CaseIterable {
 }
 
 extension AppSettings {
+    /// PersistenceService.Keys.settings ile uyumlu aynı key: "settings"
     static func load() -> AppSettings {
-        PersistenceService.shared.load(key: "app_settings", as: AppSettings.self) ?? AppSettings()
+        PersistenceService.shared.load(key: "settings", as: AppSettings.self) ?? AppSettings()
     }
     
     func save() {
-        PersistenceService.shared.save(self, key: "app_settings")
+        PersistenceService.shared.save(self, key: "settings")
     }
 }

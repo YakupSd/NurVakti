@@ -7,6 +7,7 @@ struct HomeView: View {
     @EnvironmentObject var library: DuaLibraryService
     
     @State private var selectedShareContent: DailyContent?
+    @State private var selectedSpiritualMessage: SpiritualMessage?
     @State private var activeRoutineSlot: RoutineSlot = .none
     @State private var showLibrary = false
     
@@ -31,10 +32,58 @@ struct HomeView: View {
             // Layer 2: Scrollable content
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(spacing: 0) {
+                    // ── Offline Banner ──────────────────────────────
+                    if vm.isOffline {
+                        HStack(spacing: 8) {
+                            Image(systemName: "wifi.slash")
+                                .font(.system(size: 13, weight: .bold))
+                            Text(LocalizationManager.shared.localizedString("general.offline"))
+                                .font(.system(size: 13, weight: .bold))
+                        }
+                        .foregroundColor(.white)
+                        .padding(.vertical, 8)
+                        .frame(maxWidth: .infinity)
+                        .background(Color(hex: "8A5A00").opacity(0.85))
+                        .transition(.move(edge: .top).combined(with: .opacity))
+                        .animation(.easeInOut(duration: 0.3), value: vm.isOffline)
+                    }
+                    // ── Location Error Banner ──────────────────────
+                    if let errMsg = vm.errorMessage {
+                        HStack(spacing: 8) {
+                            Image(systemName: "location.slash.fill")
+                                .font(.system(size: 13, weight: .bold))
+                            Text(errMsg)
+                                .font(.system(size: 13, weight: .bold))
+                                .lineLimit(1)
+                            Spacer()
+                            Button(action: { vm.errorMessage = nil }) {
+                                Image(systemName: "xmark")
+                                    .font(.system(size: 11, weight: .bold))
+                            }
+                        }
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 14)
+                        .padding(.vertical, 8)
+                        .frame(maxWidth: .infinity)
+                        .background(Color(hex: "C44536").opacity(0.85))
+                        .transition(.move(edge: .top).combined(with: .opacity))
+                        .animation(.easeInOut(duration: 0.3), value: vm.errorMessage)
+                        .onAppear {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                                vm.errorMessage = nil
+                            }
+                        }
+                    }
                     SkyHeroSection()
                     PrayerMiniStrip()
                     
                     VStack(spacing: 20) {
+                        // ── Friday / Special Day Banner ──
+                        if let specialTitle = SpiritualMessageService.shared.todaysSpecialBannerTitle {
+                            FridayOrSpecialDayBanner(title: specialTitle)
+                                .padding(.horizontal, 14)
+                        }
+                        
                         FavouritesStrip()
                             .padding(.horizontal, 14)
                         
@@ -71,6 +120,9 @@ struct HomeView: View {
         }
         .sheet(item: $selectedShareContent) { content in
             GuidanceShareSheet(content: content)
+        }
+        .sheet(item: $selectedSpiritualMessage) { msg in
+            SpiritualShareSheet(message: msg)
         }
     }
     
@@ -192,6 +244,9 @@ struct HomeView: View {
                 content: vm.dailyDua
             )
             
+            // Card C: Günün Hikmetli Sözü
+            DailyWisdomCard()
+            
             // Tesbihat Button
             Button(action: { 
                 HapticManager.shared.tap()
@@ -239,7 +294,7 @@ struct HomeView: View {
                 GeometryReader { geo in
                     ZStack(alignment: .leading) {
                         RoundedRectangle(cornerRadius: 4)
-                            .fill(ColorColor(hex: "1A1A2E").opacity(0.1))
+                            .fill(Color(hex: "1A1A2E").opacity(0.1))
                         
                         RoundedRectangle(cornerRadius: 4)
                             .fill(
@@ -260,7 +315,7 @@ struct HomeView: View {
             .cornerRadius(16)
             .overlay(
                 RoundedRectangle(cornerRadius: 16)
-                    .stroke(ColorColor(hex: "1A1A2E").opacity(0.05), lineWidth: 1)
+                    .stroke(Color(hex: "1A1A2E").opacity(0.05), lineWidth: 1)
             )
             .padding(.horizontal, 14)
             
@@ -378,8 +433,20 @@ struct HomeView: View {
                     )
                 }
                 
-                // Row 5: Zekât
+                // Row 5: Manevi Mesajlar & Zekât
                 HStack(spacing: 8) {
+                    QuickAccessCard(
+                        icon: "envelope.badge.fill",
+                        iconBg: Color.nurGold.opacity(0.3),
+                        title: "Manevi Mesajlar",
+                        subtitle: "Cuma, Kandil, Bayram",
+                        action: { 
+                            router.pushTo(view: MainNavigationView.builder.makeView(
+                                SpiritualMessagesView(),
+                                withNavigationTitle: "Manevi Mesajlar"
+                            ))
+                        }
+                    )
                     QuickAccessCard(
                         icon: "scalemass.fill",
                         iconBg: Color(hex: "B8860B").opacity(0.3),
@@ -392,8 +459,6 @@ struct HomeView: View {
                             ))
                         }
                     )
-                    Spacer()
-                        .frame(maxWidth: .infinity)
                 }
             }
             .padding(.horizontal, 14)
@@ -403,13 +468,13 @@ struct HomeView: View {
         .background(
             VStack(spacing: 0) {
                 LinearGradient(
-                    colors: [.clear, Color(hex: "#0f0a1e")],
+                    colors: [.clear, NurTheme.background],
                     startPoint: .top,
                     endPoint: .bottom
                 )
                 .frame(height: 100)
                 
-                Color(hex: "#0f0a1e")
+                NurTheme.background
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
             .offset(y: -50)
@@ -433,7 +498,7 @@ struct HomeView: View {
         .background(
             ZStack(alignment: .leading) {
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(isActive ? Color.nurGold.opacity(0.1) : ColorColor(hex: "1A1A2E").opacity(0.05))
+                    .fill(isActive ? Color.nurGold.opacity(0.1) : Color(hex: "1A1A2E").opacity(0.05))
                 
                 if isActive {
                     GeometryReader { geo in
@@ -446,7 +511,7 @@ struct HomeView: View {
         )
         .overlay(
             RoundedRectangle(cornerRadius: 12)
-                .strokeBorder(isActive ? Color.nurGold.opacity(0.4) : ColorColor(hex: "1A1A2E").opacity(0.08), lineWidth: 1)
+                .strokeBorder(isActive ? Color.nurGold.opacity(0.4) : Color(hex: "1A1A2E").opacity(0.08), lineWidth: 1)
         )
     }
     
@@ -470,7 +535,7 @@ struct HomeView: View {
                             .font(.system(size: 10))
                             .foregroundColor(Color(hex: "1A1A2E").opacity(0.6))
                             .padding(6)
-                            .background(ColorColor(hex: "1A1A2E").opacity(0.1))
+                            .background(Color(hex: "1A1A2E").opacity(0.1))
                             .clipShape(Circle())
                     }
 
@@ -523,7 +588,143 @@ struct HomeView: View {
         .cornerRadius(18)
         .overlay(
             RoundedRectangle(cornerRadius: 18)
-                .stroke(ColorColor(hex: "1A1A2E").opacity(0.1), lineWidth: 1)
+                .stroke(Color(hex: "1A1A2E").opacity(0.1), lineWidth: 1)
+        )
+        .padding(.horizontal, 14)
+    }
+    
+    private func FridayOrSpecialDayBanner(title: String) -> some View {
+        Button(action: {
+            HapticManager.shared.tap()
+            let initialCat: SpiritualCategory = SpiritualMessageService.shared.isTodayFriday ? .friday : .kandil
+            router.pushTo(view: MainNavigationView.builder.makeView(
+                SpiritualMessagesView(initialCategory: initialCat),
+                withNavigationTitle: "Manevi Mesajlar"
+            ))
+        }) {
+            HStack(spacing: 12) {
+                ZStack {
+                    Circle()
+                        .fill(
+                            LinearGradient(
+                                colors: [Color(hex: "#FFE58F"), Color(hex: "#D4AF37")],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                        .frame(width: 38, height: 38)
+                    Image(systemName: "sparkles")
+                        .font(.system(size: 17, weight: .bold))
+                        .foregroundColor(Color(hex: "#0E1626"))
+                }
+                
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(title)
+                        .font(.system(size: 15, weight: .bold))
+                        .foregroundColor(Color(hex: "#1A1A2E"))
+                    Text("Özel tebrik ve duaları paylaşmak için dokunun →")
+                        .font(.system(size: 11, weight: .medium))
+                        .foregroundColor(Color(hex: "#1A1A2E").opacity(0.6))
+                }
+                
+                Spacer()
+                
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 12, weight: .bold))
+                    .foregroundColor(.nurGold)
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+            .background(
+                LinearGradient(
+                    colors: [Color.white, Color(hex: "#FFFBF0")],
+                    startPoint: .leading,
+                    endPoint: .trailing
+                )
+            )
+            .cornerRadius(16)
+            .overlay(
+                RoundedRectangle(cornerRadius: 16)
+                    .stroke(
+                        LinearGradient(
+                            colors: [Color.nurGold.opacity(0.6), Color.nurGold.opacity(0.2)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        ),
+                        lineWidth: 1.2
+                    )
+            )
+            .shadow(color: Color.nurGold.opacity(0.12), radius: 8, y: 3)
+        }
+        .buttonStyle(ScaleButtonStyle())
+    }
+    
+    private func DailyWisdomCard() -> some View {
+        let wisdom = SpiritualMessageService.shared.dynamicWisdomMessage ?? SpiritualMessageService.shared.todaysFeaturedMessage()
+        return VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Label("GÜNÜN HİKMETLİ SÖZÜ", systemImage: "quote.opening")
+                    .font(.system(size: 10, weight: .medium))
+                    .foregroundColor(Color(hex: "1A1A2E").opacity(0.5))
+                    .tracking(1.5)
+                
+                Spacer()
+                
+                HStack(spacing: 8) {
+                    // Copy
+                    Button(action: {
+                        HapticManager.shared.light()
+                        UIPasteboard.general.string = wisdom.formattedShareText
+                    }) {
+                        Image(systemName: "doc.on.doc")
+                            .font(.system(size: 10))
+                            .foregroundColor(Color(hex: "1A1A2E").opacity(0.6))
+                            .padding(6)
+                            .background(Color(hex: "1A1A2E").opacity(0.1))
+                            .clipShape(Circle())
+                    }
+                    
+                    // Story Share
+                    Button(action: {
+                        HapticManager.shared.tap()
+                        selectedSpiritualMessage = wisdom
+                    }) {
+                        HStack(spacing: 4) {
+                            Image(systemName: "square.and.arrow.up")
+                                .font(.system(size: 10))
+                            Text(localization.localizedString("general.share"))
+                                .font(.system(size: 9, weight: .medium))
+                        }
+                        .foregroundColor(.nurGold)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                        .background(Color.nurGold.opacity(0.12))
+                        .cornerRadius(8)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .strokeBorder(Color.nurGold.opacity(0.3), lineWidth: 1)
+                        )
+                    }
+                }
+            }
+            
+            Text(wisdom.text)
+                .font(.system(size: 13, weight: .regular, design: .serif))
+                .foregroundColor(Color(hex: "1A1A2E").opacity(0.85))
+                .lineSpacing(4)
+            
+            if let author = wisdom.authorOrSource, !author.isEmpty {
+                Text("— \(author)")
+                    .font(.system(size: 10, weight: .bold))
+                    .foregroundColor(.nurGold)
+            }
+        }
+        .padding(14)
+        .background(Color.white)
+        .cornerRadius(18)
+        .overlay(
+            RoundedRectangle(cornerRadius: 18)
+                .stroke(Color(hex: "1A1A2E").opacity(0.1), lineWidth: 1)
         )
         .padding(.horizontal, 14)
     }

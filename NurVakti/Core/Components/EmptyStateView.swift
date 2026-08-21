@@ -97,16 +97,16 @@ struct EmptyStateView: View {
             // Animasyonlu İkon
             ZStack {
                 Circle()
-                    .fill(ColorColor(hex: "1A1A2E").opacity(0.05))
+                    .fill(Color(hex: "1A1A2E").opacity(0.05))
                     .frame(width: 110, height: 110)
                 Circle()
-                    .stroke(ColorColor(hex: "1A1A2E").opacity(0.08), lineWidth: 1)
+                    .stroke(Color(hex: "1A1A2E").opacity(0.08), lineWidth: 1)
                     .frame(width: 130, height: 130)
                 Image(systemName: type.icon)
                     .font(.system(size: 48))
                     .foregroundStyle(
                         LinearGradient(
-                            colors: [Color.nurGold.opacity(0.7), ColorColor(hex: "1A1A2E").opacity(0.3)],
+                            colors: [Color.nurGold.opacity(0.7), Color(hex: "1A1A2E").opacity(0.3)],
                             startPoint: .topLeading, endPoint: .bottomTrailing
                         )
                     )

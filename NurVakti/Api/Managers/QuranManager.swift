@@ -5,6 +5,8 @@ public class QuranManager {
     
     public init() {}
     
+    // MARK: - Callback API (geriye dönük uyumluluk)
+    
     /// Surah listesini çeker (loading overlay yok — cache-first yapıda çalışır)
     public func getSurahs(
         onSuccess: @escaping (SurahListResponse) -> Void,
@@ -19,7 +21,7 @@ public class QuranManager {
         }
     }
     
-    /// Surah detayını çeker (loading overlay kaldırıldı — hata durumunda takılma sorunu çözüldü)
+    /// Surah detayını çeker
     public func getSurahDetail(
         number: Int,
         edition: String,
@@ -38,7 +40,7 @@ public class QuranManager {
         }
     }
     
-    /// Sayfa detayını çeker (loading overlay kaldırıldı)
+    /// Sayfa detayını çeker
     public func getPageDetail(
         page: Int,
         edition: String,
@@ -53,6 +55,38 @@ public class QuranManager {
                 let desc = error?.localizedDescription ?? "Bilinmeyen hata"
                 print("QuranManager: getPageDetail error — \(desc)")
                 onFailure(.noResponse(desc: desc, code: nil))
+            }
+        }
+    }
+    
+    // MARK: - Async/Await API (tercih edilen modern yöntem)
+    
+    public func getSurahsAsync() async throws -> SurahListResponse {
+        return try await withCheckedThrowingContinuation { continuation in
+            getSurahs { response in
+                continuation.resume(returning: response)
+            } onFailure: { error in
+                continuation.resume(throwing: error ?? ApplicationErrorType.noResponse(desc: "Unknown", code: nil))
+            }
+        }
+    }
+    
+    public func getSurahDetailAsync(number: Int, edition: String) async throws -> SurahDetailResponse {
+        return try await withCheckedThrowingContinuation { continuation in
+            getSurahDetail(number: number, edition: edition) { response in
+                continuation.resume(returning: response)
+            } onFailure: { error in
+                continuation.resume(throwing: error ?? ApplicationErrorType.noResponse(desc: "Unknown", code: nil))
+            }
+        }
+    }
+    
+    public func getPageDetailAsync(page: Int, edition: String) async throws -> SurahDetailResponse {
+        return try await withCheckedThrowingContinuation { continuation in
+            getPageDetail(page: page, edition: edition) { response in
+                continuation.resume(returning: response)
+            } onFailure: { error in
+                continuation.resume(throwing: error ?? ApplicationErrorType.noResponse(desc: "Unknown", code: nil))
             }
         }
     }

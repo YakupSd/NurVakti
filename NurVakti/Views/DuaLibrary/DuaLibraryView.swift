@@ -61,7 +61,7 @@ struct DuaLibraryView: View {
                         }
                     }
                     .padding(12)
-                    .background(ColorColor(hex: "1A1A2E").opacity(0.06))
+                    .background(Color(hex: "1A1A2E").opacity(0.06))
                     .cornerRadius(12)
                     
                     // Category Filter
@@ -109,7 +109,7 @@ struct DuaLibraryView: View {
                                     }
                                 )
                                 .padding(.horizontal, 16)
-                                .background(item.isFavourite ? Color.nurGold.opacity(0.08) : ColorColor(hex: "1A1A2E").opacity(0.02))
+                                .background(item.isFavourite ? Color.nurGold.opacity(0.08) : Color(hex: "1A1A2E").opacity(0.02))
                                 .cornerRadius(12)
                                 .padding(.horizontal, 12)
                                 .padding(.vertical, 4)
@@ -148,7 +148,7 @@ struct FilterPill: View {
                 .foregroundColor(isSelected ? .black : Color(hex: "1A1A2E").opacity(0.5))
                 .padding(.horizontal, 16)
                 .padding(.vertical, 8)
-                .background(isSelected ? Color.nurGold : ColorColor(hex: "1A1A2E").opacity(0.06))
+                .background(isSelected ? Color.nurGold : Color(hex: "1A1A2E").opacity(0.06))
                 .cornerRadius(20)
         }
     }
@@ -222,7 +222,7 @@ struct DuaLibraryRow: View {
         .padding(.horizontal, 16)
         .background(
             RoundedRectangle(cornerRadius: 16)
-                .fill(item.isFavourite ? Color.nurGold.opacity(0.12) : ColorColor(hex: "1A1A2E").opacity(0.04))
+                .fill(item.isFavourite ? Color.nurGold.opacity(0.12) : Color(hex: "1A1A2E").opacity(0.04))
         )
         .overlay(
             RoundedRectangle(cornerRadius: 16)

@@ -2,7 +2,7 @@ import Foundation
 import SwiftUI
 import Combine
 import UserNotifications
-import SwiftUI
+import StoreKit
 
 @MainActor
 final class SettingsViewModel: ObservableObject {
@@ -80,6 +80,15 @@ final class SettingsViewModel: ObservableObject {
     func openAppSettings() {
         if let url = URL(string: UIApplication.openSettingsURLString) {
             UIApplication.shared.open(url)
+        }
+    }
+    
+    func requestReview() {
+        // iOS 16+ için aktif scene'e yönlendir
+        if let scene = UIApplication.shared.connectedScenes
+            .compactMap({ $0 as? UIWindowScene })
+            .first(where: { $0.activationState == .foregroundActive }) {
+            SKStoreReviewController.requestReview(in: scene)
         }
     }
     

@@ -9,21 +9,24 @@ struct ZakatCalculatorView: View {
     
     var body: some View {
         ZStack {
+            // Background
             Color(hex: "F8F6F0").ignoresSafeArea()
             
             VStack(spacing: 0) {
-                // Header Step Indicator
-                HStack {
-                    Spacer()
-                    Text("\(currentStep + 1) / 5")
-                        .nurFont(14, weight: .medium)
-                        .foregroundColor(.nurGold)
+                // Header Step Indicator (VIP Capsule)
+                HStack(spacing: 6) {
+                    ForEach(0..<5) { step in
+                        Capsule()
+                            .fill(step <= currentStep ? Color.nurGold : Color(hex: "1A1A2E").opacity(0.1))
+                            .frame(height: 5)
+                            .animation(.spring(response: 0.35, dampingFraction: 0.7), value: currentStep)
+                    }
                 }
-                .padding(.horizontal)
+                .padding(.horizontal, 20)
                 .padding(.top, 16)
                 
-                ScrollView {
-                    VStack(spacing: 30) {
+                ScrollView(showsIndicators: false) {
+                    VStack(spacing: 24) {
                         if currentStep == 0 {
                             stepView(title: "zakat.step.cash", icon: "banknote.fill") {
                                 zakatInput(label: "zakat.cash", value: $assets.cash)
@@ -46,137 +49,188 @@ struct ZakatCalculatorView: View {
                             resultView
                         }
                     }
-                    .padding()
+                    .padding(20)
                 }
                 
                 // Footer Buttons
-                HStack(spacing: 16) {
+                HStack(spacing: 14) {
                     if currentStep > 0 && currentStep < 4 {
-                        Button(action: { withAnimation { currentStep -= 1 } }) {
+                        Button(action: {
+                            HapticManager.shared.light()
+                            withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
+                                currentStep -= 1
+                            }
+                        }) {
                             Text(localization.localizedString("general.back"))
-                                .nurFont(16, weight: .bold)
+                                .nurFont(15, weight: .bold)
                                 .foregroundColor(Color(hex: "1A1A2E"))
                                 .frame(maxWidth: .infinity)
-                                .padding(.vertical, 14)
-                                .background(ColorColor(hex: "1A1A2E").opacity(0.1))
-                                .cornerRadius(12)
+                                .frame(height: 52)
+                                .background(Color.white)
+                                .cornerRadius(16)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 16)
+                                        .stroke(Color(hex: "1A1A2E").opacity(0.08), lineWidth: 1)
+                                )
+                                .shadow(color: Color.black.opacity(0.02), radius: 6, y: 2)
                         }
+                        .buttonStyle(BouncyButtonStyle())
                     }
                     
                     if currentStep < 4 {
-                        Button(action: { withAnimation { currentStep += 1 } }) {
+                        Button(action: {
+                            HapticManager.shared.light()
+                            withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
+                                currentStep += 1
+                            }
+                        }) {
                             Text(localization.localizedString("general.next"))
-                                .nurFont(16, weight: .bold)
-                                .foregroundColor(.black)
+                                .nurFont(15, weight: .bold)
+                                .foregroundColor(Color(hex: "1A1A2E"))
                                 .frame(maxWidth: .infinity)
-                                .padding(.vertical, 14)
+                                .frame(height: 52)
                                 .background(Color.nurGold)
-                                .cornerRadius(12)
+                                .cornerRadius(16)
+                                .shadow(color: Color.nurGold.opacity(0.3), radius: 8, y: 3)
                         }
+                        .buttonStyle(BouncyButtonStyle())
                     } else {
-                        Button(action: { router.pop() }) {
+                        Button(action: {
+                            HapticManager.shared.success()
+                            router.pop()
+                        }) {
                             Text(localization.localizedString("general.done"))
-                                .nurFont(16, weight: .bold)
-                                .foregroundColor(.black)
+                                .nurFont(15, weight: .bold)
+                                .foregroundColor(Color(hex: "1A1A2E"))
                                 .frame(maxWidth: .infinity)
-                                .padding(.vertical, 14)
+                                .frame(height: 52)
                                 .background(Color.nurGold)
-                                .cornerRadius(12)
+                                .cornerRadius(16)
+                                .shadow(color: Color.nurGold.opacity(0.3), radius: 8, y: 3)
                         }
+                        .buttonStyle(BouncyButtonStyle())
                     }
                 }
-                .padding()
+                .padding(.horizontal, 20)
+                .padding(.bottom, 24)
             }
         }
     }
     
     private func stepView<Content: View>(title: String, icon: String, @ViewBuilder content: () -> Content) -> some View {
-        VStack(spacing: 24) {
-            Image(systemName: icon)
-                .font(.system(size: 48))
-                .foregroundColor(.nurGold)
-                .padding(.top, 20)
+        VStack(spacing: 20) {
+            ZStack {
+                Circle()
+                    .fill(Color.nurGold.opacity(0.12))
+                    .frame(width: 72, height: 72)
+                Image(systemName: icon)
+                    .font(.system(size: 32))
+                    .foregroundColor(.nurGold)
+            }
+            .padding(.top, 10)
             
             Text(localization.localizedString(title))
-                .nurFont(24, weight: .bold)
+                .nurFont(22, weight: .bold)
                 .foregroundColor(Color(hex: "1A1A2E"))
             
-            VStack(spacing: 20) {
+            VStack(spacing: 16) {
                 content()
             }
         }
     }
     
     private func zakatInput(label: String, value: Binding<Double>, unit: String = "") -> some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 6) {
             Text(localization.localizedString(label))
-                .nurFont(14, weight: .medium)
-                .foregroundColor(Color(hex: "1A1A2E").opacity(0.6))
+                .nurFont(12, weight: .bold)
+                .foregroundColor(Color(hex: "1A1A2E").opacity(0.65))
             
             HStack {
                 TextField("0", value: value, format: .number)
                     .keyboardType(.decimalPad)
-                    .nurFont(20, weight: .bold)
+                    .nurFont(18, weight: .bold, design: .rounded)
                     .foregroundColor(Color(hex: "1A1A2E"))
                 
                 if !unit.isEmpty {
                     Text(unit)
-                        .nurFont(16, weight: .bold)
+                        .nurFont(14, weight: .bold)
                         .foregroundColor(.nurGold)
                 }
             }
-            .padding()
-            .background(ColorColor(hex: "1A1A2E").opacity(0.05))
-            .cornerRadius(12)
+            .padding(.horizontal, 16)
+            .frame(height: 52)
+            .background(Color.white)
+            .cornerRadius(16)
             .overlay(
-                RoundedRectangle(cornerRadius: 12)
-                    .stroke(ColorColor(hex: "1A1A2E").opacity(0.1), lineWidth: 1)
+                RoundedRectangle(cornerRadius: 16)
+                    .stroke(Color(hex: "1A1A2E").opacity(0.08), lineWidth: 1)
             )
+            .shadow(color: Color.black.opacity(0.02), radius: 6, y: 2)
         }
     }
     
     private var resultView: some View {
-        VStack(spacing: 32) {
-            Image(systemName: assets.isEligible ? "checkmark.circle.fill" : "info.circle.fill")
-                .font(.system(size: 64))
-                .foregroundColor(assets.isEligible ? .green : .nurGold)
+        VStack(spacing: 24) {
+            ZStack {
+                Circle()
+                    .fill((assets.isEligible ? Color.green : Color.nurGold).opacity(0.12))
+                    .frame(width: 84, height: 84)
+                Image(systemName: assets.isEligible ? "checkmark.circle.fill" : "info.circle.fill")
+                    .font(.system(size: 44))
+                    .foregroundColor(assets.isEligible ? .green : .nurGold)
+            }
             
-            VStack(spacing: 8) {
+            VStack(spacing: 6) {
                 Text(localization.localizedString(assets.isEligible ? "zakat.result.eligible" : "zakat.result.notEligible"))
-                    .nurFont(24, weight: .bold)
+                    .nurFont(22, weight: .bold)
                     .multilineTextAlignment(.center)
                     .foregroundColor(Color(hex: "1A1A2E"))
                 
                 if assets.isEligible {
                     Text(localization.localizedString("zakat.result.due"))
-                        .nurFont(16)
+                        .nurFont(14)
                         .foregroundColor(Color(hex: "1A1A2E").opacity(0.6))
                     
-                    Text("\(assets.zakatDue, specifier: "%.2f")")
-                        .nurFont(48, weight: .bold)
+                    Text("\(assets.zakatDue, specifier: "%.2f") ₺")
+                        .nurFont(42, weight: .heavy, design: .rounded)
                         .foregroundColor(.nurGold)
                 }
             }
             
-            VStack(spacing: 16) {
+            VStack(spacing: 12) {
                 resultRow(label: "zakat.totalAssets", value: assets.totalValue)
+                Divider().opacity(0.06)
                 resultRow(label: "zakat.nisabThreshold", value: assets.nisabThreshold)
             }
-            .padding()
-            .background(ColorColor(hex: "1A1A2E").opacity(0.05))
+            .padding(18)
+            .background(Color.white)
             .cornerRadius(20)
+            .overlay(
+                RoundedRectangle(cornerRadius: 20)
+                    .stroke(Color(hex: "1A1A2E").opacity(0.06), lineWidth: 1)
+            )
+            .shadow(color: Color.black.opacity(0.03), radius: 8, y: 2)
         }
     }
     
     private func resultRow(label: String, value: Double) -> some View {
         HStack {
             Text(localization.localizedString(label))
-                .nurFont(14)
+                .nurFont(13)
                 .foregroundColor(Color(hex: "1A1A2E").opacity(0.6))
             Spacer()
-            Text("\(value, specifier: "%.2f")")
-                .nurFont(14, weight: .bold)
+            Text("\(value, specifier: "%.2f") ₺")
+                .nurFont(14, weight: .bold, design: .rounded)
                 .foregroundColor(Color(hex: "1A1A2E"))
         }
+    }
+}
+
+#Preview {
+    ZStack {
+        Color(hex: "F8F6F0").ignoresSafeArea()
+        ZakatCalculatorView()
+            .environmentObject(LocalizationManager.shared)
+            .environmentObject(AppRouter.shared)
     }
 }

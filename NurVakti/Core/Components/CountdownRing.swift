@@ -15,7 +15,7 @@ struct CountdownRing: View {
         ZStack {
             // Dış Halkalar
             Circle()
-                .stroke(ColorColor(hex: "1A1A2E").opacity(0.1), lineWidth: 8)
+                .stroke(Color(hex: "1A1A2E").opacity(0.1), lineWidth: 8)
             
             Circle()
                 .trim(from: 0, to: progress)

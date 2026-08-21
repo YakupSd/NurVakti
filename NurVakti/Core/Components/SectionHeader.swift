@@ -3,45 +3,48 @@ import SwiftUI
 struct SectionHeader: View {
     let title: String
     var icon: String? = nil
+    var actionTitle: String? = nil
+    var action: (() -> Void)? = nil
     
     var body: some View {
-        HStack(spacing: 10) {
+        HStack(spacing: 8) {
             if let icon = icon {
                 Image(systemName: icon)
-                    .font(.system(size: 16, weight: .bold))
+                    .font(.system(size: 13, weight: .bold))
                     .foregroundColor(.nurGold)
-                    .frame(width: 32, height: 32)
-                    .background(Color.nurGold.opacity(0.15))
-                    .clipShape(Circle())
             }
             
             Text(title.uppercased())
-                .font(.system(size: 13, weight: .black))
-                .spacing(1.2)
-                .foregroundColor(Color(hex: "1A1A2E").opacity(0.8))
+                .nurFont(12, weight: .bold)
+                .kerning(1.2)
+                .foregroundColor(Color(hex: "1A1A2E").opacity(0.55))
             
             Spacer()
             
-            Rectangle()
-                .fill(LinearGradient(colors: [.nurGold.opacity(0.3), .clear], startPoint: .leading, endPoint: .trailing))
-                .frame(height: 1)
-                .frame(maxWidth: 60)
+            if let actionTitle = actionTitle, let action = action {
+                Button(action: {
+                    HapticManager.shared.light()
+                    action()
+                }) {
+                    Text(actionTitle)
+                        .nurFont(12, weight: .semibold)
+                        .foregroundColor(.nurGold)
+                }
+                .buttonStyle(BouncyButtonStyle())
+            }
         }
+        .padding(.horizontal, 4)
         .padding(.vertical, 4)
     }
 }
 
-extension Text {
-    func spacing(_ spacing: CGFloat) -> Text {
-        self.kerning(spacing)
-    }
-}
-
 #Preview {
-    VStack {
-        SectionHeader(title: "DİL SEÇİMİ", icon: "globe")
-        SectionHeader(title: "GÖRÜNÜM", icon: "textformat.size")
+    ZStack {
+        Color(hex: "F8F6F0").ignoresSafeArea()
+        VStack(spacing: 20) {
+            SectionHeader(title: "Günün Vakitleri", icon: "clock.fill", actionTitle: "Tümünü Gör") {}
+            SectionHeader(title: "Özel Zikirler", icon: "sparkles")
+        }
+        .padding()
     }
-    .padding()
-    .background(Color.black)
 }

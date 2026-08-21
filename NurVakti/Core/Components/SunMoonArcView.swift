@@ -19,7 +19,7 @@ struct SunMoonArcView: View {
                                 endAngle: .degrees(0),
                                 clockwise: false)
                 }
-                .stroke(ColorColor(hex: "1A1A2E").opacity(0.1), style: StrokeStyle(lineWidth: 1, dash: [5]))
+                .stroke(Color(hex: "1A1A2E").opacity(0.1), style: StrokeStyle(lineWidth: 1, dash: [5]))
                 
                 // Sun/Moon Icon with Halo
                 ZStack {
@@ -30,7 +30,7 @@ struct SunMoonArcView: View {
                             .blur(radius: 25)
                     } else {
                         Circle() // Glow for Moon
-                            .fill(ColorColor(hex: "1A1A2E").opacity(0.15))
+                            .fill(Color(hex: "1A1A2E").opacity(0.15))
                             .frame(width: 70, height: 70)
                             .blur(radius: 20)
                     }

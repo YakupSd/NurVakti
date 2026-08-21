@@ -6,30 +6,28 @@ struct AlarmView: View {
     
     var body: some View {
         ZStack {
-            // Arka plan
-            LinearGradient(colors: [Color(hex: "0D1B2A"), Color(hex: "F8F6F0")], startPoint: .top, endPoint: .bottom)
-                .ignoresSafeArea()
-            
-            StarFieldView(opacity: 0.2)
-                .ignoresSafeArea()
+            // Background
+            Color(hex: "F8F6F0").ignoresSafeArea()
             
             ScrollView(showsIndicators: false) {
-                VStack(spacing: 24) {
+                VStack(spacing: 20) {
                     // İZİN BANNER
                     if vm.permissionStatus != .authorized {
-                        VStack(spacing: 16) {
+                        VStack(spacing: 12) {
                             HStack {
                                 Image(systemName: "bell.badge.fill")
                                     .foregroundColor(.orange)
                                     .font(.title3)
                                 Text(localization.localizedString("alarm.permissionRequired"))
-                                    .nurFont(18, weight: .bold)
+                                    .nurFont(16, weight: .bold)
                                     .foregroundColor(Color(hex: "1A1A2E"))
                                 Spacer()
                             }
+                            
                             Text(localization.localizedString("alarm.permissionDesc"))
-                                .nurFont(14)
-                                .foregroundColor(Color(hex: "1A1A2E").opacity(0.7))
+                                .nurFont(13)
+                                .foregroundColor(Color(hex: "1A1A2E").opacity(0.65))
+                                .fixedSize(horizontal: false, vertical: true)
                             
                             Button(action: {
                                 HapticManager.shared.light()
@@ -37,33 +35,37 @@ struct AlarmView: View {
                             }) {
                                 Text(localization.localizedString("alarm.allowNow"))
                                     .nurFont(14, weight: .bold)
-                                    .foregroundColor(.black)
-                                    .padding(.horizontal, 24)
-                                    .padding(.vertical, 12)
+                                    .foregroundColor(Color(hex: "1A1A2E"))
+                                    .frame(maxWidth: .infinity)
+                                    .frame(height: 46)
                                     .background(Color.nurGold)
                                     .cornerRadius(12)
                             }
+                            .buttonStyle(BouncyButtonStyle())
                         }
-                        .padding(20)
+                        .padding(18)
                         .background(Color.white)
                         .cornerRadius(20)
                         .overlay(
                             RoundedRectangle(cornerRadius: 20)
-                                .stroke(ColorColor(hex: "1A1A2E").opacity(0.1), lineWidth: 1)
+                                .stroke(Color.orange.opacity(0.3), lineWidth: 1)
                         )
+                        .shadow(color: Color.black.opacity(0.02), radius: 8, y: 2)
                     }
                     
                     // BAŞLIK
                     HStack {
-                        Text(localization.localizedString("alarm.vakitReminder"))
-                            .font(.system(size: 32, weight: .black))
-                            .foregroundColor(Color(hex: "1A1A2E"))
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(localization.localizedString("alarm.vakitReminder"))
+                                .nurFont(26, weight: .bold)
+                                .foregroundColor(Color(hex: "1A1A2E"))
+                        }
                         Spacer()
                     }
-                    .padding(.top, 10)
+                    .padding(.top, 6)
                     
-                    // ALARMLAR LİSTESİ
-                    VStack(spacing: 18) {
+                    // ALARMLAR LİSTESİ (Inset Grouped)
+                    VStack(spacing: 14) {
                         ForEach(vm.alarms) { alarm in
                             AlarmCard(alarm: alarm, vm: vm, language: localization.currentLanguage)
                         }
@@ -72,12 +74,13 @@ struct AlarmView: View {
                     // ALT BİLGİ
                     Text(localization.localizedString("alarm.footerNote"))
                         .nurFont(11)
-                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.3))
+                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.4))
                         .multilineTextAlignment(.center)
-                        .padding(.top, 10)
+                        .padding(.top, 8)
                         .padding(.horizontal, 20)
+                        .padding(.bottom, 40)
                 }
-                .padding()
+                .padding(20)
             }
         }
         .onAppear { Task { await vm.onAppear() } }
@@ -92,142 +95,125 @@ struct AlarmCard: View {
     @State private var isExpanded = false
     
     var body: some View {
-        NurCard {
-            VStack(spacing: 16) {
-                HStack(spacing: 16) {
-                    // İkon ve İsim
-                    ZStack {
-                        Circle()
-                            .fill(alarm.prayerName.startColor.opacity(0.2))
-                            .frame(width: 44, height: 44)
-                        Image(systemName: alarm.prayerName.symbol)
-                            .foregroundColor(alarm.prayerName.startColor)
-                    }
+        VStack(spacing: 14) {
+            HStack(spacing: 14) {
+                // İkon ve İsim
+                ZStack {
+                    Circle()
+                        .fill(alarm.prayerName.startColor.opacity(0.15))
+                        .frame(width: 44, height: 44)
+                    Image(systemName: alarm.prayerName.symbol)
+                        .foregroundColor(.nurGold)
+                        .font(.system(size: 18, weight: .semibold))
+                }
+                
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(alarm.prayerName.localizedName(for: language))
+                        .nurFont(16, weight: .bold)
+                        .foregroundColor(Color(hex: "1A1A2E"))
                     
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(alarm.prayerName.localizedName(for: language))
-                            .nurFont(18, weight: .bold)
-                            .foregroundColor(Color(hex: "1A1A2E"))
-                        Text(LocalizationManager.shared.localizedString("alarm.vakitBased"))
+                    if alarm.isActive {
+                        Text(alarm.minutesBefore == 0 
+                             ? LocalizationManager.shared.localizedString("alarm.onTime") 
+                             : "\(alarm.minutesBefore) \(LocalizationManager.shared.localizedString("general.minutesShort")) \(LocalizationManager.shared.localizedString("alarm.before"))")
+                            .nurFont(12)
+                            .foregroundColor(.nurGold)
+                    } else {
+                        Text(LocalizationManager.shared.localizedString("alarm.closed"))
                             .nurFont(12)
                             .foregroundColor(Color(hex: "1A1A2E").opacity(0.4))
+                    }
+                }
+                
+                Spacer()
+                
+                // Toggle
+                Toggle("", isOn: Binding(
+                    get: { alarm.isActive },
+                    set: { _ in
+                        HapticManager.shared.selectionChanged()
+                        Task { await vm.toggleAlarm(alarm) }
+                    }
+                ))
+                .labelsHidden()
+                .tint(.nurGold)
+            }
+            
+            // Ayarlar Genişletme Butonu
+            if alarm.isActive {
+                Divider().opacity(0.06)
+                
+                HStack {
+                    Button(action: {
+                        withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
+                            isExpanded.toggle()
+                        }
+                    }) {
+                        HStack(spacing: 6) {
+                            Image(systemName: "slider.horizontal.3")
+                                .font(.system(size: 12))
+                            Text(LocalizationManager.shared.localizedString("alarm.settings"))
+                                .nurFont(12, weight: .semibold)
+                            Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
+                                .font(.system(size: 10))
+                        }
+                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.6))
                     }
                     
                     Spacer()
                     
-                    Toggle("", isOn: Binding(
-                        get: { alarm.isActive },
-                        set: { _ in 
-                            HapticManager.shared.light()
-                            Task { await vm.toggleAlarm(alarm) } 
-                        }
-                    ))
-                    .tint(.nurGold)
-                    .labelsHidden()
+                    // Ses Tipi Seçimi
+                    Text(alarm.soundType.localizedName(for: language))
+                        .nurFont(11, weight: .bold)
+                        .foregroundColor(.nurGold)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 3)
+                        .background(Color.nurGold.opacity(0.12))
+                        .cornerRadius(8)
                 }
                 
-                if alarm.isActive {
-                    Divider().background(ColorColor(hex: "1A1A2E").opacity(0.08))
-                    
-                    DisclosureGroup(isExpanded: $isExpanded) {
-                        VStack(spacing: 24) {
-                            // Dakika Seçimi
-                            HStack {
-                                Text(LocalizationManager.shared.localizedString("alarm.minutesBeforeLabel"))
-                                    .nurFont(14)
-                                    .foregroundColor(Color(hex: "1A1A2E").opacity(0.8))
-                                Spacer()
-                                Stepper(value: Binding(
-                                    get: { alarm.minutesBefore },
-                                    set: { 
-                                        HapticManager.shared.light()
-                                        vm.updateMinutesBefore($0, for: alarm.id) 
-                                    }
-                                ), in: 0...60, step: 5) {
-                                    Text("\(alarm.minutesBefore) \(LocalizationManager.shared.localizedString("general.minutesShort"))")
-                                        .nurFont(14, weight: .bold)
-                                        .foregroundColor(.nurGold)
-                                }
+                if isExpanded {
+                    VStack(spacing: 12) {
+                        // Dakika Seçimi (Vakit Öncesi)
+                        Picker("", selection: Binding(
+                            get: { alarm.minutesBefore },
+                            set: { val in
+                                vm.updateMinutesBefore(val, for: alarm.id)
                             }
-                            
-                            // Ses Seçimi
-                            HStack {
-                                Text(LocalizationManager.shared.localizedString("alarm.soundLabel"))
-                                    .nurFont(14)
-                                    .foregroundColor(Color(hex: "1A1A2E").opacity(0.8))
-                                Spacer()
-                                Menu {
-                                    ForEach(AlarmSound.allCases, id: \.self) { sound in
-                                        Button(sound.localizedName(for: language)) {
-                                            HapticManager.shared.light()
-                                            vm.updateSound(sound, for: alarm.id)
-                                        }
-                                    }
-                                } label: {
-                                    HStack(spacing: 4) {
-                                        Text(alarm.soundType.localizedName(for: language))
-                                            .nurFont(14, weight: .bold)
-                                        Image(systemName: "chevron.up.chevron.down")
-                                            .font(.system(size: 10))
-                                    }
-                                    .foregroundColor(.nurGold)
-                                    .padding(.horizontal, 12)
-                                    .padding(.vertical, 6)
-                                    .background(Color.nurGold.opacity(0.1))
-                                    .cornerRadius(8)
-                                }
+                        )) {
+                            Text("Tam Vaktinde").tag(0)
+                            Text("15 dk önce").tag(15)
+                            Text("30 dk önce").tag(30)
+                            Text("45 dk önce").tag(45)
+                        }
+                        .pickerStyle(.segmented)
+                        
+                        // Ses Tipi Picker
+                        Picker("", selection: Binding(
+                            get: { alarm.soundType },
+                            set: { val in
+                                vm.updateSound(val, for: alarm.id)
                             }
-                            
-                            // Günler
-                            VStack(alignment: .leading, spacing: 8) {
-                                Text(LocalizationManager.shared.localizedString("alarm.repeatDays"))
-                                    .nurFont(13, weight: .medium)
-                                    .foregroundColor(Color(hex: "1A1A2E").opacity(0.6))
-                                
-                                HStack(spacing: 6) {
-                                    ForEach(Weekday.allCases, id: \.self) { day in
-                                        let isSelected = alarm.repeatDays.isEmpty || alarm.repeatDays.contains(day)
-                                        Button(action: {
-                                            HapticManager.shared.light()
-                                            vm.updateRepeatDays(day, for: alarm.id)
-                                        }) {
-                                            Text(day.shortName(for: language))
-                                                .nurFont(10, weight: .bold)
-                                                .frame(width: 34, height: 34)
-                                                .background(isSelected ? Color.nurGold.opacity(0.2) : ColorColor(hex: "1A1A2E").opacity(0.05))
-                                                .foregroundColor(isSelected ? .nurGold : Color(hex: "1A1A2E").opacity(0.3))
-                                                .cornerRadius(8)
-                                                .overlay(
-                                                    RoundedRectangle(cornerRadius: 8)
-                                                        .stroke(isSelected ? Color.nurGold.opacity(0.5) : ColorColor(hex: "1A1A2E").opacity(0.08), lineWidth: 1)
-                                                )
-                                        }
-                                        .buttonStyle(.plain)
-                                    }
-                                }
-                                
-                                if alarm.repeatDays.isEmpty {
-                                    Text(LocalizationManager.shared.localizedString("alarm.everyDay"))
-                                        .nurFont(11)
-                                        .foregroundColor(.nurGold.opacity(0.6))
-                                }
+                        )) {
+                            ForEach(AlarmSound.allCases, id: \.self) { sound in
+                                Text(sound.localizedName(for: language)).tag(sound)
                             }
                         }
-                        .padding(.vertical, 12)
-                    } label: {
-                        HStack {
-                            Text(LocalizationManager.shared.localizedString("alarm.editSettings"))
-                                .nurFont(12, weight: .medium)
-                                .foregroundColor(.nurGold.opacity(0.8))
-                            Spacer()
-                            Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
-                                .font(.system(size: 10))
-                                .foregroundColor(.nurGold.opacity(0.5))
-                        }
+                        .pickerStyle(.segmented)
                     }
+                    .padding(.top, 4)
+                    .transition(.opacity.combined(with: .move(edge: .top)))
                 }
             }
         }
+        .padding(16)
+        .background(Color.white)
+        .cornerRadius(20)
+        .overlay(
+            RoundedRectangle(cornerRadius: 20)
+                .stroke(Color(hex: "1A1A2E").opacity(0.06), lineWidth: 1)
+        )
+        .shadow(color: Color.black.opacity(0.025), radius: 8, x: 0, y: 3)
     }
 }
 

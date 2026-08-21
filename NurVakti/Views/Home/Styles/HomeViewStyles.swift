@@ -8,7 +8,7 @@ struct ProgressBar: View {
         GeometryReader { geometry in
             ZStack(alignment: .leading) {
                 RoundedRectangle(cornerRadius: 2)
-                    .fill(ColorColor(hex: "1A1A2E").opacity(0.1))
+                    .fill(Color(hex: "1A1A2E").opacity(0.1))
                     .frame(height: 4)
                 
                 RoundedRectangle(cornerRadius: 2)

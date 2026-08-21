@@ -3,6 +3,7 @@ import Combine
 
 @MainActor
 final class QuranViewModel: ObservableObject {
+    static let shared = QuranViewModel()
     @Published var surahs: [SurahInfo] = []
     @Published var filteredSurahs: [SurahInfo] = []
     @Published var selectedSurah: SurahInfo?
@@ -42,43 +43,44 @@ final class QuranViewModel: ObservableObject {
     func loadSurahList() async {
         // Önce cache kontrol
         if let cachedData = UserDefaults.standard.data(forKey: "cached_surah_list"),
-           let cachedList = try? JSONDecoder().decode([SurahInfo].self, from: cachedData) {
+           let cachedList = try? JSONDecoder().decode([SurahInfo].self, from: cachedData),
+           !cachedList.isEmpty {
             self.surahs = cachedList
             self.filteredSurahs = cachedList
-            if !cachedList.isEmpty { return }
+            return
         }
         
         isLoading = true
         defer { isLoading = false }
         
-        await withCheckedContinuation { continuation in
-            quranManager.getSurahs { response in
-                let mappedSurahs = response.data.map { dto in
-                    SurahInfo(id: dto.number,
-                              nameArabic: dto.name,
-                              nameLocalized: [.tr: dto.englishName],
-                              englishName: dto.englishName,
-                              ayahCount: dto.numberOfAyahs,
-                              revelationType: RevelationType(rawValue: dto.revelationType) ?? .makkah)
-                }
-                
-                DispatchQueue.main.async {
-                    self.surahs = mappedSurahs
-                    self.filteredSurahs = mappedSurahs
-                    
-                    if let encoded = try? JSONEncoder().encode(mappedSurahs) {
-                        UserDefaults.standard.set(encoded, forKey: "cached_surah_list")
-                    }
-                    continuation.resume()
-                }
-            } onFailure: { _ in
-                DispatchQueue.main.async {
-                    self.loadError = .quranLoadFailed
-                    continuation.resume()
-                }
+        do {
+            let response = try await quranManager.getSurahsAsync()
+            let mappedSurahs = response.data.map { dto in
+                SurahInfo(id: dto.number,
+                          nameArabic: dto.name,
+                          nameLocalized: [
+                              .tr: dto.englishNameTranslation, // Türkçe mana (ör. "Açılış")
+                              .en: dto.englishName,            // İngilizce isim
+                              .ar: dto.name,                   // Arapça isim
+                              .de: dto.englishNameTranslation, // Almanca mana yok → İngilizce mana
+                              .pt: dto.englishNameTranslation  // Portekizce mana yok → İngilizce mana
+                          ],
+                          englishName: dto.englishName,
+                          ayahCount: dto.numberOfAyahs,
+                          revelationType: RevelationType(rawValue: dto.revelationType) ?? .makkah)
             }
+            
+            self.surahs = mappedSurahs
+            self.filteredSurahs = mappedSurahs
+            
+            if let encoded = try? JSONEncoder().encode(mappedSurahs) {
+                UserDefaults.standard.set(encoded, forKey: "cached_surah_list")
+            }
+        } catch {
+            self.loadError = .quranLoadFailed
         }
     }
+
     
     func loadAyahs(surah: SurahInfo, language: LanguageCode) async {
         isLoadingAyahs = true
@@ -89,22 +91,20 @@ final class QuranViewModel: ObservableObject {
         do {
             async let arabicResponse: SurahDetailResponse = try await fetchSurahDetail(number: surah.id, edition: "quran-uthmani")
             async let translationResponse: SurahDetailResponse = try await fetchSurahDetail(number: surah.id, edition: edition)
-            async let tajweedResponse: SurahDetailResponse = try await fetchSurahDetail(number: surah.id, edition: "ar.tajweed")
             
-            let (arabicRes, translationRes, tajweedRes) = try await (arabicResponse, translationResponse, tajweedResponse)
+            let (arabicRes, translationRes) = try await (arabicResponse, translationResponse)
             
             var items: [AyahItem] = []
-            let count = min(arabicRes.data.ayahs.count, translationRes.data.ayahs.count, tajweedRes.data.ayahs.count)
+            let count = min(arabicRes.data.ayahs.count, translationRes.data.ayahs.count)
             for i in 0..<count {
                 let arabic = arabicRes.data.ayahs[i]
                 let translation = translationRes.data.ayahs[i]
-                let tajweed = tajweedRes.data.ayahs[i].text
                 
                 items.append(AyahItem(id: arabic.numberInSurah,
                                      arabicText: arabic.text,
                                      translation: translation.text,
                                      surahNumber: surah.id,
-                                     tajweedText: tajweed))
+                                     tajweedText: nil))
             }
             self.ayahs = items
         } catch {
@@ -131,22 +131,20 @@ final class QuranViewModel: ObservableObject {
         do {
             async let arabicResponse: SurahDetailResponse = try await fetchPageDetail(page: page, edition: "quran-uthmani")
             async let translationResponse: SurahDetailResponse = try await fetchPageDetail(page: page, edition: edition)
-            async let tajweedResponse: SurahDetailResponse = try await fetchPageDetail(page: page, edition: "ar.tajweed")
             
-            let (arabicRes, translationRes, tajweedRes) = try await (arabicResponse, translationResponse, tajweedResponse)
+            let (arabicRes, translationRes) = try await (arabicResponse, translationResponse)
             
             var items: [AyahItem] = []
-            let count = min(arabicRes.data.ayahs.count, translationRes.data.ayahs.count, tajweedRes.data.ayahs.count)
+            let count = min(arabicRes.data.ayahs.count, translationRes.data.ayahs.count)
             for i in 0..<count {
                 let arabic = arabicRes.data.ayahs[i]
                 let translation = translationRes.data.ayahs[i]
-                let tajweed = tajweedRes.data.ayahs[i].text
                 
                 items.append(AyahItem(id: arabic.numberInSurah,
                                      arabicText: arabic.text,
                                      translation: translation.text,
                                      surahNumber: arabic.surah?.number ?? 0,
-                                     tajweedText: tajweed))
+                                     tajweedText: nil))
             }
             self.ayahs = items
             saveHatimProgress(page: page)

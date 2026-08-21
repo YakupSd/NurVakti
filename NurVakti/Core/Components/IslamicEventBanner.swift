@@ -49,7 +49,7 @@ struct IslamicEventBanner: View {
                         .font(.system(size: 12, weight: .bold))
                         .foregroundColor(Color(hex: "1A1A2E").opacity(0.5))
                         .padding(8)
-                        .background(ColorColor(hex: "1A1A2E").opacity(0.1))
+                        .background(Color(hex: "1A1A2E").opacity(0.1))
                         .clipShape(Circle())
                 }
                 .accessibilityLabel("Banner'ı kapat")

@@ -19,8 +19,33 @@ struct MushafMainView: View {
                 VStack {
                     ProgressView()
                         .tint(Color.nurGoldPremium)
-                    Text("Mushaf Yükleniyor...")
+                    Text(LocalizationManager.shared.localizedString("quran.mushafLoading"))
                         .foregroundColor(Color.nurGoldPremium)
+                }
+            } else if vm.loadError {
+                // Hata durumu — Retry butonu
+                VStack(spacing: 16) {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .font(.system(size: 36))
+                        .foregroundColor(Color.nurGoldPremium)
+                    Text(LocalizationManager.shared.localizedString("general.loadFailed"))
+                        .font(.system(size: 16, weight: .bold))
+                        .foregroundColor(Color(hex: "1A1A2E"))
+                    Button(action: {
+                        if let page = vm.pageNumber {
+                            vm.loadPageData(page)
+                        } else {
+                            vm.loadSurahData()
+                        }
+                    }) {
+                        Text(LocalizationManager.shared.localizedString("general.tryAgain"))
+                            .font(.system(size: 14, weight: .bold))
+                            .foregroundColor(.white)
+                            .padding(.horizontal, 24)
+                            .padding(.vertical, 10)
+                            .background(Color.nurGoldPremium)
+                            .cornerRadius(12)
+                    }
                 }
             } else if !vm.pages.isEmpty {
                 ZStack {
@@ -60,7 +85,7 @@ struct MushafMainView: View {
                     }
                 }
             } else {
-                Text("Veri bulunamadı.")
+                Text(LocalizationManager.shared.localizedString("general.noContent"))
             }
         }
     }

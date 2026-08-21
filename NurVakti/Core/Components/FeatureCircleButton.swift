@@ -7,42 +7,30 @@ struct FeatureCircleButton: View {
     
     var body: some View {
         Button(action: {
-            HapticManager.shared.tap()
+            HapticManager.shared.light()
             action()
         }) {
-            VStack(spacing: 12) {
-                // Circular Icon Container — Dark Glass
+            VStack(spacing: 10) {
+                // Circular Icon Container — Apple VIP Glass
                 ZStack {
-                    // Outer glow
                     Circle()
-                        .fill(
-                            RadialGradient(
-                                colors: [
-                                    Color.nurGold.opacity(0.08),
-                                    Color.clear
-                                ],
-                                center: .center,
-                                startRadius: 20,
-                                endRadius: 40
-                            )
-                        )
-                        .frame(width: 72, height: 72)
-                    
-                    // Main circle
-                    Circle()
-                        .fill(ColorColor(hex: "1A1A2E").opacity(0.06))
-                        .frame(width: 68, height: 68)
+                        .fill(Color.white)
+                        .frame(width: 64, height: 64)
+                        .shadow(color: Color.black.opacity(0.04), radius: 8, x: 0, y: 3)
                         .overlay(
                             Circle()
-                                .stroke(ColorColor(hex: "1A1A2E").opacity(0.1), lineWidth: 1)
+                                .stroke(Color(hex: "1A1A2E").opacity(0.06), lineWidth: 1)
                         )
-                        .shadow(color: Color.black.opacity(0.2), radius: 8, x: 0, y: 4)
+                    
+                    Circle()
+                        .fill(Color.nurGold.opacity(0.1))
+                        .frame(width: 52, height: 52)
                     
                     Image(systemName: icon)
-                        .font(.system(size: 24, weight: .semibold))
+                        .font(.system(size: 22, weight: .semibold))
                         .foregroundStyle(
                             LinearGradient(
-                                colors: [Color.nurGold, Color(hex: "FFD700")],
+                                colors: [Color.nurGold, Color(hex: "B8860B")],
                                 startPoint: .topLeading,
                                 endPoint: .bottomTrailing
                             )
@@ -55,10 +43,21 @@ struct FeatureCircleButton: View {
                     .foregroundColor(Color(hex: "1A1A2E").opacity(0.8))
                     .multilineTextAlignment(.center)
                     .lineLimit(2)
-                    .minimumScaleFactor(0.85) // Allow scaling to fit
-                    .frame(width: 90) // Increased width
+                    .minimumScaleFactor(0.85)
+                    .frame(width: 84)
             }
         }
-        .buttonStyle(ScaleButtonStyle())
+        .buttonStyle(BouncyButtonStyle())
+    }
+}
+
+#Preview {
+    ZStack {
+        Color(hex: "F8F6F0").ignoresSafeArea()
+        HStack(spacing: 16) {
+            FeatureCircleButton(icon: "book.fill", title: "Kur'an-ı Kerim") {}
+            FeatureCircleButton(icon: "circle.circle.fill", title: "Zikirmatik") {}
+            FeatureCircleButton(icon: "location.north.line.fill", title: "Kıble Bulucu") {}
+        }
     }
 }

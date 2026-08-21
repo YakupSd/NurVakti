@@ -27,10 +27,18 @@ open class PrayerAPI {
     open class func getCalendarWithRequestBuilder(latitude: Double, longitude: Double, method: Int) -> RequestBuilder<AladhanResponse> {
         let path = "/calendar"
         let URLString = SwaggerClientAPI.basePath + path
+        
+        let now = Date()
+        let cal = Calendar.current
+        let year = cal.component(.year, from: now)
+        let month = cal.component(.month, from: now)
+        
         let parameters: [String: Any] = [
             "latitude": latitude,
             "longitude": longitude,
-            "method": method
+            "method": method,
+            "year": year,
+            "month": month
         ]
         
         let targetURL = URLComponents(string: URLString)

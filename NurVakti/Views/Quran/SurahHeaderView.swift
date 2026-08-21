@@ -8,31 +8,46 @@ struct SurahHeaderView: View {
     
     var body: some View {
         ZStack {
-            // Background Banner (Gold Gradient)
-            RoundedRectangle(cornerRadius: 12)
+            // Background Banner (Luxury Gold Gradient)
+            RoundedRectangle(cornerRadius: 18)
                 .fill(
                     LinearGradient(
-                        colors: [Color(hex: "#C9A84C"), Color(hex: "#E5C87E")],
+                        colors: [Color(hex: "#D4AF37"), Color(hex: "#C9A84C"), Color(hex: "#B8860B")],
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
                     )
                 )
-                .frame(height: 80)
-                .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 3)
+                .frame(height: 84)
+                .shadow(color: Color.nurGold.opacity(0.3), radius: 10, x: 0, y: 4)
             
             // Decorative Inner Border
-            RoundedRectangle(cornerRadius: 10)
-                .stroke(Color.white.opacity(0.3), lineWidth: 1)
-                .padding(4)
-                .frame(height: 80)
+            RoundedRectangle(cornerRadius: 14)
+                .stroke(Color.white.opacity(0.35), lineWidth: 1)
+                .padding(5)
+                .frame(height: 84)
             
-            HStack(spacing: 20) {
+            HStack(spacing: 16) {
+                // Surah Number Left Badge
+                ZStack {
+                    Circle()
+                        .fill(Color.white.opacity(0.2))
+                        .frame(width: 38, height: 38)
+                    Circle()
+                        .stroke(Color.white.opacity(0.5), lineWidth: 1)
+                        .frame(width: 38, height: 38)
+                    Text("\(surahId)")
+                        .nurFont(14, weight: .heavy, design: .rounded)
+                        .foregroundColor(.white)
+                }
+                
                 // Info Left
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("\(ayahCount) Ayet")
-                    Text(isMakki ? "Mekki" : "Medeni")
+                    if ayahCount > 0 {
+                        Text("\(ayahCount) \(LocalizationManager.shared.localizedString("quran.ayahs"))")
+                    }
+                    Text(isMakki ? LocalizationManager.shared.localizedString("quran.makki") : LocalizationManager.shared.localizedString("quran.madani"))
                 }
-                .font(.system(size: 12, weight: .bold))
+                .nurFont(11, weight: .bold)
                 .foregroundColor(.white.opacity(0.9))
                 
                 Spacer()
@@ -41,29 +56,18 @@ struct SurahHeaderView: View {
                 Text("سُورَةُ \(surahName)")
                     .font(.custom("ScheherazadeNew-Bold", size: 28))
                     .foregroundColor(.white)
-                    .shadow(color: .black.opacity(0.2), radius: 1, x: 0, y: 1)
-                
-                Spacer()
-                
-                // Surah Number Right
-                ZStack {
-                    Circle()
-                        .stroke(Color.white.opacity(0.5), lineWidth: 1)
-                        .frame(width: 32, height: 32)
-                    Text("\(surahId)")
-                        .font(.system(size: 14, weight: .bold))
-                        .foregroundColor(.white)
-                }
+                    .shadow(color: .black.opacity(0.15), radius: 2, y: 1)
             }
-            .padding(.horizontal, 24)
+            .padding(.horizontal, 20)
         }
-        .padding(.horizontal)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 6)
     }
 }
 
 #Preview {
     ZStack {
-        Color.mushafBackground.ignoresSafeArea()
+        Color(hex: "F8F6F0").ignoresSafeArea()
         SurahHeaderView(surahId: 1, surahName: "الْفَاتِحَةِ", ayahCount: 7, isMakki: true)
     }
 }

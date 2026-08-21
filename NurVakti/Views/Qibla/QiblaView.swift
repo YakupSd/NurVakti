@@ -8,111 +8,62 @@ struct QiblaView: View {
     @EnvironmentObject var persistService: PersistenceService
     @State private var city: String = "..."
 
+    var isAligned: Bool {
+        vm.relativeAngle < 3.5 || vm.relativeAngle > 356.5
+    }
+
     var body: some View {
         ZStack {
-            // MARK: - Back Layer
-            LinearGradient(colors: [Color(hex: "#0D1B2A"), Color(hex: "#1B263B")],
-                           startPoint: .top, endPoint: .bottom)
-                .ignoresSafeArea()
-            
-            StarFieldView(opacity: 0.5)
+            // Background — Warm Cream Light Luxury
+            Color(hex: "F8F6F0").ignoresSafeArea()
 
-            VStack(spacing: 20) {
-                // MARK: - Header Info
-                VStack(spacing: 12) {
-                    Text(localization.localizedString("qibla.title"))
-                        .nurFont(24, weight: .bold)
-                        .foregroundColor(Color(hex: "1A1A2E"))
-                    
-                    Text(city)
-                        .nurFont(14, weight: .medium)
-                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.6))
-                    
-                    VStack(spacing: 4) {
-                        HStack(alignment: .lastTextBaseline, spacing: 4) {
-                            Text(String(format: "%.0f°", vm.heading))
-                                .nurFont(64, weight: .black)
-                                .foregroundColor(Color(hex: "1A1A2E"))
-                            Text(currentDirectionString)
-                                .nurFont(24, weight: .bold)
-                                .foregroundColor(.nurGold)
-                                .padding(.bottom, 12)
-                        }
-                        
-                        HStack(spacing: 6) {
-                            Image(systemName: "safari.fill")
-                                .font(.system(size: 12))
-                            Text("\(localization.localizedString("qibla.title")): \(String(format: "%.0f°", vm.qiblaAngle)) SE")
-                                .nurFont(12, weight: .bold)
-                        }
-                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.5))
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 4)
-                        .background(ColorColor(hex: "1A1A2E").opacity(0.1))
-                        .cornerRadius(20)
-                    }
-                    
-                    // Accuracy Badge
-                    accuracyBadge
-                }
-                .padding(.top, 40)
+            VStack(spacing: 12) {
+                // MARK: - 1. Top Header Info
+                headerSection
+                    .padding(.top, 8)
                 
                 Spacer()
 
-                // MARK: - Pro Compass
+                // MARK: - 2. Luxury Astrolabe Compass
                 ZStack {
-                    // Alignment Glow (Perfect alignment effects)
-                    if vm.relativeAngle < 15 || vm.relativeAngle > 345 {
+                    // Alignment Halo Glow
+                    if isAligned {
                         Circle()
-                            .fill(RadialGradient(colors: [Color.nurGold.opacity(0.3), .clear], center: .center, startRadius: 100, endRadius: 180))
+                            .fill(
+                                RadialGradient(
+                                    colors: [
+                                        Color(hex: "#10B981").opacity(0.35),
+                                        Color.nurGold.opacity(0.2),
+                                        Color.clear
+                                    ],
+                                    center: .center,
+                                    startRadius: 80,
+                                    endRadius: 200
+                                )
+                            )
                             .frame(width: 360, height: 360)
                             .transition(.opacity)
                     }
 
-                    // Ring Outer Glow
-                    Circle()
-                        .stroke(Color.nurGold.opacity(0.1), lineWidth: 2)
-                        .frame(width: 310, height: 310)
-
-                    // Direction Indicator (Fixed Pointer)
-                    VStack {
-                        Image(systemName: "arrowtriangle.up.fill")
-                            .font(.system(size: 24))
-                            .foregroundColor(.nurGold)
-                            .shadow(color: .nurGold.opacity(0.5), radius: 10)
-                        Spacer()
-                    }
-                    .frame(width: 320, height: 320)
-                    .zIndex(10)
-
-                    // The Compass Disk (Glassmorphic)
-                    CompassDiskView()
-                        .rotationEffect(.degrees(-vm.heading))
-                        .animation(.spring(response: 0.4, dampingFraction: 0.7), value: vm.heading)
-                    
-                    // Kaaba Indicator
-                    KaabaPointerView(angle: vm.qiblaAngle)
-                        .rotationEffect(.degrees(-vm.heading))
-                        .animation(.spring(response: 0.4, dampingFraction: 0.7), value: vm.heading)
+                    // Luxury Compass Dial
+                    LuxuryAstrolabeCompass(
+                        heading: vm.heading,
+                        qiblaAngle: vm.qiblaAngle,
+                        isAligned: isAligned,
+                        pitch: vm.pitch,
+                        roll: vm.roll
+                    )
                 }
                 .frame(width: 320, height: 320)
-                .scaleEffect(vm.relativeAngle < 5 || vm.relativeAngle > 355 ? 1.05 : 1.0)
-                .animation(.spring(), value: vm.relativeAngle)
+                .scaleEffect(isAligned ? 1.03 : 1.0)
+                .animation(.spring(response: 0.35, dampingFraction: 0.65), value: isAligned)
                 
                 Spacer()
                 
-                // MARK: - Calibration / Footer
-                if vm.isCalibrating {
-                    calibrationBanner
-                } else {
-                    Text(localization.localizedString("qibla.calibrateHint"))
-                        .nurFont(12)
-                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.4))
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal, 40)
-                }
-                
-                Spacer()
+                // MARK: - 3. Live Metrics & Guidance Card
+                bottomMetricsSection
+                    .padding(.horizontal, 20)
+                    .padding(.bottom, 24)
             }
         }
         .onAppear { 
@@ -124,11 +75,188 @@ struct QiblaView: View {
                 }
             }
         }
-        .onDisappear { vm.stopTracking() }
+        .onDisappear { 
+            vm.stopTracking() 
+        }
     }
 
-    // MARK: - Components
+    // MARK: - Header Section
+    private var headerSection: some View {
+        VStack(spacing: 8) {
+            // Location Badge
+            if !city.isEmpty && city != "..." {
+                HStack(spacing: 6) {
+                    Image(systemName: "location.fill")
+                        .font(.system(size: 12, weight: .bold))
+                        .foregroundColor(.nurGold)
+                    Text(city)
+                        .nurFont(14, weight: .bold)
+                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.75))
+                }
+                .padding(.horizontal, 12)
+                .padding(.vertical, 5)
+                .background(Color.white)
+                .cornerRadius(14)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 14)
+                        .stroke(Color(hex: "1A1A2E").opacity(0.06), lineWidth: 1)
+                )
+                .shadow(color: Color.black.opacity(0.02), radius: 4, y: 1)
+            }
+            
+            // Current Heading & Direction
+            HStack(alignment: .lastTextBaseline, spacing: 6) {
+                Text(String(format: "%.0f°", vm.heading))
+                    .nurFont(54, weight: .black, design: .rounded)
+                    .foregroundColor(Color(hex: "1A1A2E"))
+                
+                Text(currentDirectionString)
+                    .nurFont(22, weight: .heavy, design: .rounded)
+                    .foregroundStyle(
+                        LinearGradient(
+                            colors: [Color(hex: "D4AF37"), Color(hex: "996515")],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .padding(.bottom, 6)
+            }
+            
+            // Live Turn / Alignment Guidance Pill
+            guidanceBadge
+        }
+    }
     
+    // MARK: - Live Dynamic Guidance Badge
+    @ViewBuilder
+    private var guidanceBadge: some View {
+        let instruction = vm.turnInstruction
+        
+        HStack(spacing: 8) {
+            if isAligned {
+                Image(systemName: "checkmark.seal.fill")
+                    .font(.system(size: 14, weight: .bold))
+                    .foregroundColor(.white)
+                
+                Text("Kâbe'ye Doğru Hizalandı ✨")
+                    .nurFont(13, weight: .bold)
+                    .foregroundColor(.white)
+            } else {
+                Image(systemName: instruction.isRight ? "arrow.turn.up.right" : "arrow.turn.up.left")
+                    .font(.system(size: 13, weight: .bold))
+                    .foregroundColor(.nurGold)
+                
+                Text(instruction.text)
+                    .nurFont(13, weight: .bold)
+                    .foregroundColor(Color(hex: "1A1A2E"))
+            }
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 8)
+        .background(
+            ZStack {
+                if isAligned {
+                    LinearGradient(
+                        colors: [Color(hex: "#10B981"), Color(hex: "#059669")],
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    )
+                } else {
+                    Color.white
+                }
+            }
+        )
+        .cornerRadius(18)
+        .overlay(
+            RoundedRectangle(cornerRadius: 18)
+                .stroke(
+                    isAligned ? Color.white.opacity(0.4) : Color.nurGold.opacity(0.3),
+                    lineWidth: 1.2
+                )
+        )
+        .shadow(
+            color: isAligned ? Color(hex: "#10B981").opacity(0.35) : Color.black.opacity(0.04),
+            radius: 8,
+            y: 3
+        )
+    }
+
+    // MARK: - Bottom Metrics Section
+    private var bottomMetricsSection: some View {
+        VStack(spacing: 10) {
+            // Flat Phone Warning if tilted
+            if !vm.isPhoneFlat {
+                HStack(spacing: 8) {
+                    Image(systemName: "iphone.radiowaves.left.and.right")
+                        .foregroundColor(.orange)
+                        .font(.system(size: 13, weight: .bold))
+                    Text("Daha doğru ölçüm için telefonu düz tutun")
+                        .nurFont(12, weight: .semibold)
+                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.7))
+                }
+                .padding(.horizontal, 14)
+                .padding(.vertical, 6)
+                .background(Color.orange.opacity(0.12))
+                .cornerRadius(12)
+                .transition(.opacity)
+            }
+            
+            // 3 Metric Cards
+            HStack(spacing: 12) {
+                // 1. Distance to Makkah
+                metricCard(
+                    icon: "map.fill",
+                    title: "Kâbe Mesafesi",
+                    value: vm.formattedDistance,
+                    accentColor: .nurGold
+                )
+                
+                // 2. Qibla Bearing Angle
+                metricCard(
+                    icon: "safari.fill",
+                    title: "Kıble Açısı",
+                    value: String(format: "%.0f°", vm.qiblaAngle),
+                    accentColor: Color(hex: "#10B981")
+                )
+                
+                // 3. Accuracy
+                metricCard(
+                    icon: "sparkles",
+                    title: "Hassasiyet",
+                    value: vm.accuracy >= 0 ? "±\(Int(vm.accuracy))°" : "Aktif",
+                    accentColor: Color(hex: "#3B82F6")
+                )
+            }
+        }
+    }
+    
+    private func metricCard(icon: String, title: String, value: String, accentColor: Color) -> some View {
+        VStack(spacing: 4) {
+            HStack(spacing: 4) {
+                Image(systemName: icon)
+                    .font(.system(size: 10, weight: .bold))
+                    .foregroundColor(accentColor)
+                Text(title)
+                    .nurFont(10, weight: .semibold)
+                    .foregroundColor(Color(hex: "1A1A2E").opacity(0.55))
+            }
+            
+            Text(value)
+                .nurFont(15, weight: .bold, design: .rounded)
+                .foregroundColor(Color(hex: "1A1A2E"))
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 10)
+        .background(Color.white)
+        .cornerRadius(16)
+        .overlay(
+            RoundedRectangle(cornerRadius: 16)
+                .stroke(Color(hex: "1A1A2E").opacity(0.06), lineWidth: 1)
+        )
+        .shadow(color: Color.black.opacity(0.03), radius: 6, y: 2)
+    }
+
+    // MARK: - Direction String
     private var currentDirectionString: String {
         let angle = vm.heading
         if angle < 22.5 || angle >= 337.5 { return "N" }
@@ -140,124 +268,283 @@ struct QiblaView: View {
         if angle < 292.5 { return "W" }
         return "NW"
     }
-
-    private var accuracyBadge: some View {
-        HStack(spacing: 6) {
-            Circle()
-                .fill(accuracyColor)
-                .frame(width: 8, height: 8)
-            Text(accuracyLabel)
-                .nurFont(12, weight: .bold)
-                .foregroundColor(accuracyColor)
-        }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 6)
-        .background(accuracyColor.opacity(0.1))
-        .cornerRadius(20)
-    }
-
-    private var accuracyColor: Color {
-        if vm.accuracy < 0 { return .gray }
-        if vm.accuracy < 15 { return .green }
-        if vm.accuracy < 30 { return .orange }
-        return .red
-    }
-
-    private var accuracyLabel: String {
-        if vm.accuracy < 0 { return "---" }
-        if vm.accuracy < 15 { return localization.localizedString("qibla.veryAccurate") }
-        if vm.accuracy < 30 { return localization.localizedString("qibla.accurate") }
-        return localization.localizedString("qibla.lowAccuracy")
-    }
-
-    private var calibrationBanner: some View {
-        HStack(spacing: 8) {
-            ProgressView()
-                .tint(.orange)
-            Text(localization.localizedString("qibla.calibrate"))
-                .nurFont(12, weight: .bold)
-                .foregroundColor(.orange)
-        }
-        .padding(.horizontal, 20)
-        .padding(.vertical, 12)
-        .background(Color.orange.opacity(0.1))
-        .cornerRadius(12)
-    }
 }
 
-// MARK: - Compass Disk
-struct CompassDiskView: View {
-    var body: some View {
-        ZStack {
-            // Main Disk - Glassmorphism
-            Circle()
-                .fill(.ultraThinMaterial)
-                .overlay(
-                    Circle()
-                        .stroke(ColorColor(hex: "1A1A2E").opacity(0.2), lineWidth: 1)
-                )
-                .shadow(color: .black.opacity(0.3), radius: 20, y: 10)
-            
-            // Decorative Inner Patterns
-            Circle()
-                .stroke(Color.nurGold.opacity(0.1), lineWidth: 1)
-                .padding(40)
-            
-            // Marks
-            ForEach(0..<72) { i in
-                Rectangle()
-                    .fill(i % 18 == 0 ? Color.nurGold : ColorColor(hex: "1A1A2E").opacity(0.3))
-                    .frame(width: i % 18 == 0 ? 3 : 1, height: i % 18 == 0 ? 18 : 10)
-                    .offset(y: -135)
-                    .rotationEffect(.degrees(Double(i) * 5))
-            }
-            
-            // Labels (N, E, S, W)
-            Group {
-                Text("N").offset(y: -110)
-                Text("E").offset(x: 110)
-                Text("S").offset(y: 110)
-                Text("W").offset(x: -110)
-            }
-            .nurFont(16, weight: .black)
-            .foregroundColor(Color(hex: "1A1A2E"))
-        }
-        .frame(width: 300, height: 300)
-    }
-}
-
-// MARK: - Kaaba Pointer
-struct KaabaPointerView: View {
-    let angle: Double
+// MARK: - Luxury Astrolabe & Modern Compass View
+struct LuxuryAstrolabeCompass: View {
+    let heading: Double
+    let qiblaAngle: Double
+    let isAligned: Bool
+    let pitch: Double
+    let roll: Double
     
     var body: some View {
         ZStack {
-            // Pointer Line to center
-            Rectangle()
-                .fill(LinearGradient(colors: [.nurGold, .clear], startPoint: .top, endPoint: .bottom))
-                .frame(width: 2, height: 100)
-                .offset(y: -50)
+            // 1. Outer Brass/Gold Bezel Ring
+            Circle()
+                .fill(
+                    LinearGradient(
+                        colors: [
+                            Color(hex: "#F4E4BA"),
+                            Color(hex: "#D4AF37"),
+                            Color(hex: "#AA7C11"),
+                            Color(hex: "#E5C158")
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+                .frame(width: 316, height: 316)
+                .shadow(color: Color.black.opacity(0.12), radius: 18, y: 8)
+                .shadow(color: Color.nurGold.opacity(0.2), radius: 8, y: 2)
             
-            // Kaaba Icon with Fallback
+            // 2. Outer Bezel Groove
+            Circle()
+                .stroke(Color(hex: "#8A5A00").opacity(0.3), lineWidth: 1.5)
+                .frame(width: 308, height: 308)
+
+            // 3. The Rotating Pearl Dial
+            RotatingCompassDial(isAligned: isAligned)
+                .frame(width: 296, height: 296)
+                .rotationEffect(.degrees(-heading))
+                .animation(.spring(response: 0.35, dampingFraction: 0.7), value: heading)
+            
+            // 4. Rotating Kaaba Beacon Needle (Anchored to exact Qibla bearing)
+            KaabaBeaconNeedle(isAligned: isAligned)
+                .frame(width: 296, height: 296)
+                .rotationEffect(.degrees(qiblaAngle - heading))
+                .animation(.spring(response: 0.35, dampingFraction: 0.7), value: heading)
+
+            // 5. Fixed Top Alignment Pointer (Triangle Marker)
             VStack {
-                ZStack {
+                Image(systemName: "arrowtriangle.down.fill")
+                    .font(.system(size: 16, weight: .black))
+                    .foregroundColor(isAligned ? Color(hex: "#10B981") : Color.nurGold)
+                    .shadow(
+                        color: (isAligned ? Color(hex: "#10B981") : Color.nurGold).opacity(0.5),
+                        radius: 6
+                    )
+                    .offset(y: -4)
+                Spacer()
+            }
+            .frame(width: 316, height: 316)
+            .zIndex(20)
+            
+            // 6. Center Bubble Level (Su Terazisi)
+            SpiritBubbleLevel(pitch: pitch, roll: roll, isAligned: isAligned)
+                .zIndex(30)
+        }
+    }
+}
+
+// MARK: - Rotating Compass Dial (Pearl & Seljuk Star Core)
+struct RotatingCompassDial: View {
+    let isAligned: Bool
+    
+    var body: some View {
+        ZStack {
+            // Pearl Base
+            Circle()
+                .fill(
+                    LinearGradient(
+                        colors: [Color.white, Color(hex: "#FCFAF6"), Color(hex: "#F5EFE6")],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                )
+                .overlay(
                     Circle()
-                        .fill(Color.nurGold.opacity(0.2))
-                        .frame(width: 54, height: 54)
-                        .blur(radius: 5)
+                        .stroke(Color(hex: "1A1A2E").opacity(0.08), lineWidth: 1)
+                )
+            
+            // Subtle Islamic 8-Pointed Star Rosette
+            IslamicStarRosette()
+                .stroke(Color.nurGold.opacity(0.2), lineWidth: 1)
+                .frame(width: 140, height: 140)
+            
+            // Inner Compass Ring
+            Circle()
+                .stroke(Color.nurGold.opacity(0.25), lineWidth: 1)
+                .frame(width: 210, height: 210)
+            
+            // Degree Tick Marks (Every 5°, major every 30°)
+            ForEach(0..<72) { i in
+                let isMajor = i % 6 == 0
+                let isQuarter = i % 18 == 0
+                
+                Rectangle()
+                    .fill(
+                        isQuarter ? Color(hex: "#1A1A2E") : (isMajor ? Color.nurGold : Color(hex: "1A1A2E").opacity(0.2))
+                    )
+                    .frame(
+                        width: isQuarter ? 2.5 : (isMajor ? 1.8 : 1),
+                        height: isQuarter ? 14 : (isMajor ? 10 : 6)
+                    )
+                    .offset(y: -136)
+                    .rotationEffect(.degrees(Double(i) * 5))
+            }
+            
+            // Cardinal Points (N, E, S, W)
+            Group {
+                // North (Red Accent)
+                VStack {
+                    Text("N")
+                        .nurFont(16, weight: .black, design: .rounded)
+                        .foregroundColor(Color(hex: "#EF4444"))
+                    Spacer()
+                }
+                .frame(height: 242)
+                
+                // East
+                HStack {
+                    Spacer()
+                    Text("E")
+                        .nurFont(15, weight: .bold, design: .rounded)
+                        .foregroundColor(Color(hex: "1A1A2E"))
+                }
+                .frame(width: 242)
+                
+                // South
+                VStack {
+                    Spacer()
+                    Text("S")
+                        .nurFont(15, weight: .bold, design: .rounded)
+                        .foregroundColor(Color(hex: "1A1A2E"))
+                }
+                .frame(height: 242)
+                
+                // West
+                HStack {
+                    Text("W")
+                        .nurFont(15, weight: .bold, design: .rounded)
+                        .foregroundColor(Color(hex: "1A1A2E"))
+                    Spacer()
+                }
+                .frame(width: 242)
+            }
+        }
+    }
+}
+
+// MARK: - Kaaba Beacon Needle & Perimeter Orb
+struct KaabaBeaconNeedle: View {
+    let isAligned: Bool
+    
+    var body: some View {
+        ZStack {
+            // Luminous Beacon Beam to Center
+            VStack(spacing: 0) {
+                // Outer Kaaba 3D Orb on Perimeter
+                ZStack {
+                    // Pulsing Emerald/Gold Target Ring
+                    Circle()
+                        .stroke(
+                            isAligned ? Color(hex: "#10B981") : Color.nurGold,
+                            lineWidth: isAligned ? 2.5 : 1.5
+                        )
+                        .frame(width: 44, height: 44)
+                        .background(
+                            Circle()
+                                .fill(isAligned ? Color(hex: "#10B981").opacity(0.2) : Color.white)
+                        )
+                        .shadow(
+                            color: (isAligned ? Color(hex: "#10B981") : Color.nurGold).opacity(0.4),
+                            radius: isAligned ? 10 : 5
+                        )
                     
+                    // Kaaba Icon
                     Image("KaabaIcon")
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 44, height: 44)
-                        .shadow(color: .nurGold.opacity(0.5), radius: 10)
+                        .frame(width: 32, height: 32)
                 }
-                .offset(y: -125)
+                .offset(y: -10)
+                
+                // Emerald/Gold Gradient Pointer Line
+                Rectangle()
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                isAligned ? Color(hex: "#10B981") : Color.nurGold,
+                                (isAligned ? Color(hex: "#10B981") : Color.nurGold).opacity(0.1)
+                            ],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
+                    .frame(width: isAligned ? 3.5 : 2.5, height: 100)
+                
                 Spacer()
             }
         }
-        .frame(width: 300, height: 300)
-        .rotationEffect(.degrees(angle))
+    }
+}
+
+// MARK: - Spirit Bubble Level (Su Terazisi)
+struct SpiritBubbleLevel: View {
+    let pitch: Double
+    let roll: Double
+    let isAligned: Bool
+    
+    var body: some View {
+        let maxOffset: CGFloat = 16.0
+        let offsetX = CGFloat(max(-maxOffset, min(maxOffset, roll * 0.7)))
+        let offsetY = CGFloat(max(-maxOffset, min(maxOffset, pitch * 0.7)))
+        let isLevel = abs(offsetX) < 4 && abs(offsetY) < 4
+        
+        ZStack {
+            // Level Outer Circle
+            Circle()
+                .fill(Color.white.opacity(0.95))
+                .frame(width: 46, height: 46)
+                .overlay(
+                    Circle()
+                        .stroke(
+                            isLevel ? (isAligned ? Color(hex: "#10B981") : Color.nurGold) : Color(hex: "1A1A2E").opacity(0.15),
+                            lineWidth: 1.5
+                        )
+                )
+                .shadow(color: Color.black.opacity(0.08), radius: 6, y: 2)
+            
+            // Level Target Crosshair Center
+            Circle()
+                .stroke(Color.nurGold.opacity(0.4), lineWidth: 1)
+                .frame(width: 16, height: 16)
+            
+            // Moving Spirit Bubble
+            Circle()
+                .fill(
+                    isLevel ? (isAligned ? Color(hex: "#10B981") : Color.nurGold) : Color.orange
+                )
+                .frame(width: 10, height: 10)
+                .offset(x: offsetX, y: offsetY)
+                .animation(.spring(response: 0.2, dampingFraction: 0.6), value: offsetX)
+                .animation(.spring(response: 0.2, dampingFraction: 0.6), value: offsetY)
+        }
+    }
+}
+
+// MARK: - Sacred 8-Pointed Seljuk Star Shape
+struct IslamicStarRosette: Shape {
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        let center = CGPoint(x: rect.midX, y: rect.midY)
+        let rOuter = min(rect.width, rect.height) / 2
+        let rInner = rOuter * 0.65
+        
+        for i in 0..<16 {
+            let angle = CGFloat(i) * (.pi / 8.0) - (.pi / 2.0)
+            let r = (i % 2 == 0) ? rOuter : rInner
+            let pt = CGPoint(x: center.x + r * cos(angle), y: center.y + r * sin(angle))
+            
+            if i == 0 {
+                path.move(to: pt)
+            } else {
+                path.addLine(to: pt)
+            }
+        }
+        path.closeSubpath()
+        return path
     }
 }
 
@@ -265,16 +552,5 @@ struct KaabaPointerView: View {
     QiblaView()
         .environmentObject(LocalizationManager.shared)
         .environmentObject(PersistenceService.shared)
-}
-
-// MARK: - Helpers
-struct Triangle: Shape {
-    func path(in rect: CGRect) -> Path {
-        var path = Path()
-        path.move(to: CGPoint(x: rect.midX, y: rect.minY))
-        path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))
-        path.addLine(to: CGPoint(x: rect.minX, y: rect.maxY))
-        path.closeSubpath()
-        return path
-    }
+        .environmentObject(AppRouter.shared)
 }

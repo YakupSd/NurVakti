@@ -27,7 +27,7 @@ struct NurCardWithHeader: View {
                             .font(.system(size: 10))
                             .foregroundColor(Color(hex: "1A1A2E").opacity(0.5))
                             .padding(6)
-                            .background(ColorColor(hex: "1A1A2E").opacity(0.08))
+                            .background(Color(hex: "1A1A2E").opacity(0.08))
                             .clipShape(Circle())
                     }
 
@@ -58,7 +58,7 @@ struct NurCardWithHeader: View {
                 .foregroundColor(Color(hex: "1A1A2E"))
                 .lineSpacing(6)
             
-            Divider().background(ColorColor(hex: "1A1A2E").opacity(0.1)).padding(.vertical, 4)
+            Divider().background(Color(hex: "1A1A2E").opacity(0.1)).padding(.vertical, 4)
             
             Text(content.translation(for: localization.currentLanguage))
                 .font(.system(size: 14, weight: .medium))
@@ -74,10 +74,10 @@ struct NurCardWithHeader: View {
         .padding(20)
         .background(Color.white)
         .cornerRadius(20)
-        .shadow(color: Color.black.opacity(0.2), radius: 12, x: 0, y: 6)
+        .shadow(color: NurTheme.cardShadow, radius: NurTheme.cardShadowRadius, x: 0, y: 4)
         .overlay(
             RoundedRectangle(cornerRadius: 20)
-                .stroke(ColorColor(hex: "1A1A2E").opacity(0.08), lineWidth: 1)
+                .stroke(Color(hex: "1A1A2E").opacity(0.08), lineWidth: 1)
         )
         .sheet(isPresented: $showShareSheet) {
             GuidanceShareSheet(content: content)

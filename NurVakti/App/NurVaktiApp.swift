@@ -3,6 +3,7 @@ import SwiftUI
 @main
 struct NurVaktiApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    @Environment(\.scenePhase) private var scenePhase
     
     // Services as StateObjects
     @StateObject private var localization = LocalizationManager.shared
@@ -14,7 +15,7 @@ struct NurVaktiApp: App {
     @StateObject private var monthlyDuaService = MonthlyDuaService.shared
     @StateObject private var libraryService = DuaLibraryService.shared
     @StateObject private var audioManager = AudioManager.shared
-    @StateObject private var userSession = UserSession.shared
+    @StateObject private var networkMonitor = NetworkMonitor.shared
     
     var body: some Scene {
         WindowGroup {
@@ -28,15 +29,23 @@ struct NurVaktiApp: App {
                 .environmentObject(monthlyDuaService)
                 .environmentObject(libraryService)
                 .environmentObject(audioManager)
-                .environmentObject(userSession)
+                .environmentObject(networkMonitor)
                 .environment(\.layoutDirection, localization.isRTL ? .rightToLeft : .leftToRight)
-                .preferredColorScheme(.dark)
+                .preferredColorScheme(.light)
                 .onAppear {
                     libraryService.setup()
                 }
                 // ── Deep Link – URL Scheme ─────────────────────────
                 .onOpenURL { url in
                     DeepLinkHandler.shared.handle(url: url)
+                }
+                // ── Foreground Dönüşü: Stale Data Koruması ─────────
+                .onChange(of: scenePhase) { _, newPhase in
+                    if newPhase == .active {
+                        Task {
+                            await HomeViewModel.shared.refreshOnForeground()
+                        }
+                    }
                 }
         }
     }

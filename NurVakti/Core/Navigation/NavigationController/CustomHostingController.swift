@@ -75,23 +75,41 @@ class CustomHostingController<Content>: UIHostingController<AnyView> where Conte
         let appearance = UINavigationBarAppearance()
         appearance.configureWithTransparentBackground()
         appearance.titleTextAttributes = [
-            .foregroundColor: UIColor.white,
+            .foregroundColor: UIColor(red: 26/255, green: 26/255, blue: 46/255, alpha: 1.0),
             .font: UIFont.setCustomUIFont(name: .InterBold, size: 18)
         ]
         
         navigationItem.standardAppearance = appearance
         navigationItem.scrollEdgeAppearance = appearance
+        navigationItem.compactAppearance = appearance
         
         // Custom Back Button - Ensure it replaces and doesn't supplement
         navigationItem.hidesBackButton = true
         navigationItem.leftItemsSupplementBackButton = false
         
-        let backButtonImage = UIImage(systemName: "chevron.left", withConfiguration: UIImage.SymbolConfiguration(weight: .bold))
-        let backButton = UIBarButtonItem(image: backButtonImage, style: .plain, target: self, action: #selector(backButtonTapped))
-        backButton.tintColor = .white
+        let backButton = createBackButton()
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backButton)
+    }
+
+    private func createBackButton() -> UIButton {
+        let button = UIButton(type: .system)
+        let config = UIImage.SymbolConfiguration(pointSize: 15, weight: .bold)
+        let image = UIImage(systemName: "chevron.left", withConfiguration: config)
+        button.setImage(image, for: .normal)
+        button.tintColor = UIColor(red: 26/255, green: 26/255, blue: 46/255, alpha: 0.85)
         
-        // Set it as the ONLY left item
-        navigationItem.leftBarButtonItem = backButton
+        button.frame = CGRect(x: 0, y: 0, width: 38, height: 38)
+        button.backgroundColor = UIColor.white
+        button.layer.cornerRadius = 19
+        button.layer.borderWidth = 1.0
+        button.layer.borderColor = UIColor(red: 26/255, green: 26/255, blue: 46/255, alpha: 0.08).cgColor
+        button.layer.shadowColor = UIColor.black.cgColor
+        button.layer.shadowOpacity = 0.04
+        button.layer.shadowOffset = CGSize(width: 0, height: 2)
+        button.layer.shadowRadius = 4
+        
+        button.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+        return button
     }
 
     @objc private func backButtonTapped() {

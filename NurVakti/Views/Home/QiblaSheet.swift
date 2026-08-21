@@ -27,7 +27,7 @@ struct QiblaSheet: View {
                 ZStack {
                     // Pusula Arka Planı
                     Circle()
-                        .stroke(ColorColor(hex: "1A1A2E").opacity(0.1), lineWidth: 4)
+                        .stroke(Color(hex: "1A1A2E").opacity(0.1), lineWidth: 4)
                         .frame(width: 300, height: 300)
                     
                     // Pusula İğnesi

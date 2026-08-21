@@ -6,10 +6,11 @@ struct PrayerGuideMainView: View {
     
     var body: some View {
         ZStack {
+            // Background
             Color(hex: "F8F6F0").ignoresSafeArea()
             
-            ScrollView {
-                VStack(spacing: 20) {
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 14) {
                     menuItem(
                         title: "prayerGuide.howToPray",
                         subtitle: "prayerGuide.howToPray.desc",
@@ -25,7 +26,7 @@ struct PrayerGuideMainView: View {
                     menuItem(
                         title: "prayerGuide.duas",
                         subtitle: "prayerGuide.duas.desc",
-                        icon: "hand.raised.fill",
+                        icon: "hands.sparkles.fill",
                         color: .nurGold
                     ) {
                         router.pushTo(view: MainNavigationView.builder.makeView(
@@ -70,47 +71,60 @@ struct PrayerGuideMainView: View {
                         ))
                     }
                 }
-                .padding()
+                .padding(20)
+                .padding(.bottom, 60)
             }
         }
     }
     
     private func menuItem(title: String, subtitle: String, icon: String, color: Color, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            HStack(spacing: 20) {
+        Button(action: {
+            HapticManager.shared.light()
+            action()
+        }) {
+            HStack(spacing: 16) {
                 ZStack {
                     RoundedRectangle(cornerRadius: 16)
-                        .fill(color.opacity(0.2))
-                        .frame(width: 56, height: 56)
+                        .fill(color.opacity(0.12))
+                        .frame(width: 52, height: 52)
                     
                     Image(systemName: icon)
-                        .font(.system(size: 24))
+                        .font(.system(size: 22, weight: .semibold))
                         .foregroundColor(color)
                 }
                 
-                VStack(alignment: .leading, spacing: 4) {
+                VStack(alignment: .leading, spacing: 3) {
                     Text(localization.localizedString(title))
-                        .nurFont(20, weight: .bold)
+                        .nurFont(16, weight: .bold)
                         .foregroundColor(Color(hex: "1A1A2E"))
                     
                     Text(localization.localizedString(subtitle))
-                        .nurFont(14)
-                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.6))
+                        .nurFont(12)
+                        .foregroundColor(Color(hex: "1A1A2E").opacity(0.5))
                         .multilineTextAlignment(.leading)
                 }
                 
                 Spacer()
                 
                 Image(systemName: "chevron.right")
-                    .foregroundColor(Color(hex: "1A1A2E").opacity(0.3))
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundColor(Color(hex: "1A1A2E").opacity(0.25))
             }
-            .padding(20)
-            .background(ColorColor(hex: "1A1A2E").opacity(0.05))
-            .cornerRadius(24)
+            .padding(16)
+            .background(Color.white)
+            .cornerRadius(20)
             .overlay(
-                RoundedRectangle(cornerRadius: 24)
-                    .stroke(ColorColor(hex: "1A1A2E").opacity(0.1), lineWidth: 1)
+                RoundedRectangle(cornerRadius: 20)
+                    .stroke(Color(hex: "1A1A2E").opacity(0.06), lineWidth: 1)
             )
+            .shadow(color: Color.black.opacity(0.025), radius: 8, x: 0, y: 3)
         }
+        .buttonStyle(CardPressableButtonStyle())
     }
+}
+
+#Preview {
+    PrayerGuideMainView()
+        .environmentObject(LocalizationManager.shared)
+        .environmentObject(AppRouter.shared)
 }

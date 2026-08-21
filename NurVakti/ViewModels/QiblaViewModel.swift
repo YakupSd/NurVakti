@@ -1,5 +1,6 @@
 import Foundation
 import CoreLocation
+import CoreMotion
 import Combine
 
 @MainActor
@@ -12,23 +13,30 @@ final class QiblaViewModel: ObservableObject {
     @Published var accuracy: CLLocationDirection = -1  // < 0: geçersiz, ≥ 0: ° cinsinden hata
     @Published var isCalibrating: Bool = false
     @Published var locationError: String? = nil
+    @Published var distanceToMakkahKm: Double = 0
+    
+    // CoreMotion - Bubble Level / Flatness check
+    @Published var pitch: Double = 0
+    @Published var roll: Double = 0
+    @Published var isPhoneFlat: Bool = true
 
-    // MARK: - Mekke Koordinatları (sabit)
+    // MARK: - Mekke Koordinatları
     private let makkahCoord = CLLocationCoordinate2D(latitude: 21.4225, longitude: 39.8262)
 
-    // MARK: - Location Manager
+    // MARK: - Managers
     private let locationManager = CLLocationManager()
+    private let motionManager = CMMotionManager()
     private var headingDelegate: HeadingDelegate?
 
     // MARK: - Init
     init() {
         headingDelegate = HeadingDelegate(vm: self)
         locationManager.delegate = headingDelegate
-        locationManager.headingFilter = 1          // Her 1° değişimde güncelle
+        locationManager.headingFilter = 1
         locationManager.headingOrientation = .portrait
     }
 
-    // MARK: - Start / Stop
+    // MARK: - Start / Stop Tracking
     func startTracking() {
         guard CLLocationManager.headingAvailable() else {
             locationError = "Bu cihazda pusula desteklenmiyor."
@@ -36,42 +44,56 @@ final class QiblaViewModel: ObservableObject {
         }
         isCalibrating = true
         locationManager.startUpdatingHeading()
-        // Kıble açısını hesaplamak için konum al
+        
         if let loc = locationManager.location {
-            calculateQiblaAngle(from: loc.coordinate)
+            calculateQibla(from: loc)
         } else {
             locationManager.requestWhenInUseAuthorization()
             locationManager.startUpdatingLocation()
         }
+        
+        startMotionTracking()
     }
 
     func stopTracking() {
         locationManager.stopUpdatingHeading()
         locationManager.stopUpdatingLocation()
+        motionManager.stopDeviceMotionUpdates()
+    }
+
+    // MARK: - Device Motion for Bubble Level
+    private func startMotionTracking() {
+        guard motionManager.isDeviceMotionAvailable else { return }
+        motionManager.deviceMotionUpdateInterval = 0.05
+        motionManager.startDeviceMotionUpdates(to: .main) { [weak self] motion, _ in
+            guard let self = self, let motion = motion else { return }
+            let p = motion.attitude.pitch * 180 / .pi
+            let r = motion.attitude.roll * 180 / .pi
+            self.pitch = p
+            self.roll = r
+            
+            // Flat if pitch is within [-20, 20] and roll is within [-20, 20]
+            self.isPhoneFlat = abs(p) < 22 && abs(r) < 22
+        }
     }
 
     private var hasTriggeredAlignedHaptic = false
 
     // MARK: - Heading Update
     func updateHeading(_ newHeading: CLHeading) {
-        // Manyetik kuzey bilgisi al
         let val = newHeading.magneticHeading
         
-        // Gürültü engelleme: Çok küçük değişimleri yok sayma (Opsiyonel)
         if abs(val - heading) > 0.1 {
             heading = val
         }
         
         accuracy = newHeading.headingAccuracy
-        
-        // Kalibrasyon gereksinimi: Hata payı çok yüksekse (örn > 45) veya negatifse
         isCalibrating = newHeading.headingAccuracy < 0 || newHeading.headingAccuracy > 45
         
         let rel = (qiblaAngle - heading + 360).truncatingRemainder(dividingBy: 360)
         relativeAngle = rel
         
-        // Kıble yönü yakalandığında (tam açıda) dokunsal titreşim ver
-        let isAligned = rel < 3 || rel > 357
+        let isAligned = rel < 3.5 || rel > 356.5
         if isAligned && !hasTriggeredAlignedHaptic {
             hasTriggeredAlignedHaptic = true
             HapticManager.shared.success()
@@ -81,13 +103,12 @@ final class QiblaViewModel: ObservableObject {
     }
 
     func updateLocation(_ location: CLLocation) {
-        calculateQiblaAngle(from: location.coordinate)
-        // Konum bir kez yetebilir, ancak hassasiyet için açık bırakılabilir 
-        // veya belirli aralıklarla güncellenebilir.
+        calculateQibla(from: location)
     }
 
-    // MARK: - Kıble Hesabı (Great Circle / Bearing formülü)
-    private func calculateQiblaAngle(from coordinate: CLLocationCoordinate2D) {
+    // MARK: - Kıble & Mesafe Hesabı
+    private func calculateQibla(from location: CLLocation) {
+        let coordinate = location.coordinate
         let lat1 = coordinate.latitude  * .pi / 180
         let lon1 = coordinate.longitude * .pi / 180
         let lat2 = makkahCoord.latitude  * .pi / 180
@@ -101,10 +122,63 @@ final class QiblaViewModel: ObservableObject {
 
         qiblaAngle = bearing
         relativeAngle = (bearing - heading + 360).truncatingRemainder(dividingBy: 360)
+
+        // Distance in km
+        let makkahLoc = CLLocation(latitude: makkahCoord.latitude, longitude: makkahCoord.longitude)
+        let meters = location.distance(from: makkahLoc)
+        distanceToMakkahKm = meters / 1000.0
+    }
+    
+    // MARK: - Direction Assistant Helpers
+    var turnInstruction: (text: String, isRight: Bool, delta: Double) {
+        let rel = relativeAngle
+        let lang = LocalizationManager.shared.currentLanguage
+        
+        if rel < 3.5 || rel > 356.5 {
+            let aligned: String
+            switch lang {
+            case .tr: aligned = "Kıbleye Hizalandı"
+            case .en: aligned = "Aligned with Qibla"
+            case .ar: aligned = "تم التوجه للقبلة"
+            case .de: aligned = "Auf die Qibla ausgerichtet"
+            case .pt: aligned = "Alinhado com a Qibla"
+            }
+            return (aligned, true, 0)
+        } else if rel <= 180 {
+            let right: String
+            switch lang {
+            case .tr: right = String(format: "%.0f° Sağa Dönün", rel)
+            case .en: right = String(format: "Turn %.0f° Right", rel)
+            case .ar: right = String(format: "أدر %.0f° لليمين", rel)
+            case .de: right = String(format: "%.0f° nach Rechts drehen", rel)
+            case .pt: right = String(format: "Vire %.0f° à Direita", rel)
+            }
+            return (right, true, rel)
+        } else {
+            let leftDelta = 360 - rel
+            let left: String
+            switch lang {
+            case .tr: left = String(format: "%.0f° Sola Dönün", leftDelta)
+            case .en: left = String(format: "Turn %.0f° Left", leftDelta)
+            case .ar: left = String(format: "أدر %.0f° لليسار", leftDelta)
+            case .de: left = String(format: "%.0f° nach Links drehen", leftDelta)
+            case .pt: left = String(format: "Vire %.0f° à Esquerda", leftDelta)
+            }
+            return (left, false, leftDelta)
+        }
+    }
+    
+    var formattedDistance: String {
+        guard distanceToMakkahKm > 0 else { return "···" }
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.maximumFractionDigits = 0
+        let numStr = formatter.string(from: NSNumber(value: distanceToMakkahKm)) ?? "\(Int(distanceToMakkahKm))"
+        return "\(numStr) km"
     }
 }
 
-// MARK: - HeadingDelegate (CLLocationManagerDelegate → @MainActor köprüsü)
+// MARK: - HeadingDelegate
 private final class HeadingDelegate: NSObject, CLLocationManagerDelegate {
     weak var vm: QiblaViewModel?
     init(vm: QiblaViewModel) { self.vm = vm }

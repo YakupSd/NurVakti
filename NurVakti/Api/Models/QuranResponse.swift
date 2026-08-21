@@ -10,8 +10,9 @@ public struct SurahListResponse: Codable {
 
 public struct SurahDTO: Codable {
     public let number: Int
-    public let name: String
-    public let englishName: String
+    public let name: String              // Arapça isim (ör: "سُورَةُ الفَاتِحَةِ")
+    public let englishName: String       // İngilizce isim (ör: "Al-Faatiha")
+    public let englishNameTranslation: String // Mana (ör: "The Opening")
     public let numberOfAyahs: Int
     public let revelationType: String
 }

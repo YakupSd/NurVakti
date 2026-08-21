@@ -20,29 +20,65 @@ final class PrayerTimeService: ObservableObject {
     }
     
     // MARK: - Widget Veri Yazma (App Group)
-    private func writeWidgetData(prayer: PrayerTime) {
-        guard let next = findNextPrayer(from: prayer) else { return }
-
+    func writeWidgetData(prayer: PrayerTime) {
         let language = LocalizationManager.shared.currentLanguage
-        let allEntries: [WidgetPrayerEntry] = PrayerName.allCases.compactMap { name in
+        let cal = Calendar.current
+        let now = Date()
+
+        // 1. Çok günlük kaynak havuzunu al (monthlyPrayers veya Cache)
+        var sourcePrayers = self.monthlyPrayers
+        if sourcePrayers.isEmpty {
+            sourcePrayers = PersistenceService.shared.loadPrayerCache()
+        }
+        if sourcePrayers.isEmpty {
+            sourcePrayers = [prayer]
+        }
+
+        // Bugünden itibaren olan günleri sırala
+        let todayStart = cal.startOfDay(for: now)
+        let relevantPrayers = sourcePrayers.filter { cal.startOfDay(for: $0.date) >= todayStart }.sorted { $0.date < $1.date }
+
+        // 2. Çok günlük widget veri paketlerini hazırla
+        let widgetDays: [WidgetDayPrayerData] = relevantPrayers.map { p in
+            let dayStart = cal.startOfDay(for: p.date)
+            let hijriStr = "\(p.hijriDate.day) \(p.hijriDate.monthName(for: language)) \(p.hijriDate.year)"
+            let dayEntries: [WidgetPrayerEntry] = PrayerName.allCases.map { name in
+                let time = prayerDate(for: name, in: p)
+                return WidgetPrayerEntry(
+                    name: name.localizedName(for: language),
+                    nameEn: name.localizedName(for: .en),
+                    time: time,
+                    isNext: false,
+                    isPast: time <= now
+                )
+            }
+            return WidgetDayPrayerData(date: dayStart, hijriDateString: hijriStr, prayers: dayEntries)
+        }
+
+        // 3. Sıradaki ilk vakti bul
+        let allEntriesToday: [WidgetPrayerEntry] = PrayerName.allCases.map { name in
             let time = prayerDate(for: name, in: prayer)
-            let isPast = time < Date()
-            let isNext = next.name == name
             return WidgetPrayerEntry(
                 name: name.localizedName(for: language),
                 nameEn: name.localizedName(for: .en),
                 time: time,
-                isNext: isNext,
-                isPast: isPast
+                isNext: false,
+                isPast: time <= now
             )
         }
 
+        let next = findNextPrayer(from: prayer)
+        let nextName = next?.name.localizedName(for: language) ?? (allEntriesToday.first?.name ?? "İmsak")
+        let nextNameEn = next?.name.localizedName(for: .en) ?? (allEntriesToday.first?.nameEn ?? "Imsak")
+        let nextTime = next?.time ?? (allEntriesToday.first?.time.addingTimeInterval(86400) ?? now.addingTimeInterval(3600))
+
         NurWidgetData.updatePrayers(
-            nextName: next.name.localizedName(for: language),
-            nextNameEn: next.name.localizedName(for: .en),
-            nextTime: next.time,
-            all: allEntries,
-            city: prayer.cityName,
+            nextName: nextName,
+            nextNameEn: nextNameEn,
+            nextTime: nextTime,
+            all: allEntriesToday,
+            days: widgetDays,
+            city: prayer.cityName.isEmpty ? PersistenceService.shared.lastKnownCityName : prayer.cityName,
             hijri: "\(prayer.hijriDate.day) \(prayer.hijriDate.monthName(for: language)) \(prayer.hijriDate.year)",
             lang: language.rawValue
         )

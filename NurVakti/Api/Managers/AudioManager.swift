@@ -16,6 +16,7 @@ public class AudioManager: ObservableObject {
 
     @Published public var isPlaying = false
     @Published public var isBuffering = false
+    @Published public var currentPlayingID: String? = nil
 
     // Sequential playback queue (for multi-ayah surahs like İhlâs, Felak, Nas)
     private var ayahQueue: [URL] = []
@@ -81,6 +82,7 @@ public class AudioManager: ObservableObject {
             }
             stopQueue()
             let t = title ?? "Sure \(surah), Ayet \(ayah)"
+            currentPlayingID = "ayah_\(surah)_\(ayah)"
             audioService.play(url: url, title: t)
 
         case .surahID(let surah):
@@ -131,6 +133,7 @@ public class AudioManager: ObservableObject {
     public func stop() {
         stopQueue()
         audioService.stop()
+        currentPlayingID = nil
     }
 
     // MARK: - Sequential Queue
@@ -226,8 +229,28 @@ public class AudioManager: ObservableObject {
     }
 
     private func showServiceError() {
-        let message = "Hizmetimiz şu an çalışmıyor"
-        let popup = ServerErrorPopup(message: message, buttonText: "Tamam")
+        currentPlayingID = nil
+        let lang = LocalizationManager.shared.currentLanguage
+        let message: String
+        let buttonText: String
+        switch lang {
+        case .tr:
+            message = "Hizmetimiz şu an çalışmıyor"
+            buttonText = "Tamam"
+        case .en:
+            message = "Service is currently unavailable"
+            buttonText = "OK"
+        case .ar:
+            message = "الخدمة غير متوفرة حالياً"
+            buttonText = "حسناً"
+        case .de:
+            message = "Der Dienst ist derzeit nicht verfügbar"
+            buttonText = "OK"
+        case .pt:
+            message = "Serviço indisponível no momento"
+            buttonText = "OK"
+        }
+        let popup = ServerErrorPopup(message: message, buttonText: buttonText)
         if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
            let rootVC = windowScene.windows.first?.rootViewController {
             rootVC.present(popup, animated: true)

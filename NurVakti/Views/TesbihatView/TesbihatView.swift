@@ -37,7 +37,7 @@ struct TesbihatView: View {
         HStack(spacing: 6) {
             ForEach(0..<steps.count, id: \.self) { index in
                 Capsule()
-                    .fill(index == currentStepIndex ? Color.nurGold : (index < currentStepIndex ? Color.nurGold.opacity(0.4) : ColorColor(hex: "1A1A2E").opacity(0.1)))
+                    .fill(index == currentStepIndex ? Color.nurGold : (index < currentStepIndex ? Color.nurGold.opacity(0.4) : Color(hex: "1A1A2E").opacity(0.1)))
                     .frame(width: index == currentStepIndex ? 30 : 10, height: 4)
                     .animation(.spring(), value: currentStepIndex)
             }
@@ -75,7 +75,7 @@ struct TesbihatView: View {
                         }) {
                             HStack(spacing: 8) {
                                 Image(systemName: audioManager.isPlaying ? "stop.fill" : "play.fill")
-                                Text("dua.listenArabic")
+                                Text(localization.localizedString("dua.listenArabic"))
                             }
                             .nurFont(14, weight: .medium)
                             .padding(.horizontal, 20)
@@ -120,7 +120,7 @@ struct TesbihatView: View {
     private var counterUI: some View {
         ZStack {
             Circle()
-                .stroke(ColorColor(hex: "1A1A2E").opacity(0.05), lineWidth: 12)
+                .stroke(Color(hex: "1A1A2E").opacity(0.05), lineWidth: 12)
                 .frame(width: 180, height: 180)
             
             Circle()
@@ -171,7 +171,7 @@ struct TesbihatView: View {
                             Image(systemName: "checkmark")
                                 .font(.title2.bold())
                                 .foregroundColor(.black)
-                            Text("Bitir")
+                            Text(localization.localizedString("general.finish"))
                                 .font(.caption.bold())
                                 .foregroundColor(.black)
                         }

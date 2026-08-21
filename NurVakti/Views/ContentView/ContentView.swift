@@ -16,20 +16,27 @@ struct ContentView: View {
     }
 
     var body: some View {
-        Group {
-            if showOnboarding {
-                OnboardingView()
-                    .onReceive(NotificationCenter.default.publisher(for: .init("OnboardingCompleted"))) { _ in
-                        withAnimation { showOnboarding = false }
-                    }
-            } else if showSplash {
+        ZStack {
+            // Background — Prevents any black screen flash
+            Color(hex: "F8F6F0").ignoresSafeArea()
+            
+            if showSplash {
                 SplashView {
-                    withAnimation(.easeOut(duration: 0.5)) {
+                    withAnimation(.easeInOut(duration: 0.4)) {
                         showSplash = false
                     }
                 }
+                .transition(.opacity)
+                .zIndex(100)
+            } else if showOnboarding {
+                OnboardingView()
+                    .onReceive(NotificationCenter.default.publisher(for: .init("OnboardingCompleted"))) { _ in
+                        withAnimation(.easeInOut(duration: 0.4)) { showOnboarding = false }
+                    }
+                    .transition(.opacity)
             } else {
                 mainContent
+                    .transition(.opacity)
             }
         }
     }
@@ -61,7 +68,7 @@ struct ContentView: View {
             }
             // Bottom padding so content isn't hidden behind the tab bar
             .safeAreaInset(edge: .bottom) {
-                Color.clear.frame(height: 82)
+                Color.clear.frame(height: 96)
             }
 
             // ── Fixed Bottom Tab Bar ──

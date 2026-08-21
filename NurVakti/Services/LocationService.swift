@@ -86,11 +86,32 @@ enum LocationError: LocalizedError {
     case permissionDenied, locationUnavailable, geocodingFailed
     
     var errorDescription: String? {
-        // Not: Gerçekte AppConstants üzerinden veya localizable'dan dil bazlı dönmeli
+        let lang = LocalizationManager.shared.currentLanguage
         switch self {
-        case .permissionDenied: return "Konum izni reddedildi"
-        case .locationUnavailable: return "Konum alınamadı"
-        case .geocodingFailed: return "Şehir bilgisi çözümlenemedi"
+        case .permissionDenied:
+            switch lang {
+            case .tr: return "Konum izni reddedildi"
+            case .en: return "Location permission denied"
+            case .ar: return "تم رفض إذن الموقع"
+            case .de: return "Standortberechtigung verweigert"
+            case .pt: return "Permissão de localização negada"
+            }
+        case .locationUnavailable:
+            switch lang {
+            case .tr: return "Konum alınamadı"
+            case .en: return "Location unavailable"
+            case .ar: return "الموقع غير متاح"
+            case .de: return "Standort nicht verfügbar"
+            case .pt: return "Localização indisponível"
+            }
+        case .geocodingFailed:
+            switch lang {
+            case .tr: return "Şehir bilgisi çözümlenemedi"
+            case .en: return "City information could not be resolved"
+            case .ar: return "تعذر تحديد معلومات المدينة"
+            case .de: return "Stadtinformation konnte nicht aufgelöst werden"
+            case .pt: return "Não foi possível resolver as informações da cidade"
+            }
         }
     }
 }

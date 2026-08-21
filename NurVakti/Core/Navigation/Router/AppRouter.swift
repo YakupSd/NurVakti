@@ -7,7 +7,7 @@ final class AppRouter: ObservableObject, Router {
     @Published var nav: UINavigationController?
     
     static let shared = AppRouter()
-    private init() {}
+    init() {}
     
     func pushTo(view: UIViewController) {
         MainViewsRouter.shared.pushTo(view: view)

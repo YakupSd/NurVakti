@@ -1,31 +1,30 @@
 import SwiftUI
 
 // MARK: - Tab Item Model
-enum NurTab: Int, CaseIterable {
+public enum NurTab: Int, CaseIterable {
     case home     = 0
     case quran    = 1
-    case dhikr    = 2  // Center/raised button
+    case dhikr    = 2
     case alarms   = 3
     case vakitler = 4
 
-    var icon: String {
+    var activeIcon: String {
         switch self {
-        case .home:     return "homePage"
-        case .quran:    return "Quran"
-        case .dhikr:    return "Dhikr"
-        case .alarms:   return "Alarms"
-        case .vakitler: return "Times"
+        case .home:     return "house.fill"
+        case .quran:    return "book.closed.fill"
+        case .dhikr:    return "hands.sparkles.fill"
+        case .alarms:   return "bell.badge.fill"
+        case .vakitler: return "clock.fill"
         }
     }
     
-    /// SF Symbol fallback for the active glow ring
-    var sfSymbol: String {
+    var inactiveIcon: String {
         switch self {
-        case .home:     return "house.fill"
-        case .quran:    return "book.fill"
-        case .dhikr:    return "hands.sparkles.fill"
-        case .alarms:   return "bell.fill"
-        case .vakitler: return "clock.fill"
+        case .home:     return "house"
+        case .quran:    return "book.closed"
+        case .dhikr:    return "hands.sparkles"
+        case .alarms:   return "bell"
+        case .vakitler: return "clock"
         }
     }
 
@@ -73,192 +72,132 @@ enum NurTab: Int, CaseIterable {
             }
         }
     }
-
-    var isCenter: Bool { self == .quran }
 }
 
-// MARK: - Premium Fixed Bottom Tab Bar
+// MARK: - Luxury Floating Island Tab Bar
 struct FloatingTabBar: View {
     @Binding var selectedTab: NurTab
     @EnvironmentObject var loc: LocalizationManager
-    @Namespace private var indicatorNS
-
-    // Layout
-    private let barHeight: CGFloat = 82
-    private let indicatorHeight: CGFloat = 3
-    
-    // Colors — consistent dark premium palette
-    private let barBgPrimary   = Color(hex: "0A0E17")
-    private let barBgSecondary = Color(hex: "111827")
-    private let activeGold     = Color.nurGold
-    private let inactiveColor  = ColorColor(hex: "1A1A2E").opacity(0.35)
+    @Namespace private var tabAnimationNS
 
     var body: some View {
-        VStack(spacing: 0) {
-            // ─── Top separator line ────────────────────────────
-            Rectangle()
-                .fill(
-                    LinearGradient(
-                        colors: [
-                            ColorColor(hex: "1A1A2E").opacity(0.03),
-                            Color.nurGold.opacity(0.15),
-                            ColorColor(hex: "1A1A2E").opacity(0.03)
-                        ],
-                        startPoint: .leading,
-                        endPoint: .trailing
-                    )
-                )
-                .frame(height: 0.5)
-
-            // ─── Tab Items ─────────────────────────────────────
-            HStack(spacing: 0) {
-                ForEach(NurTab.allCases, id: \.rawValue) { tab in
-                    tabItem(tab)
-                }
+        HStack(spacing: 4) {
+            ForEach(NurTab.allCases, id: \.rawValue) { tab in
+                tabButton(for: tab)
             }
-            .frame(height: barHeight)
-            .padding(.bottom, safeAreaBottom > 0 ? 0 : 8)
         }
+        .padding(.horizontal, 8)
+        .padding(.vertical, 7)
         .background(
             ZStack {
-                // Base dark fill
-                barBgPrimary
+                // Glassmorphism blur
+                BlurView(style: .systemUltraThinMaterialLight)
                 
-                // Subtle gradient overlay for depth
+                // Warm Ivory Luxury Tint
                 LinearGradient(
                     colors: [
-                        barBgSecondary.opacity(0.5),
-                        barBgPrimary
+                        Color.white.opacity(0.94),
+                        Color(hex: "FCFAF6").opacity(0.88)
                     ],
                     startPoint: .top,
                     endPoint: .bottom
                 )
-                
-                // Ultra-thin blur material layer
-                Rectangle()
-                    .fill(.ultraThinMaterial)
-                    .opacity(0.12)
             }
         )
+        .clipShape(Capsule())
+        .overlay(
+            Capsule()
+                .stroke(
+                    LinearGradient(
+                        colors: [
+                            Color.white,
+                            Color.nurGold.opacity(0.35),
+                            Color.white.opacity(0.7)
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    ),
+                    lineWidth: 1.2
+                )
+        )
+        .shadow(color: Color(hex: "1A1A2E").opacity(0.08), radius: 24, x: 0, y: 8)
+        .shadow(color: Color.nurGold.opacity(0.08), radius: 10, x: 0, y: 2)
+        .padding(.horizontal, 20)
+        .padding(.bottom, safeAreaBottom > 0 ? safeAreaBottom : 16)
     }
-    
-    // MARK: - Individual Tab Item
-    @ViewBuilder
-    private func tabItem(_ tab: NurTab) -> some View {
+
+    // MARK: - Tab Item Button
+    private func tabButton(for tab: NurTab) -> some View {
         let isActive = selectedTab == tab
-        let isCenter = tab == .quran
-        
-        Button {
-            withAnimation(.spring(response: 0.35, dampingFraction: 0.72)) {
-                selectedTab = tab
-            }
-            UIImpactFeedbackGenerator(style: isCenter ? .medium : .light).impactOccurred()
-        } label: {
-            VStack(spacing: 0) {
-                // ── Active indicator line ──
-                ZStack {
-                    if isActive {
-                        Capsule()
-                            .fill(
-                                LinearGradient(
-                                    colors: [activeGold.opacity(0.6), activeGold, activeGold.opacity(0.6)],
-                                    startPoint: .leading,
-                                    endPoint: .trailing
-                                )
-                            )
-                            .frame(width: isCenter ? 36 : 28, height: indicatorHeight)
-                            .shadow(color: activeGold.opacity(0.6), radius: 6, y: 2)
-                            .matchedGeometryEffect(id: "indicator", in: indicatorNS)
-                    }
+
+        return Button {
+            if selectedTab != tab {
+                HapticManager.shared.selectionChanged()
+                withAnimation(.spring(response: 0.35, dampingFraction: 0.72)) {
+                    selectedTab = tab
                 }
-                .frame(height: indicatorHeight + 2)
-                
-                Spacer().frame(height: 8)
-                
-                // ── Icon ──
-                ZStack {
-                    // Glow effect for center (Quran) button
-                    if isCenter {
-                        Circle()
-                            .fill(
-                                RadialGradient(
-                                    colors: [
-                                        activeGold.opacity(isActive ? 0.25 : 0.08),
-                                        Color.clear
-                                    ],
-                                    center: .center,
-                                    startRadius: 0,
-                                    endRadius: 30
-                                )
+            }
+        } label: {
+            ZStack {
+                // Active Animated Pill Indicator
+                if isActive {
+                    Capsule()
+                        .fill(
+                            LinearGradient(
+                                colors: [
+                                    Color.nurGold.opacity(0.18),
+                                    Color.nurGold.opacity(0.08)
+                                ],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
                             )
-                            .frame(width: 52, height: 52)
-                        
-                        Circle()
-                            .fill(
-                                LinearGradient(
-                                    colors: isActive
-                                        ? [Color(hex: "E8C46A"), Color(hex: "C9A84C"), Color(hex: "A07A28")]
-                                        : [Color(hex: "1A2035"), Color(hex: "141B2D")],
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                )
-                            )
-                            .frame(width: 44, height: 44)
-                            .overlay(
-                                Circle()
-                                    .stroke(
-                                        isActive
-                                            ? ColorColor(hex: "1A1A2E").opacity(0.25)
-                                            : Color.nurGold.opacity(0.3),
-                                        lineWidth: 1.5
-                                    )
-                            )
-                            .shadow(color: activeGold.opacity(isActive ? 0.5 : 0.15), radius: isActive ? 12 : 4, y: 2)
-                    }
-                    
-                    Image(tab.icon)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: isCenter ? 22 : 24, height: isCenter ? 22 : 24)
+                        )
+                        .overlay(
+                            Capsule()
+                                .stroke(Color.nurGold.opacity(0.32), lineWidth: 1)
+                        )
+                        .matchedGeometryEffect(id: "activeTabIndicator", in: tabAnimationNS)
+                }
+
+                VStack(spacing: 3) {
+                    Image(systemName: isActive ? tab.activeIcon : tab.inactiveIcon)
+                        .font(.system(size: isActive ? 18 : 17, weight: isActive ? .bold : .medium))
+                        .symbolRenderingMode(.hierarchical)
                         .foregroundStyle(
                             isActive
-                                ? (isCenter
-                                    ? AnyShapeStyle(Color.white)
-                                    : AnyShapeStyle(
-                                        LinearGradient(
-                                            colors: [activeGold, Color(hex: "FFD700")],
-                                            startPoint: .topLeading,
-                                            endPoint: .bottomTrailing
-                                        )
-                                      ))
-                                : AnyShapeStyle(inactiveColor)
+                                ? LinearGradient(
+                                    colors: [Color(hex: "C9A84C"), Color(hex: "E5C158")],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                  )
+                                : LinearGradient(
+                                    colors: [Color(hex: "1A1A2E").opacity(0.42), Color(hex: "1A1A2E").opacity(0.42)],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                  )
                         )
-                        .scaleEffect(isActive ? 1.1 : 1.0)
+                        .scaleEffect(isActive ? 1.08 : 1.0)
                         .animation(.spring(response: 0.3, dampingFraction: 0.65), value: isActive)
+
+                    Text(tab.label(for: loc))
+                        .nurFont(10, weight: isActive ? .bold : .medium)
+                        .foregroundColor(
+                            isActive
+                                ? Color(hex: "A37D1D")
+                                : Color(hex: "1A1A2E").opacity(0.45)
+                        )
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.75)
                 }
-                .frame(height: isCenter ? 44 : 28)
-                
-                Spacer().frame(height: isCenter ? 2 : 6)
-                
-                // ── Label ──
-                Text(tab.label(for: loc))
-                    .font(.system(size: 10, weight: isActive ? .bold : .medium))
-                    .foregroundColor(
-                        isActive
-                            ? (isCenter ? activeGold : activeGold)
-                            : inactiveColor
-                    )
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.75)
-                
-                Spacer()
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 7)
+                .contentShape(Rectangle())
             }
-            .frame(maxWidth: .infinity)
-            .contentShape(Rectangle())
+            .frame(height: 50)
         }
         .buttonStyle(.plain)
     }
-    
+
     // MARK: - Safe Area Helper
     private var safeAreaBottom: CGFloat {
         UIApplication.shared.connectedScenes
@@ -266,5 +205,13 @@ struct FloatingTabBar: View {
             .flatMap { $0.windows }
             .first { $0.isKeyWindow }?
             .safeAreaInsets.bottom ?? 0
+    }
+}
+
+#Preview {
+    ZStack(alignment: .bottom) {
+        Color(hex: "F8F6F0").ignoresSafeArea()
+        FloatingTabBar(selectedTab: .constant(.home))
+            .environmentObject(LocalizationManager.shared)
     }
 }

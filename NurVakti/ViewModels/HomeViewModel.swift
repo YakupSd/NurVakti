@@ -26,6 +26,7 @@ final class HomeViewModel: ObservableObject {
     @Published var dailyGuidance: GuidanceItem? = nil
     @Published var prayerProgress: [PrayerName: Double] = [:]
     @Published var remTimeStrings: [PrayerName: String] = [:]
+    @Published var currentWeather: WeatherData? = nil
     
     // NEW additions:
     @Published var dailyAyah: DailyContent = .placeholder
@@ -41,7 +42,10 @@ final class HomeViewModel: ObservableObject {
     // UI Animation State
     @Published var sunPosition: Double = 0.5
     @Published var isNight: Bool = false
+    @Published var isOffline: Bool = false
     
+    private let weatherService: WeatherService = .shared
+    private let networkMonitor: NetworkMonitor = .shared
     private var cancellables = Set<AnyCancellable>()
     private var hasAppeared = false
     
@@ -50,9 +54,9 @@ final class HomeViewModel: ObservableObject {
          bgService: BackgroundGradientService? = nil,
          notifService: NotificationService? = nil,
          persistService: PersistenceService? = nil) {
-        self.prayerService = prayerService ?? PrayerTimeService()
-        self.locationService = locationService ?? LocationService()
-        self.bgService = bgService ?? BackgroundGradientService()
+        self.prayerService = prayerService ?? .shared
+        self.locationService = locationService ?? .shared
+        self.bgService = bgService ?? .shared
         self.notifService = notifService ?? .shared
         self.persistService = persistService ?? .shared
         
@@ -64,9 +68,16 @@ final class HomeViewModel: ObservableObject {
         locationService.$currentLocation
             .compactMap { $0 }
             .sink { [weak self] location in
-                Task { await self?.handleLocationUpdate(location) }
+                Task { 
+                    await self?.handleLocationUpdate(location)
+                    await self?.weatherService.fetchWeather(for: location.coordinate)
+                }
             }
             .store(in: &cancellables)
+            
+        // Weather Service binding
+        weatherService.$currentWeather
+            .assign(to: &$currentWeather)
             
         // Saniyede bir bağımsız timer
         Timer.publish(every: 1, on: .main, in: .common)
@@ -79,6 +90,20 @@ final class HomeViewModel: ObservableObject {
         // Service'ten gelen temayı VM temasına bağla
         bgService.$currentTheme
             .assign(to: &$currentTheme)
+        
+        // Network durumu izle
+        networkMonitor.$isConnected
+            .map { !$0 }
+            .assign(to: &$isOffline)
+        
+        // Konum hatalarını kullanıcıya göster
+        locationService.$error
+            .compactMap { $0?.errorDescription }
+            .receive(on: RunLoop.main)
+            .sink { [weak self] errMsg in
+                self?.errorMessage = errMsg
+            }
+            .store(in: &cancellables)
     }
     
     func onAppear() async {
@@ -155,6 +180,39 @@ final class HomeViewModel: ObservableObject {
         updateReadingProgress()
         
         languageDidChange(settings.language)
+    }
+    
+    // MARK: - Foreground Dönüşü
+    /// Uygulama arka plandan geri geldiğinde stale veriyi yeniler.
+    /// scenePhase == .active olduğunda NurVaktiApp tarafından çağrılır.
+    func refreshOnForeground() async {
+        let settings = persistService.settings
+        
+        // 1. Cache'ten bugünün verisini yeniden yükle
+        if let today = prayerService.loadCached(for: Date()) {
+            applyPrayers(today)
+            prayerService.writeWidgetData(prayer: today)
+        } else {
+            // Cache'te bugün yoksa API'den çek
+            if let loc = persistService.lastKnownLocation {
+                await handleLocationUpdate(loc, force: true)
+            }
+        }
+        
+        // 2. Hava durumunu yenile (TTL kontrolü kendi içinde)
+        if let loc = locationService.currentLocation ?? persistService.lastKnownLocation {
+            await weatherService.fetchWeather(for: loc.coordinate)
+        }
+        
+        // 3. UI state'lerini güncelle
+        updateRoutineSlot()
+        updateDhikrStatus()
+        updateReadingProgress()
+        updateNextReligiousDay(language: settings.language)
+        
+        // 4. Günlük içerik (gün değişmişse farklı ayet/dua gelir)
+        loadDailyContent(language: settings.language)
+        self.dailyGuidance = GuidanceService.shared.getDailyGuidance(for: settings.language)
     }
     
     func loadDailyContent(language: LanguageCode) {
@@ -309,11 +367,36 @@ final class HomeViewModel: ObservableObject {
             self.errorMessage = "Vakitler güncellenemedi: \(error.localizedDescription)"
             print("HomeViewModel: ❌ API Error — \(error)")
             
-            // API başarısız olsa bile cache'ten bir şey varsa göster
-            if todayPrayers == nil, let cached = prayerService.loadCached(for: Date()) {
-                applyPrayers(cached)
-                let city = cached.cityName.isEmpty ? persistService.lastKnownCityName : cached.cityName
-                self.cityName = city
+            // API başarısız olsa bile:
+            // 1. Önce cache'e bak
+            // 2. Cache de yoksa yerel offline astronomik hesaplama ile vakitleri üret (Zero-Crash & Zero-Blank Guarantee)
+            if todayPrayers == nil {
+                if let cached = prayerService.loadCached(for: Date()) {
+                    applyPrayers(cached)
+                    let city = cached.cityName.isEmpty ? persistService.lastKnownCityName : cached.cityName
+                    self.cityName = city.isEmpty ? "İstanbul" : city
+                } else {
+                    let offlinePrayer = PrayerCalculator.shared.calculate(
+                        for: location,
+                        method: settings.calculationMethod,
+                        madhab: settings.madhab
+                    )
+                    let fallbackWithCity = PrayerTime(
+                        id: offlinePrayer.id,
+                        date: offlinePrayer.date,
+                        imsak: offlinePrayer.imsak,
+                        fajr: offlinePrayer.fajr,
+                        sunrise: offlinePrayer.sunrise,
+                        dhuhr: offlinePrayer.dhuhr,
+                        asr: offlinePrayer.asr,
+                        maghrib: offlinePrayer.maghrib,
+                        isha: offlinePrayer.isha,
+                        cityName: finalCity.isEmpty ? "İstanbul" : finalCity,
+                        hijriDate: offlinePrayer.hijriDate,
+                        calculationMethod: offlinePrayer.calculationMethod
+                    )
+                    applyPrayers(fallbackWithCity)
+                }
             }
         }
         
@@ -328,11 +411,15 @@ final class HomeViewModel: ObservableObject {
         if nextPrayer != nil {
             bgService.updateTheme(prayers: prayers, currentTime: Date())
         }
+        
+        // Sync with Widget Extension App Group
+        prayerService.writeWidgetData(prayer: prayers)
     }
     
     func languageDidChange(_ code: LanguageCode) {
         if let prayers = todayPrayers {
             self.hijriText = prayers.hijriDate.formatted(for: code)
+            prayerService.writeWidgetData(prayer: prayers)
         }
         loadDailyContent(language: code)
         updateNextReligiousDay(language: code)
@@ -340,6 +427,24 @@ final class HomeViewModel: ObservableObject {
     }
     
     private func updateCountdown() {
+        // nextPrayer nil ise (gece yarısı geçişi, cache sorunu) yeniden bulmayı dene
+        if nextPrayer == nil {
+            if let prayers = todayPrayers {
+                self.nextPrayer = prayerService.findNextPrayer(from: prayers)
+            }
+            // Hala nil ise yarının cache'inden bak
+            if nextPrayer == nil {
+                let tomorrow = Date().addingTimeInterval(86400)
+                if let tomorrowPrayers = prayerService.loadCached(for: tomorrow) {
+                    self.nextPrayer = (.imsak, tomorrowPrayers.imsak)
+                }
+            }
+            if nextPrayer == nil {
+                self.countdown = "--:--:--"
+                return
+            }
+        }
+        
         guard let next = nextPrayer else { return }
         let diff = next.time.timeIntervalSince(Date())
         
@@ -347,6 +452,7 @@ final class HomeViewModel: ObservableObject {
             // Vakit değişti, yeniden hesapla
             if let prayers = todayPrayers {
                 self.nextPrayer = prayerService.findNextPrayer(from: prayers)
+                prayerService.writeWidgetData(prayer: prayers)
             }
             return
         }
@@ -415,14 +521,14 @@ final class HomeViewModel: ObservableObject {
     private func updateCompletedPrayersCount() {
         guard let prayers = todayPrayers else { return }
         let now = Date()
+        // Sadece gerçek 5 namaz vakti sayılır:
+        // İmsak = namaz kılınmaz; Güneş (Sunrise) = mekruh vakittir
         var count = 0
-        if now > prayers.imsak { count += 1 }
-        if now > prayers.fajr { count += 1 }
-        if now > prayers.sunrise { count += 1 }
-        if now > prayers.dhuhr { count += 1 }
-        if now > prayers.asr { count += 1 }
-        if now > prayers.maghrib { count += 1 }
-        if now > prayers.isha { count += 1 }
+        if now > prayers.fajr    { count += 1 }  // Sabah
+        if now > prayers.dhuhr   { count += 1 }  // Öğle
+        if now > prayers.asr     { count += 1 }  // İkindi
+        if now > prayers.maghrib { count += 1 }  // Akşam
+        if now > prayers.isha    { count += 1 }  // Yatsı
         self.completedPrayers = count
     }
     
@@ -507,10 +613,14 @@ final class HomeViewModel: ObservableObject {
         
         if now >= prayers.fajr && now < prayers.dhuhr {
             self.currentRoutineSlot = .morning
-        } 
+        }
+        else if now >= prayers.dhuhr && now < prayers.asr {
+            // Öğle-İkindi arası: sabah rutini devam eder
+            self.currentRoutineSlot = .morning
+        }
         else if now >= prayers.asr || now < prayers.fajr {
             self.currentRoutineSlot = .evening
-        } 
+        }
         else {
             self.currentRoutineSlot = .none
         }
@@ -529,6 +639,15 @@ final class HomeViewModel: ObservableObject {
     public func updateReadingProgress() {
         let progress = persistService.readingProgress
         let surahName = PrayerGuideData.surahNames[max(1, min(114, progress.lastSurah)) - 1]
-        self.lastReadSurah = "\(surahName) · \(progress.lastSurah). Sure"
+        let language = persistService.settings.language
+        let surahLabel: String
+        switch language {
+        case .tr: surahLabel = "Sure"
+        case .en: surahLabel = "Surah"
+        case .ar: surahLabel = "سورة"
+        case .de: surahLabel = "Sure"
+        case .pt: surahLabel = "Surata"
+        }
+        self.lastReadSurah = "\(surahName) · \(progress.lastSurah). \(surahLabel)"
     }
 }
