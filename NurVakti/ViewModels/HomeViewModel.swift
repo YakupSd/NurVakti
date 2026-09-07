@@ -38,6 +38,7 @@ final class HomeViewModel: ObservableObject {
     @Published var qiblaDirectionText: String = "158° · Güneydoğu"
     @Published var nextReligiousDay: String = ""
     @Published var currentRoutineSlot: RoutineSlot = .none
+    @Published var todaySpecialDay: SpecialDayInfo? = nil
     
     // UI Animation State
     @Published var sunPosition: Double = 0.5
@@ -175,9 +176,14 @@ final class HomeViewModel: ObservableObject {
         loadDailyContent(language: settings.language)
         
         updateNextReligiousDay(language: settings.language)
+        updateSpecialDayStatus(language: settings.language)
         updateRoutineSlot()
         updateDhikrStatus()
         updateReadingProgress()
+        
+        Task {
+            await SpecialDayService.shared.scheduleSpecialDayNotifications(language: settings.language)
+        }
         
         languageDidChange(settings.language)
     }
@@ -209,6 +215,11 @@ final class HomeViewModel: ObservableObject {
         updateDhikrStatus()
         updateReadingProgress()
         updateNextReligiousDay(language: settings.language)
+        updateSpecialDayStatus(language: settings.language)
+        
+        Task {
+            await SpecialDayService.shared.scheduleSpecialDayNotifications(language: settings.language)
+        }
         
         // 4. Günlük içerik (gün değişmişse farklı ayet/dua gelir)
         loadDailyContent(language: settings.language)
@@ -423,6 +434,7 @@ final class HomeViewModel: ObservableObject {
         }
         loadDailyContent(language: code)
         updateNextReligiousDay(language: code)
+        updateSpecialDayStatus(language: code)
         updateCountdown()
     }
     
@@ -604,6 +616,10 @@ final class HomeViewModel: ObservableObject {
         } else {
             self.nextReligiousDay = "---"
         }
+    }
+    
+    func updateSpecialDayStatus(language: LanguageCode) {
+        self.todaySpecialDay = SpecialDayService.shared.refreshTodaySpecialDay(language: language)
     }
     
     

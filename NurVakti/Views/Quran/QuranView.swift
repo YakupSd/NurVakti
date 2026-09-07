@@ -103,7 +103,11 @@ struct QuranView: View {
                             SectionHeader(title: localization.localizedString("quran.lastRead"))
                             
                             Button {
-                                selectedSurahForSheet = surah
+                                HapticManager.shared.light()
+                                router.pushTo(view: MainNavigationView.builder.makeView(
+                                    SurahDetailView(surah: surah, vm: vm),
+                                    withNavigationTitle: surah.englishName
+                                ))
                             } label: {
                                 HStack {
                                     Image(systemName: "book.fill")
@@ -125,7 +129,7 @@ struct QuranView: View {
                                 .cornerRadius(20)
                                 .shadow(color: .black.opacity(0.04), radius: 6, x: 0, y: 2)
                             }
-                            .buttonStyle(.plain)
+                            .buttonStyle(BouncyButtonStyle())
                         }
                         
                         SectionHeader(title: localization.localizedString("quran.surahsTitle"))
@@ -137,9 +141,9 @@ struct QuranView: View {
                                     .tint(Color(hex: "C9A84C"))
                                     .padding(40)
                             } else if let error = vm.loadError {
-                                ErrorStateView(error: error, language: localization.currentLanguage) {
+                                ErrorStateView(error: error, language: localization.currentLanguage, onAction: {
                                     Task { await vm.loadSurahList() }
-                                }
+                                })
                                 .padding(.top, 40)
                             } else if vm.filteredSurahs.isEmpty && !vm.searchText.isEmpty {
                                 EmptyStateView(type: .quranSearchNoResults, language: localization.currentLanguage)
@@ -147,11 +151,15 @@ struct QuranView: View {
                             } else {
                                 ForEach(vm.filteredSurahs) { surah in
                                     Button {
-                                        selectedSurahForSheet = surah
+                                        HapticManager.shared.light()
+                                        router.pushTo(view: MainNavigationView.builder.makeView(
+                                            SurahDetailView(surah: surah, vm: vm),
+                                            withNavigationTitle: surah.englishName
+                                        ))
                                     } label: {
                                         SurahRowView(surah: surah, language: localization.currentLanguage, fontSize: .medium)
                                     }
-                                    .buttonStyle(.plain)
+                                    .buttonStyle(BouncyButtonStyle())
                                 }
                             }
                         }
@@ -163,133 +171,9 @@ struct QuranView: View {
         .task {
             await vm.loadSurahList()
         }
-        // Okuma Modu Seçim Sheet'i
-        .sheet(item: $selectedSurahForSheet) { surah in
-            readingModeSheet(for: surah)
-                .presentationDetents([.height(320)])
-                .presentationDragIndicator(.visible)
-                .presentationCornerRadius(32)
-        }
-    }
-    
-    // MARK: - Okuma Modu Seçim Sheet
-    @ViewBuilder
-    private func readingModeSheet(for surah: SurahInfo) -> some View {
-        ZStack {
-            Color(hex: "F8F6F0").ignoresSafeArea()
-            
-            VStack(spacing: 20) {
-                // Surah info
-                VStack(spacing: 8) {
-                    Text(surah.nameArabic)
-                        .font(.custom("ScheherazadeNew-Bold", size: 30))
-                        .foregroundColor(Color(hex: "C9A84C"))
-                    
-                    Text(surah.englishName)
-                        .nurFont(16, weight: .bold)
-                        .foregroundColor(Color(hex: "1A1A2E"))
-                }
-                .padding(.top, 20)
-                
-                // Mod seçimi
-                VStack(spacing: 12) {
-                    // Arapça + Meal (Varsayılan)
-                    Button {
-                        selectedSurahForSheet = nil
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                            router.pushTo(view: MainNavigationView.builder.makeView(
-                                SurahDetailView(surah: surah),
-                                withNavigationTitle: surah.englishName
-                            ))
-                        }
-                    } label: {
-                        HStack(spacing: 16) {
-                            Image(systemName: "text.book.closed.fill")
-                                .font(.system(size: 24))
-                                .foregroundColor(Color(hex: "C9A84C"))
-                                .frame(width: 44, height: 44)
-                                .background(Color(hex: "C9A84C").opacity(0.12))
-                                .clipShape(Circle())
-                            
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(localization.localizedString("quran.arabicAndMeal"))
-                                    .nurFont(16, weight: .bold)
-                                    .foregroundColor(Color(hex: "1A1A2E"))
-                                Text(localization.localizedString("quran.arabicAndMealDesc"))
-                                    .nurFont(12)
-                                    .foregroundColor(Color(hex: "1A1A2E").opacity(0.5))
-                            }
-                            
-                            Spacer()
-                            
-                            Text(localization.localizedString("quran.recommended"))
-                                .nurFont(10, weight: .bold)
-                                .foregroundColor(Color(hex: "C9A84C"))
-                                .padding(.horizontal, 10)
-                                .padding(.vertical, 4)
-                                .background(Color(hex: "C9A84C").opacity(0.12))
-                                .cornerRadius(12)
-                            
-                            Image(systemName: "chevron.right")
-                                .foregroundColor(Color(hex: "1A1A2E").opacity(0.3))
-                        }
-                        .padding(16)
-                        .background(Color.white)
-                        .cornerRadius(20)
-                        .shadow(color: .black.opacity(0.04), radius: 6, x: 0, y: 2)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 20)
-                                .stroke(Color(hex: "C9A84C").opacity(0.3), lineWidth: 1)
-                        )
-                    }
-                    .buttonStyle(.plain)
-                    
-                    // Mushaf Modu
-                    Button {
-                        selectedSurahForSheet = nil
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                            router.pushTo(view: MainNavigationView.builder.makeView(
-                                MushafMainView(surah: surah),
-                                withNavigationTitle: surah.englishName
-                            ))
-                        }
-                    } label: {
-                        HStack(spacing: 16) {
-                            Image(systemName: "book.pages.fill")
-                                .font(.system(size: 24))
-                                .foregroundColor(Color(hex: "1A1A2E").opacity(0.6))
-                                .frame(width: 44, height: 44)
-                                .background(Color(hex: "1A1A2E").opacity(0.05))
-                                .clipShape(Circle())
-                            
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(localization.localizedString("quran.mushaf"))
-                                    .nurFont(16, weight: .bold)
-                                    .foregroundColor(Color(hex: "1A1A2E"))
-                                Text(localization.localizedString("quran.mushafDesc"))
-                                    .nurFont(12)
-                                    .foregroundColor(Color(hex: "1A1A2E").opacity(0.5))
-                            }
-                            
-                            Spacer()
-                            
-                            Image(systemName: "chevron.right")
-                                .foregroundColor(Color(hex: "1A1A2E").opacity(0.3))
-                        }
-                        .padding(16)
-                        .background(Color.white)
-                        .cornerRadius(20)
-                        .shadow(color: .black.opacity(0.03), radius: 4, x: 0, y: 1)
-                    }
-                    .buttonStyle(.plain)
-                }
-                .padding(.horizontal, 20)
-                
-                Spacer()
-            }
-        }
     }
 }
+
 
 struct SurahRowView: View {
     let surah: SurahInfo

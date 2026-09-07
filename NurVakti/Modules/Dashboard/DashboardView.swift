@@ -498,60 +498,19 @@ struct DashboardView: View {
     // MARK: - Friday / Special Day Banner
     @ViewBuilder
     private var fridayOrSpecialDayBanner: some View {
-        if let special = SpiritualMessageService.shared.getTodaySpecialEventBanner(currentLanguage: localization.currentLanguage) {
-            Button(action: {
-                HapticManager.shared.tap()
+        if let special = vm.todaySpecialDay ?? SpecialDayService.shared.todaySpecialDay {
+            SpecialDayBannerView(info: special) {
+                let kandilSub: KandilSubType? = (special.category == .kandil && special.subCategory != nil) ? KandilSubType(rawValue: special.subCategory!) : nil
+                let bayramSub: BayramSubType? = (special.category == .bayram && special.subCategory != nil) ? BayramSubType(rawValue: special.subCategory!) : nil
                 dashboardVM.router.pushTo(view: MainNavigationView.builder.makeView(
-                    SpiritualMessagesView(initialCategory: special.category),
-                    withNavigationTitle: special.title
+                    SpiritualMessagesView(
+                        initialCategory: special.category,
+                        initialKandilSub: kandilSub,
+                        initialBayramSub: bayramSub
+                    ),
+                    withNavigationTitle: "Manevi Mesajlar"
                 ))
-            }) {
-                HStack(spacing: 14) {
-                    ZStack {
-                        Circle()
-                            .fill(Color(hex: "0E1626").opacity(0.12))
-                            .frame(width: 44, height: 44)
-                        Text(special.emoji)
-                            .font(.system(size: 22))
-                    }
-                    
-                    VStack(alignment: .leading, spacing: 3) {
-                        Text(special.title)
-                            .nurFont(15, weight: .bold)
-                            .foregroundColor(Color(hex: "0E1626"))
-                        Text(special.subtitle)
-                            .nurFont(12)
-                            .foregroundColor(Color(hex: "0E1626").opacity(0.8))
-                            .lineLimit(1)
-                    }
-                    
-                    Spacer()
-                    
-                    HStack(spacing: 4) {
-                        Text("Tebrikler")
-                            .nurFont(11, weight: .bold)
-                        Image(systemName: "chevron.right")
-                            .font(.system(size: 11, weight: .bold))
-                    }
-                    .foregroundColor(Color(hex: "0E1626"))
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 6)
-                    .background(Color(hex: "0E1626").opacity(0.12))
-                    .clipShape(Capsule())
-                }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 12)
-                .background(
-                    LinearGradient(
-                        colors: [Color.nurGold, Color(hex: "F3C64F"), Color(hex: "E5B338")],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    )
-                )
-                .cornerRadius(20)
-                .shadow(color: Color.nurGold.opacity(0.3), radius: 10, y: 4)
             }
-            .buttonStyle(BouncyButtonStyle())
             .padding(.horizontal, 20)
         }
     }

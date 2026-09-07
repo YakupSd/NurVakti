@@ -79,9 +79,20 @@ struct HomeView: View {
                     
                     VStack(spacing: 20) {
                         // ── Friday / Special Day Banner ──
-                        if let specialTitle = SpiritualMessageService.shared.todaysSpecialBannerTitle {
-                            FridayOrSpecialDayBanner(title: specialTitle)
-                                .padding(.horizontal, 14)
+                        if let special = vm.todaySpecialDay ?? SpecialDayService.shared.todaySpecialDay {
+                            SpecialDayBannerView(info: special) {
+                                let kandilSub: KandilSubType? = (special.category == .kandil && special.subCategory != nil) ? KandilSubType(rawValue: special.subCategory!) : nil
+                                let bayramSub: BayramSubType? = (special.category == .bayram && special.subCategory != nil) ? BayramSubType(rawValue: special.subCategory!) : nil
+                                router.pushTo(view: MainNavigationView.builder.makeView(
+                                    SpiritualMessagesView(
+                                        initialCategory: special.category,
+                                        initialKandilSub: kandilSub,
+                                        initialBayramSub: bayramSub
+                                    ),
+                                    withNavigationTitle: "Manevi Mesajlar"
+                                ))
+                            }
+                            .padding(.horizontal, 14)
                         }
                         
                         FavouritesStrip()

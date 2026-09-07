@@ -83,7 +83,19 @@ final class QuranViewModel: ObservableObject {
 
     
     func loadAyahs(surah: SurahInfo, language: LanguageCode) async {
+        // 1. FAST PATH: Check Ultra-Fast Cache (0ms Instant Return)
+        if let cachedAyahs = QuranDataCache.shared.getAyahs(surahNumber: surah.id, language: language) {
+            self.ayahs = cachedAyahs
+            self.isLoadingAyahs = false
+            self.ayahLoadError = nil
+            // Silently pre-fetch adjacent surahs in background
+            QuranDataCache.shared.prefetchAdjacentSurahs(currentSurah: surah.id, language: language, quranManager: quranManager)
+            return
+        }
+        
+        // 2. SLOW PATH: Network Fetch with Loading State
         isLoadingAyahs = true
+        self.ayahLoadError = nil
         defer { isLoadingAyahs = false }
         
         let edition = getEdition(for: language)
@@ -107,6 +119,11 @@ final class QuranViewModel: ObservableObject {
                                      tajweedText: nil))
             }
             self.ayahs = items
+            
+            // Save to 2-Tier Cache
+            QuranDataCache.shared.saveAyahs(surahNumber: surah.id, language: language, ayahs: items)
+            // Trigger pre-fetch for next & previous surah
+            QuranDataCache.shared.prefetchAdjacentSurahs(currentSurah: surah.id, language: language, quranManager: quranManager)
         } catch {
             self.ayahLoadError = .quranLoadFailed
         }
@@ -123,6 +140,18 @@ final class QuranViewModel: ObservableObject {
     }
     
     func loadHatimPage(page: Int, language: LanguageCode) async {
+        // Check cache
+        if let cachedPage = QuranDataCache.shared.getMushafPage(pageNumber: page) {
+            self.ayahs = cachedPage.ayahs.map {
+                AyahItem(id: $0.ayahNumber, arabicText: $0.arabicText, translation: "", surahNumber: $0.surahNumber)
+            }
+            self.isLoadingAyahs = false
+            self.ayahLoadError = nil
+            saveHatimProgress(page: page)
+            QuranDataCache.shared.prefetchAdjacentPages(currentPage: page, quranManager: quranManager)
+            return
+        }
+        
         isLoadingAyahs = true
         defer { isLoadingAyahs = false }
         
@@ -148,6 +177,7 @@ final class QuranViewModel: ObservableObject {
             }
             self.ayahs = items
             saveHatimProgress(page: page)
+            QuranDataCache.shared.prefetchAdjacentPages(currentPage: page, quranManager: quranManager)
         } catch {
             self.ayahLoadError = .quranLoadFailed
         }
@@ -161,6 +191,14 @@ final class QuranViewModel: ObservableObject {
                 continuation.resume(throwing: error ?? ApplicationErrorType.noResponse(desc: "Unknown", code: nil))
             }
         }
+    }
+    
+    func nextSurah(after current: SurahInfo) -> SurahInfo? {
+        surahs.first { $0.id == current.id + 1 }
+    }
+    
+    func previousSurah(before current: SurahInfo) -> SurahInfo? {
+        surahs.first { $0.id == current.id - 1 }
     }
     
     // MARK: - Logic

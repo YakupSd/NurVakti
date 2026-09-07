@@ -136,6 +136,9 @@
 		F3B000010000000000000003 /* SpiritualStoryShareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3A000010000000000000003 /* SpiritualStoryShareView.swift */; };
 		F3B000010000000000000004 /* SpiritualShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3A000010000000000000004 /* SpiritualShareSheet.swift */; };
 		F3B000010000000000000005 /* SpiritualMessagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3A000010000000000000005 /* SpiritualMessagesView.swift */; };
+		F3B000020000000000000001 /* SpecialDayService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3A000020000000000000001 /* SpecialDayService.swift */; };
+		F3B000020000000000000002 /* SpecialDayBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3A000020000000000000002 /* SpecialDayBannerView.swift */; };
+		F3B000030000000000000001 /* QuranDataCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3A000030000000000000001 /* QuranDataCache.swift */; };
 		F3B9058A2F7405F500254779 /* fajr.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F3B905892F7405F500254779 /* fajr.mp3 */; };
 		F3B9058B2F7405F500254779 /* ezan.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F3B905882F7405F500254779 /* ezan.mp3 */; };
 		F3B905952F74087600254779 /* SkyColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3B9058E2F74087600254779 /* SkyColorPalette.swift */; };
@@ -369,6 +372,9 @@
 		F3A000010000000000000003 /* SpiritualStoryShareView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SpiritualStoryShareView.swift; sourceTree = "<group>"; };
 		F3A000010000000000000004 /* SpiritualShareSheet.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SpiritualShareSheet.swift; sourceTree = "<group>"; };
 		F3A000010000000000000005 /* SpiritualMessagesView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SpiritualMessagesView.swift; path = Tools/SpiritualMessagesView.swift; sourceTree = "<group>"; };
+		F3A000020000000000000001 /* SpecialDayService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SpecialDayService.swift; sourceTree = "<group>"; };
+		F3A000020000000000000002 /* SpecialDayBannerView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SpecialDayBannerView.swift; sourceTree = "<group>"; };
+		F3A000030000000000000001 /* QuranDataCache.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = QuranDataCache.swift; sourceTree = "<group>"; };
 		F3B905882F7405F500254779 /* ezan.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ezan.mp3; sourceTree = "<group>"; };
 		F3B905892F7405F500254779 /* fajr.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = fajr.mp3; sourceTree = "<group>"; };
 		F3B9058C2F74087600254779 /* CelestialBodyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CelestialBodyView.swift; sourceTree = "<group>"; };
@@ -774,6 +780,8 @@
 		D3F7DAD44D0FA1F376423F97 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				F3A000030000000000000001 /* QuranDataCache.swift */,
+				F3A000020000000000000001 /* SpecialDayService.swift */,
 				F3A000010000000000000002 /* SpiritualMessageService.swift */,
 				F37685BA2F72B37900179634 /* PrayerCalculator.swift */,
 				EE910DA401DC61A213B26C91 /* BackgroundRefreshService.swift */,
@@ -897,6 +905,7 @@
 		F35206222F76CCFD00E2B12F /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				F3A000020000000000000002 /* SpecialDayBannerView.swift */,
 				F35206202F76CCFD00E2B12F /* QuickAccessCard.swift */,
 				F35206212F76CCFD00E2B12F /* ShareButton.swift */,
 				E1705BE671A14321939EE7A2 /* DailyRoutineCard.swift */,
@@ -1371,6 +1380,9 @@
 				F3B000010000000000000003 /* SpiritualStoryShareView.swift in Sources */,
 				F3B000010000000000000004 /* SpiritualShareSheet.swift in Sources */,
 				F3B000010000000000000005 /* SpiritualMessagesView.swift in Sources */,
+				F3B000020000000000000001 /* SpecialDayService.swift in Sources */,
+				F3B000020000000000000002 /* SpecialDayBannerView.swift in Sources */,
+				F3B000030000000000000001 /* QuranDataCache.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

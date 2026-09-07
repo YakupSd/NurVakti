@@ -3,194 +3,66 @@ import Combine
 
 @MainActor
 class MushafViewModel: ObservableObject {
-    @Published var pages: [MushafPageModel] = []
-    @Published var currentPageIndex: Int = 0
-    @Published var isLoading: Bool = false
-    @Published var loadError: Bool = false
-    @Published var pageNumber: Int?
+    @Published var currentPage: Int = 1 {
+        didSet {
+            saveHatimProgress()
+        }
+    }
     
     let surah: SurahInfo?
-    private let quranManager = QuranManager()
     
     init(surah: SurahInfo) {
         self.surah = surah
-        self.pageNumber = nil
-        loadSurahData()
+        let startingPage = MushafViewModel.pageNumber(forSurah: surah.id)
+        self.currentPage = startingPage
     }
     
     init(page: Int) {
         self.surah = nil
-        self.pageNumber = page
-        loadPageData(page)
-    }
-    
-    func loadPageData(_ page: Int) {
-        isLoading = true
-        quranManager.getPageDetail(page: page, edition: "quran-uthmani") { response in
-            DispatchQueue.main.async {
-                self.processAyahs(response.data.ayahs, asSinglePage: true, forcedPageNumber: page)
-                self.isLoading = false
-                self.loadError = false
-            }
-        } onFailure: { _ in
-            DispatchQueue.main.async {
-                self.isLoading = false
-                self.loadError = true
-            }
-        }
-    }
-    
-    private func processAyahs(_ ayahs: [AyahDTO], asSinglePage: Bool = false, forcedPageNumber: Int? = nil) {
-        var ayahModels: [AyahModel] = []
-        for ayah in ayahs {
-            var text = ayah.text
-            let standardBesmele = "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ"
-            if text.contains(standardBesmele) {
-                text = text.replacingOccurrences(of: standardBesmele, with: "").trimmingCharacters(in: .whitespaces)
-            }
-            let uthmaniBesmele = "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ"
-            if text.contains(uthmaniBesmele) {
-                text = text.replacingOccurrences(of: uthmaniBesmele, with: "").trimmingCharacters(in: .whitespaces)
-            }
-            
-            ayahModels.append(AyahModel(
-                id: ayah.number,
-                surahNumber: ayah.surah?.number ?? (surah?.id ?? 0),
-                ayahNumber: ayah.numberInSurah,
-                arabicText: text,
-                tajweedRanges: []
-            ))
-        }
-        
-        if asSinglePage {
-            self.pages = [MushafPageModel(
-                pageNumber: forcedPageNumber ?? (pageNumber ?? 1),
-                surahNumber: ayahModels.first?.surahNumber ?? 0,
-                surahName: ayahs.first?.surah?.name ?? "Mushaf",
-                isMakki: false,
-                ayahs: ayahModels,
-                lineCount: 15
-            )]
-            self.currentPageIndex = 0
-            return
-        }
-        
-        let ayahsPerPage = 10
-        var newPages: [MushafPageModel] = []
-        let totalPagesCount = (ayahModels.count + ayahsPerPage - 1) / ayahsPerPage
-        
-        for i in 0..<totalPagesCount {
-            let start = i * ayahsPerPage
-            let end = min(start + ayahsPerPage, ayahModels.count)
-            let pageAyahs = Array(ayahModels[start..<end])
-            
-            newPages.append(MushafPageModel(
-                pageNumber: i + 1,
-                surahNumber: pageAyahs.first?.surahNumber ?? 0,
-                surahName: surah?.nameArabic ?? "Mushaf",
-                isMakki: surah?.revelationType == .makkah,
-                ayahs: pageAyahs,
-                lineCount: 15
-            ))
-        }
-        
-        self.pages = newPages
+        self.currentPage = max(1, min(604, page))
     }
     
     func nextPage() {
-        if currentPageIndex < pages.count - 1 {
-            currentPageIndex += 1
-            saveHatimProgressIfNeeded()
-        } else {
-            if let pn = pageNumber, pn < 604 {
-                self.loadPageData(pn + 1)
-                self.updatePageNumber(pn + 1)
-            } else if let currentSurahId = surah?.id, currentSurahId < 114 {
-                loadNextSurah(id: currentSurahId + 1)
-            }
+        if currentPage < 604 {
+            currentPage += 1
         }
     }
     
     func previousPage() {
-        if currentPageIndex > 0 {
-            currentPageIndex -= 1
-            saveHatimProgressIfNeeded()
-        } else {
-            if let pn = pageNumber, pn > 1 {
-                self.loadPageData(pn - 1)
-                self.updatePageNumber(pn - 1)
-            } else if let currentSurahId = surah?.id, currentSurahId > 1 {
-                loadPreviousSurah(id: currentSurahId - 1)
-            }
+        if currentPage > 1 {
+            currentPage -= 1
         }
     }
     
-    private func updatePageNumber(_ newPage: Int) {
-        self.pageNumber = newPage
+    func goToPage(_ page: Int) {
+        self.currentPage = max(1, min(604, page))
+    }
+    
+    private func saveHatimProgress() {
         let existing = HatimProgress.load()
-        let progress = HatimProgress(currentPage: newPage, completedCount: existing.completedCount, lastUpdated: Date())
+        let progress = HatimProgress(currentPage: currentPage, completedCount: existing.completedCount, lastUpdated: Date())
         progress.save()
     }
     
-    private func saveHatimProgressIfNeeded() {
-        if let pn = pageNumber {
-            let existing = HatimProgress.load()
-            let progress = HatimProgress(currentPage: pn, completedCount: existing.completedCount, lastUpdated: Date())
-            progress.save()
-        }
-    }
-    
-    private func loadNextSurah(id: Int) {
-        isLoading = true
-        quranManager.getSurahDetail(number: id, edition: "quran-uthmani") { response in
-            DispatchQueue.main.async {
-                self.processAyahs(response.data.ayahs)
-                self.currentPageIndex = 0
-                self.isLoading = false
-                self.loadError = false
-            }
-        } onFailure: { _ in
-            DispatchQueue.main.async {
-                self.isLoading = false
-                self.loadError = true
-            }
-        }
-    }
-    
-    private func loadPreviousSurah(id: Int) {
-        isLoading = true
-        quranManager.getSurahDetail(number: id, edition: "quran-uthmani") { response in
-            DispatchQueue.main.async {
-                self.processAyahs(response.data.ayahs)
-                self.currentPageIndex = self.pages.count - 1
-                self.isLoading = false
-            }
-        } onFailure: { _ in
-            DispatchQueue.main.async {
-                self.isLoading = false
-            }
-        }
-    }
-    
-    func loadSurahData() {
-        guard let surah = surah else { return }
-        isLoading = true
-        quranManager.getSurahDetail(number: surah.id, edition: "quran-uthmani") { response in
-            DispatchQueue.main.async {
-                self.processAyahs(response.data.ayahs)
-                self.isLoading = false
-                self.loadError = false
-            }
-        } onFailure: { _ in
-            DispatchQueue.main.async {
-                self.isLoading = false
-                self.loadError = true
-            }
-        }
-    }
-    
-    private func parseTajweedBrackets(_ raw: String) -> (cleanText: String, ranges: [MushafRange]) {
-        return (raw, [])
+    // MARK: - Surah to Standard Madinah Mushaf Starting Page Map
+    static func pageNumber(forSurah id: Int) -> Int {
+        let surahStartPages: [Int: Int] = [
+            1: 1, 2: 2, 3: 50, 4: 77, 5: 106, 6: 128, 7: 151, 8: 177, 9: 187,
+            10: 208, 11: 221, 12: 235, 13: 249, 14: 255, 15: 262, 16: 267, 17: 282,
+            18: 293, 19: 305, 20: 312, 21: 322, 22: 332, 23: 342, 24: 350, 25: 359,
+            26: 367, 27: 377, 28: 385, 29: 396, 30: 404, 31: 411, 32: 415, 33: 418,
+            34: 428, 35: 434, 36: 440, 37: 446, 38: 453, 39: 458, 40: 467, 41: 477,
+            42: 483, 43: 489, 44: 496, 45: 499, 46: 502, 47: 507, 48: 511, 49: 515,
+            50: 518, 51: 520, 52: 523, 53: 526, 54: 528, 55: 531, 56: 534, 57: 537,
+            58: 542, 59: 545, 60: 549, 61: 551, 62: 553, 63: 554, 64: 556, 65: 558,
+            66: 560, 67: 562, 68: 564, 69: 566, 70: 568, 71: 570, 72: 572, 73: 574,
+            74: 575, 75: 577, 76: 578, 77: 580, 78: 582, 79: 583, 80: 585, 81: 586,
+            82: 587, 83: 587, 84: 589, 85: 590, 86: 591, 87: 591, 88: 592, 89: 593,
+            90: 594, 91: 595, 92: 595, 93: 596, 94: 596, 95: 597, 96: 597, 97: 598,
+            98: 598, 99: 599, 100: 599, 101: 600, 102: 600, 103: 601, 104: 601,
+            105: 601, 106: 602, 107: 602, 108: 602, 109: 603, 110: 603, 111: 603,
+            112: 604, 113: 604, 114: 604
+        ]
+        return surahStartPages[id] ?? 1
     }
 }
-
